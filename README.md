@@ -1,10 +1,10 @@
-# [Name of the Project] : [Team Number]
+# [Wii Fishing] : [Team 6]
 # Members
-Project Manager: [Name] ([GitHub Name])\
-Communications Lead: [Name] ([GitHub Name])\
-Git Master: [Name] ([GitHub Name])\
-Design Lead: [Name] ([GitHub Name])\
-Quality Assurance Tester: [Name] ([GitHub Name])
+Project Manager: [Kyle] ([GitHub Name])\
+Communications Lead: [Julian] ([GitHub Name])\
+Git Master: [Ford] ([GitHub Name])\
+Design Lead: [Emily] ([GitHub Name])\
+Quality Assurance Tester: [Jerald] ([GitHub Name])
 
 # About Our Software
 
