@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "SonarSource.sonarlint-vscode",
+    "ms-dotnettools.csdevkit",
+    "GitHub.vscode-pull-request-github",
+    "eamodio.gitlens",
+    "ms-vsliveshare.vsliveshare",
+    "aaron-bond.better-comments",
+    "vscode-icons-team.vscode-icons",
+    "godotengine.godot-tools"
+  ]
+}
