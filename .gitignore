@@ -1,0 +1,15 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# C# / .NET specific ignores
+.vs/
+.mono/
+bin/
+obj/
+Export/
+Properties/
+
+# OS generated files
+.DS_Store
+Thumbs.db
