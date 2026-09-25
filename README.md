@@ -4,7 +4,7 @@ Project Manager: [Kyle] ([kbour64])\
 Communications Lead: [Julian] ([GitHub Name])\
 Git Master: [Ford] ([GitHub Name])\
 Design Lead: [Emily] ([GitHub Name])\
-Quality Assurance Tester: [Jerald] ([GitHub Name])
+Quality Assurance Tester: [Gerald] ([jerrymaronge])
 
 # About Our Software
 
