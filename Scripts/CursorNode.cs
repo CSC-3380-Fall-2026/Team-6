@@ -1,11 +1,8 @@
 using Godot;
 
-/// <summary>
-/// On-screen crosshair that stands in for the Wiimote IR pointer.
-/// Until the Wiimote integration is done it follows the mouse, can be nudged with
-/// the arrow keys / WASD, and turns the cursor_* input actions into signals the
-/// minigames can listen to.
-/// </summary>
+/// this is code for the crosshair that is here until we integrate the Wiimote.
+/// can be nudged with the arrow keys and WASD. also reads the cursor when you press game on godot.
+
 public partial class CursorNode : Node2D
 {
 	[Signal] public delegate void PrimaryPressedEventHandler(Vector2 screenPosition);
@@ -13,21 +10,18 @@ public partial class CursorNode : Node2D
 	[Signal] public delegate void SecondaryPressedEventHandler(Vector2 screenPosition);
 	[Signal] public delegate void RecalibratedEventHandler();
 
-	/// <summary>How fast the keyboard moves the cursor, in pixels per second.</summary>
 	[Export] public float KeyboardSpeed = 600f;
 
-	/// <summary>Hide the OS mouse pointer so only the crosshair is visible.</summary>
 	[Export] public bool HideSystemCursor = true;
 
-	/// <summary>Tint applied to the crosshair while the primary button is held.</summary>
+	/// Tint applied to the cursor, can be removed if wanted by dev/gitmaster.
 	[Export] public Color PressedTint = new Color(1f, 0.8f, 0.2f);
 
 	private Vector2 _screenPosition;
 
-	/// <summary>
-	/// Cursor position in viewport (screen) pixels, clamped to the visible area.
-	/// The Wiimote code can set this directly once it's ready.
-	/// </summary>
+	
+	/// Wiimote code can set and use this directly once fully implemented.
+
 	public Vector2 ScreenPosition
 	{
 		get => _screenPosition;
@@ -74,10 +68,7 @@ public partial class CursorNode : Node2D
 		UpdateGlobalPosition();
 	}
 
-	/// <summary>
-	/// Snaps the cursor back to the middle of the screen. With a mouse this just recenters;
-	/// with the Wiimote it will be where the "point at the center" calibration step happens.
-	/// </summary>
+	/// Snaps cursor back to the middle of the screen, while using a mouse this just recenters.
 	public void Recalibrate()
 	{
 		ScreenPosition = GetViewportRect().GetCenter();
@@ -94,8 +85,8 @@ public partial class CursorNode : Node2D
 
 	private void UpdateGlobalPosition()
 	{
-		// Map screen pixels into whatever canvas we live in, so a Camera2D in a game
 		// scene doesn't drag the crosshair away from where the player is pointing.
-		GlobalPosition = GetCanvasTransform().AffineInverse() * ScreenPosition;
+		
+        GlobalPosition = GetCanvasTransform().AffineInverse() * ScreenPosition;
 	}
 }
