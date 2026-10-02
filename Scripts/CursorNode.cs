@@ -19,7 +19,7 @@ public partial class CursorNode : Node2D
 
 	private Vector2 _screenPosition;
 
-	
+
 	/// Wiimote code can set and use this directly once fully implemented.
 
 	public Vector2 ScreenPosition
@@ -32,8 +32,9 @@ public partial class CursorNode : Node2D
 
 	public override void _Ready()
 	{
-		if (HideSystemCursor)
+		if (HideSystemCursor) {
 			Input.MouseMode = Input.MouseModeEnum.Hidden;
+		}
 
 		ScreenPosition = GetViewport().GetMousePosition();
 		UpdateGlobalPosition();
@@ -41,29 +42,32 @@ public partial class CursorNode : Node2D
 
 	public override void _ExitTree()
 	{
-		if (HideSystemCursor)
+		if (HideSystemCursor) {
 			Input.MouseMode = Input.MouseModeEnum.Visible;
+		}
 	}
 
 	public override void _Input(InputEvent @event)
 	{
-		if (@event is InputEventMouseMotion motion)
+		if (@event is InputEventMouseMotion motion) {
 			ScreenPosition = motion.Position;
-		else if (@event.IsActionPressed("cursor_primary"))
+		} else if (@event.IsActionPressed("cursor_primary")) {
 			SetPrimaryHeld(true);
-		else if (@event.IsActionReleased("cursor_primary"))
+		} else if (@event.IsActionReleased("cursor_primary")) {
 			SetPrimaryHeld(false);
-		else if (@event.IsActionPressed("cursor_secondary"))
+		} else if (@event.IsActionPressed("cursor_secondary")) {
 			EmitSignal(SignalName.SecondaryPressed, ScreenPosition);
-		else if (@event.IsActionPressed("cursor_recalibrate"))
+		} else if (@event.IsActionPressed("cursor_recalibrate")) {
 			Recalibrate();
+		}
 	}
 
 	public override void _Process(double delta)
 	{
 		Vector2 direction = Input.GetVector("cursor_left", "cursor_right", "cursor_up", "cursor_down");
-		if (direction != Vector2.Zero)
+		if (direction != Vector2.Zero) {
 			ScreenPosition += direction * KeyboardSpeed * (float)delta;
+		}
 
 		UpdateGlobalPosition();
 	}
@@ -86,7 +90,7 @@ public partial class CursorNode : Node2D
 	private void UpdateGlobalPosition()
 	{
 		// scene doesn't drag the crosshair away from where the player is pointing.
-		
-        GlobalPosition = GetCanvasTransform().AffineInverse() * ScreenPosition;
+
+		GlobalPosition = GetCanvasTransform().AffineInverse() * ScreenPosition;
 	}
 }
