@@ -2,6 +2,9 @@ using Godot;
 
 public partial class InteractiveObject : Area2D
 {
+    [Export]
+    private float hoverScaleMultiplier = 1.1f;
+
     private Vector2 originalScale;
 
     public override void _Ready()
@@ -14,7 +17,7 @@ public partial class InteractiveObject : Area2D
 
     private void OnMouseEntered()
     {
-        Scale = originalScale * 1.1f;
+        Scale = originalScale * hoverScaleMultiplier;
     }
 
     private void OnMouseExited()
