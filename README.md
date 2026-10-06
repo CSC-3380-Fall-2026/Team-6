@@ -1,6 +1,6 @@
 # [Wii Fishing] : [Team 6]
 # Members
-Project Manager: [Kyle] ([GitHub Name])\
+Project Manager: [Kyle] ([kbour64])\
 Communications Lead: [Julian] ([GitHub Name])\
 Git Master: [Ford] ([GitHub Name])\
 Design Lead: [Emily] ([GitHub Name])\
