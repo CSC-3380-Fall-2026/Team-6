@@ -18,6 +18,8 @@ public partial class SceneManager : Node
 	{
 		Error err = GetTree().ChangeSceneToFile(path);
 		if (err != Error.Ok)
+		{
 			GD.PushError($"SceneManager: couldn't load '{path}' ({err})");
+		}
 	}
 }
