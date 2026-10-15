@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/CursorNode.cs" id="1_cursor"]
+[ext_resource type="Texture2D" path="res://Assets/crosshair.svg" id="2_crosshair"]
+
+[node name="Cursor" type="Node2D"]
+z_index = 4096
+script = ExtResource("1_cursor")
+
+[node name="Crosshair" type="Sprite2D" parent="."]
+texture = ExtResource("2_crosshair")
