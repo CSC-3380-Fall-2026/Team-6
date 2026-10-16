@@ -15,6 +15,25 @@ public partial class WiimoteManager : Node2D
 	private const int WiimoteProductIdStandard = 0x0306;
     private const int WiimoteProductIdPlus = 0x0330;
 
+
+
+	//Nintendo has four operating states that we can pull from. They are as follows:
+	//0x30 = Core buttons Only
+	//0x31 = Core Buttons + accelerometer
+	//0x33 = Core buttons + accelerometer + Basic Infrared reading.
+	//0x37 = More precise 0x33 mode. 'full-power'.
+
+	//Additionally, there are bytes to be sent that have functionality.
+	//0x12 tells the controller to switch modes.
+	//0x04, which we will use, tells the controller to always scan for input.
+	//0x00 is an alternative to that, which would wait till the player pushes a button.
+	private const byte ChangeOperatingMode = 0x12;
+	private const byte ContinousReporting = 0x04;
+	private const byte IRWiimoteMode = 0x33;
+	
+
+
+
 	//These variables make it clear what hardware to call.
 	private HidDevice _connectedDevice;
 	private HidStream _dataStream;
@@ -45,9 +64,8 @@ public partial class WiimoteManager : Node2D
 			}
 			catch (Exception ex)
 			{
-				{
-					GD.PushWarning($"Non-critical error disposing Wiimote stream: {ex.Message}");
-				}
+
+				GD.PushWarning($"Non-critical error disposing Wiimote stream: {ex.Message}");
 			}
 			finally
 			{
@@ -58,6 +76,7 @@ public partial class WiimoteManager : Node2D
 		}
     }
 
+	//This method is intended to allow windows blueooth to work with the game.
 	private void ConnectToWiimote()
 	{
 		try
@@ -73,7 +92,7 @@ public partial class WiimoteManager : Node2D
 					if(_connectedDevice.TryOpen(out _dataStream))
 					{
 						GD.Print($"Successfully opened native HID stream: {_connectedDevice.DevicePath}");
-
+						InitializeWiimote();
 						//once this stream is established, STOP.
 						break;
 					}
@@ -91,6 +110,18 @@ public partial class WiimoteManager : Node2D
 		
 	}
 
+	private void InitializeWiimote()
+	{
+		try
+		{
+			byte[] modes = {ChangeOperatingMode , ContinousReporting , IRWiimoteMode };
+			_dataStream.Write(modes, 0, modes.Length);
+		}
+		catch (Exception ex)
+		{
+			GD.PushError($"Error initializing Wiimote reporting mode: {ex.Message}");
+		}
+	}
 	public event Action OnWiimoteAClicked;
 	public event Action OnWiimoteBClicked;
 
