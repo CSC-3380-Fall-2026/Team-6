@@ -1,10 +1,70 @@
 [gd_scene format=3]
 
-[node name="TestLevel" type="Node2D"]
+[ext_resource type="Script" uid="uid://xe8ps136u3al" path="res://Scripts/TestLevel.cs" id="1_test"]
 
-[node name="Label" type="Label" parent="."]
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 220.0
-offset_bottom = 43.0
-text = "Test Level"
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_back"]
+bg_color = Color(0.101960786, 0.20784314, 0.40392157, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[node name="TestLevel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_test")
+
+[node name="BackgroundColor" type="ColorRect" parent="."]
+z_index = -100
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.69803923, 0.85490197, 0.89411765, 1)
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 200.0
+offset_bottom = 365.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 120
+text = "Test Screen"
+horizontal_alignment = 1
+
+[node name="GameMarker" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -70.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "No game selected"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = -160.0
+offset_right = 360.0
+offset_bottom = -60.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 45
+theme_override_styles/normal = SubResource("StyleBoxFlat_back")
+text = "Back"
