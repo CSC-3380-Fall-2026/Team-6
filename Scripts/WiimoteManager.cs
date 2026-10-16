@@ -35,6 +35,29 @@ public partial class WiimoteManager : Node2D
 		});
 	}
 
+    public override void _ExitTree()
+    {
+        if( _dataStream != null)
+		{
+			try
+			{
+				_dataStream.Dispose();
+			}
+			catch (Exception ex)
+			{
+				{
+					GD.PushWarning($"Non-critical error disposing Wiimote stream: {ex.Message}");
+				}
+			}
+			finally
+			{
+				_dataStream = null;
+			}
+			
+			_dataStream = null;
+		}
+    }
+
 	private void ConnectToWiimote()
 	{
 		try
