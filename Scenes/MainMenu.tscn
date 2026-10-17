@@ -425,6 +425,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="BackgroundColor" type="ColorRect" parent="." unique_id=1894003716]
 z_index = -100
@@ -510,6 +511,7 @@ offset_left = 300.0
 offset_top = 526.0
 offset_right = 830.0
 offset_bottom = 706.0
+focus_mode = 0
 theme_override_font_sizes/font_size = 60
 theme_override_styles/normal = SubResource("StyleBoxFlat_ut64v")
 text = "Gone Fishing"
@@ -520,6 +522,7 @@ offset_left = 1090.0
 offset_top = 526.0
 offset_right = 1620.0
 offset_bottom = 706.0
+focus_mode = 0
 theme_override_font_sizes/font_size = 60
 theme_override_styles/normal = SubResource("StyleBoxFlat_hlhnc")
 text = "Fish Ninja"
