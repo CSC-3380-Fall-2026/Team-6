@@ -11,6 +11,11 @@ public partial class SceneManager : Node
 
 	public override void _Ready()
 	{
+		if (Instance != null)
+		{
+			QueueFree(); 
+			return;
+		}
 		Instance = this;
 	}
 
