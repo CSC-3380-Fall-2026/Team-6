@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://d1ha4gupgwbkj" path="res://Assets/Fish/greenbass.png" id="2_8saeu"]
 [ext_resource type="Texture2D" uid="uid://p35ffbqw87vh" path="res://Assets/Fish/jellyfish.png" id="3_8saeu"]
 [ext_resource type="Texture2D" uid="uid://ck64jwsxmwncx" path="res://Assets/Fish/yellowfish.png" id="4_ghw46"]
+[ext_resource type="Script" uid="uid://cbib5loj7najs" path="res://Scripts/MainMenu.cs" id="5_menu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ghw46"]
 atlas = ExtResource("1_853f1")
@@ -418,7 +419,7 @@ corner_radius_top_right = 35
 corner_radius_bottom_right = 35
 corner_radius_bottom_left = 35
 
-[node name="MainMenu" type="Control" unique_id=2077510560]
+[node name="MainMenu" type="Control" unique_id=2077510560 node_paths=PackedStringArray("goneFishingButton", "fishNinjaButton")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -426,6 +427,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("5_menu")
+goneFishingButton = NodePath("GoneFishingButton")
+fishNinjaButton = NodePath("FishNinjaButton")
 
 [node name="BackgroundColor" type="ColorRect" parent="." unique_id=1894003716]
 z_index = -100
