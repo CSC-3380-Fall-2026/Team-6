@@ -3,10 +3,19 @@ using Godot;
 // Classes open the two games and bring to current test screen
 public partial class MainMenu : Control
 {
+	// Assigned in the Inspector so the buttons can be moved or renamed in the scene
+	[Export] private Button goneFishingButton;
+	[Export] private Button fishNinjaButton;
+
 	public override void _Ready()
 	{
-		GetNode<Button>("GoneFishingButton").Pressed += OnGoneFishingPressed;
-		GetNode<Button>("FishNinjaButton").Pressed += OnFishNinjaPressed;
+		if (goneFishingButton == null || fishNinjaButton == null) {
+			GD.PushError("MainMenu: assign the game buttons in the Inspector");
+			return;
+		}
+
+		goneFishingButton.Pressed += OnGoneFishingPressed;
+		fishNinjaButton.Pressed += OnFishNinjaPressed;
 	}
 
 	private void OnGoneFishingPressed()

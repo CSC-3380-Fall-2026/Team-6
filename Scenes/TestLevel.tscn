@@ -9,7 +9,7 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
-[node name="TestLevel" type="Control"]
+[node name="TestLevel" type="Control" node_paths=PackedStringArray("gameMarker", "backButton")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,6 +17,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_test")
+gameMarker = NodePath("GameMarker")
+backButton = NodePath("BackButton")
 
 [node name="BackgroundColor" type="ColorRect" parent="."]
 z_index = -100

@@ -419,7 +419,7 @@ corner_radius_top_right = 35
 corner_radius_bottom_right = 35
 corner_radius_bottom_left = 35
 
-[node name="MainMenu" type="Control" unique_id=2077510560]
+[node name="MainMenu" type="Control" unique_id=2077510560 node_paths=PackedStringArray("goneFishingButton", "fishNinjaButton")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -427,6 +427,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_menu")
+goneFishingButton = NodePath("GoneFishingButton")
+fishNinjaButton = NodePath("FishNinjaButton")
 
 [node name="BackgroundColor" type="ColorRect" parent="." unique_id=1894003716]
 z_index = -100

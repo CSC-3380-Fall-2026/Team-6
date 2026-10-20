@@ -4,14 +4,23 @@ using Godot;
 // Shows which game was picked so each button can be checked.
 public partial class TestLevel : Control
 {
+	// Assigned in the Inspector so the nodes can be moved or renamed in the scene
+	[Export] private Label gameMarker;
+	[Export] private Button backButton;
+
 	public override void _Ready()
 	{
-		string game = SceneManager.Instance.SelectedGame;
-		if (game != "") {
-			GetNode<Label>("GameMarker").Text = game;
+		if (gameMarker == null || backButton == null) {
+			GD.PushError("TestLevel: assign GameMarker and BackButton in the Inspector");
+			return;
 		}
 
-		GetNode<Button>("BackButton").Pressed += GoBack;
+		string game = SceneManager.Instance.SelectedGame;
+		if (game != "") {
+			gameMarker.Text = game;
+		}
+
+		backButton.Pressed += GoBack;
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
