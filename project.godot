@@ -30,6 +30,10 @@ window/stretch/mode="canvas_items"
 
 project/assembly_name="Wii Fishing"
 
+[editor]
+
+version_control/autoload_on_startup=true
+
 [input]
 
 cursor_left={
