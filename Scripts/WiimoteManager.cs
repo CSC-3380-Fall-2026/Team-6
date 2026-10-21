@@ -31,8 +31,10 @@ public partial class WiimoteManager : Node2D
 	private const byte ContinousReporting = 0x04;
 	private const byte IRWiimoteMode = 0x33;
 	
+	private const int InputBufferSize = 22;
 
-
+	//volatile so that the data isn't cached.
+	private volatile bool _isReading;
 
 	//These variables make it clear what hardware to call.
 	private HidDevice _connectedDevice;
@@ -75,6 +77,28 @@ public partial class WiimoteManager : Node2D
 			_dataStream = null;
 		}
     }
+
+	private void ReadIncomingData()
+	{
+		byte[] buffer = new byte[InputBufferSize];
+		while(_isReading)
+		{
+			try
+			{
+				_dataStream.Read(buffer, 0 , buffer.Length);
+			}
+			catch (Exception ex)
+			{
+				_isReading = false;
+				GD.PushError($"Data not reading from Wii Remote properly: {ex.Message}");
+			}
+		}
+	}
+
+
+
+
+
 
 	//This method is intended to allow windows blueooth to work with the game.
 	private void ConnectToWiimote()
