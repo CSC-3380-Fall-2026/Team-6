@@ -190,11 +190,12 @@ public partial class WiimoteManager : Node2D
 	//This is a Godot thing^.
 	public override void _Process(double delta)
 	{
-		//This basically treats the wiimote as a mouse. Pointing logic is quite simple.
-		//Touchmote is the software I landed upon.
-		
-		
-		CurrentAimPosition = GetGlobalMousePosition();
+
+		//This will check if the bluetooth for wii remote is working.
+		//If the wii remote is not working, fall back to mouse controls.
+		if(_dataStream ==null)
+		{
+			CurrentAimPosition = GetGlobalMousePosition();
 
 		if(Input.IsActionJustPressed(WiiAAction))
 		{
@@ -209,7 +210,6 @@ public partial class WiimoteManager : Node2D
 
 			GD.Print("Wiimote 'B button' clicked at: " + CurrentAimPosition);
 		}
-
-
+		}
 	}
 }
