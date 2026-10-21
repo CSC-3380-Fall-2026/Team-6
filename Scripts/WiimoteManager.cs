@@ -31,11 +31,27 @@ public partial class WiimoteManager : Node2D
 	private const byte ContinousReporting = 0x04;
 	private const byte IRWiimoteMode = 0x33;
 	
+	//Bitwise masking will be used here to manage network and bluetooth bandwidth.
+	//example
+	//00001010  (Incoming buffer[2] data: A is pressed, B is not, something else is)
+	//& 00001000  (Our ButtonAMask: 0x08)
+	//----------
+  	//00001000  (Result is not zero. The A button is pressed)
+
+	private const byte ButtonAMask = 0x08;
+	private const byte ButtonBMask = 0x04;
+
 	private const int InputBufferSize = 22;
 
-	//volatile so that the data isn't cached.
+	//volatile so that the data isn't cached. All these volatile methods are for Godot to play nice with threads.
 	private volatile bool _isReading;
+	private volatile bool _isAPressed;
+	private volatile bool _isBPressed;
 
+	//past tense versions of the button pressing to allow for coding that prevents like 1000 things menus from opening on a single click.
+	private bool _wasAPressed;
+	private bool _wasBPressed;
+	
 	//These variables make it clear what hardware to call.
 	private HidDevice _connectedDevice;
 	private HidStream _dataStream;
@@ -62,6 +78,7 @@ public partial class WiimoteManager : Node2D
 		{
 			try
 			{
+				_isReading = false;
 				_dataStream.Dispose();
 			}
 			catch (Exception ex)
@@ -73,8 +90,6 @@ public partial class WiimoteManager : Node2D
 			{
 				_dataStream = null;
 			}
-			
-			_dataStream = null;
 		}
     }
 
@@ -86,6 +101,23 @@ public partial class WiimoteManager : Node2D
 			try
 			{
 				_dataStream.Read(buffer, 0 , buffer.Length);
+				//We look for the A button byte mask to match the buffer recieved.
+				//if the two bytes do not match, the & comparator returns false and A is not pressed.
+				_isAPressed = ((buffer[2] & ButtonAMask) != 0);
+				if(_isAPressed && !(_wasAPressed))
+				{
+					Callable.From(() => OnWiimoteAClicked?.Invoke()).CallDeferred();
+				}
+				//We look for the B button byte mask to match the buffer recieved.
+				//if the two bytes do not match, the & comparator returns false and B is not pressed.
+				_isBPressed = ((buffer[2] & ButtonBMask) != 0);
+				if(_isBPressed && !(_wasBPressed))
+				{
+					Callable.From(() => OnWiimoteBClicked?.Invoke()).CallDeferred();
+				}
+
+				_wasAPressed = _isAPressed;
+				_wasBPressed = _isBPressed;
 			}
 			catch (Exception ex)
 			{
@@ -117,8 +149,12 @@ public partial class WiimoteManager : Node2D
 					{
 						GD.Print($"Successfully opened native HID stream: {_connectedDevice.DevicePath}");
 						InitializeWiimote();
-						//once this stream is established, STOP.
-						break;
+						_isReading = true;
+
+						Task.Run(() => ReadIncomingData()); 
+						//task.run once more makes a separate worker thread handle this infinite loop.
+						
+						break; //once this stream is established, STOP.
 					}
 				}
 			}
@@ -156,6 +192,8 @@ public partial class WiimoteManager : Node2D
 	{
 		//This basically treats the wiimote as a mouse. Pointing logic is quite simple.
 		//Touchmote is the software I landed upon.
+		
+		
 		CurrentAimPosition = GetGlobalMousePosition();
 
 		if(Input.IsActionJustPressed(WiiAAction))
