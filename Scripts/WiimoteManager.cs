@@ -66,6 +66,9 @@ public partial class WiimoteManager : Node2D
 	{
 		//Task.run should set the ConnectToWiimote method to be a separate thread.
 		//Without it, Godot would literally just wait until windows was 'done' scanning for bluetooth.
+		OnWiimoteAClicked += HandleWiimoteA;
+		OnWiimoteBClicked += HandleWiimoteB;
+		
 		Task.Run(() =>
 		{
 			ConnectToWiimote();
@@ -93,6 +96,15 @@ public partial class WiimoteManager : Node2D
 		}
     }
 
+
+	private void HandleWiimoteA()
+	{
+		GD.Print("Wiimote 'A button' clicked!");
+	}
+	private void HandleWiimoteB()
+	{
+		GD.Print("Wiimote 'B button' clicked!");
+	}
 	private void ReadIncomingData()
 	{
 		byte[] buffer = new byte[InputBufferSize];
