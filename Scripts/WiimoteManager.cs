@@ -30,7 +30,15 @@ public partial class WiimoteManager : Node2D
 	private const byte ChangeOperatingMode = 0x12;
 	private const byte ContinousReporting = 0x04;
 	private const byte IRWiimoteMode = 0x33;
-	
+
+	//these bytes are used for writing to register.
+	private const byte WriteMemoryReport = 0x16;
+	private const byte MemoryAddressPart1 = 0xb0;
+	private const byte MemoryAddressPart2 = 0x00;
+	private const byte MemoryAddressPart3 = 0x30;
+	private const byte PayloadDataSize = 0x01;
+	private const byte CameraEnableValue = 0x08;
+	private const byte ControlRegisterFlag = 0x04;
 	//Bitwise masking will be used here to manage network and bluetooth bandwidth.
 	//example
 	//00001010  (Incoming buffer[2] data: A is pressed, B is not, something else is)
@@ -187,7 +195,16 @@ public partial class WiimoteManager : Node2D
 		try
 		{
 			byte[] modes = {ChangeOperatingMode , ContinousReporting , IRWiimoteMode };
+			byte[] firstCameraRegister = {WriteMemoryReport, ControlRegisterFlag, MemoryAddressPart1, MemoryAddressPart2, MemoryAddressPart3, PayloadDataSize, CameraEnableValue};
+			//second is very similar, but not identical.
+			byte[] secondCameraRegister = {WriteMemoryReport, ControlRegisterFlag, MemoryAddressPart1, MemoryAddressPart2, MemoryAddressPart2, PayloadDataSize, CameraEnableValue};
 			_dataStream.Write(modes, 0, modes.Length);
+			_dataStream.Write(firstCameraRegister, 0, firstCameraRegister.Length);
+			//should give the microcontroller time to store into the first register before trying to move on.
+			System.Threading.Thread.Sleep(50);
+			_dataStream.Write(secondCameraRegister, 0, secondCameraRegister.Length);
+
+			
 		}
 		catch (Exception ex)
 		{
