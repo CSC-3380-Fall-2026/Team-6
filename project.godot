@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 SceneManager="*uid://dcr4ixikllmmj"
 InputManager="*uid://phaiap613s5a"
 WiimoteManager="*uid://b0j44rycihbeq"
+Cursor="*res://Scenes/CursorNode.tscn"
 
 [display]
 

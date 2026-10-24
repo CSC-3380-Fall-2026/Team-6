@@ -10,7 +10,7 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
-[node name="TestLevel" type="Control" unique_id=543741245 node_paths=PackedStringArray("gameMarker", "backButton")]
+[node name="TestLevel" type="Control" unique_id=1256143024 node_paths=PackedStringArray("gameMarker", "backButton")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,7 +34,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.69803923, 0.85490197, 0.89411765, 1)
 
-[node name="Title" type="Label" parent="." unique_id=431905515]
+[node name="Title" type="Label" parent="." unique_id=1630909068]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -45,7 +45,7 @@ theme_override_font_sizes/font_size = 120
 text = "Test Screen"
 horizontal_alignment = 1
 
-[node name="GameMarker" type="Label" parent="." unique_id=165310762]
+[node name="GameMarker" type="Label" parent="." unique_id=1232057090]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -60,7 +60,7 @@ text = "No game selected"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BackButton" type="Button" parent="." unique_id=1426576603]
+[node name="BackButton" type="Button" parent="." unique_id=1455233194]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -70,6 +70,7 @@ offset_top = -160.0
 offset_right = 360.0
 offset_bottom = -60.0
 grow_vertical = 0
+focus_mode = 0
 theme_override_font_sizes/font_size = 45
 theme_override_styles/normal = SubResource("StyleBoxFlat_back")
 text = "Back"
