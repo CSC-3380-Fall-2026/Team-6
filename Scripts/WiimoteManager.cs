@@ -14,7 +14,7 @@ public partial class WiimoteManager : Node2D
 	//0x0306 is the Wiimote product id.
 	//0x0330 is the wiimote+ product id.
 	private const int WiimoteProductIdStandard = 0x0306;
-    private const int WiimoteProductIdPlus = 0x0330;
+	private const int WiimoteProductIdPlus = 0x0330;
 
 
 
@@ -68,7 +68,7 @@ public partial class WiimoteManager : Node2D
 	public Vector2 CurrentAimPosition { get; private set; }
 	//Variables to store 'A' and 'B' so it's easier to call later.
 	private const string WiiAAction = "wii_a_button";
-    private const string WiiBAction = "wii_b_trigger";
+	private const string WiiBAction = "wii_b_trigger";
 
 	//These variables are the wiimote camera dimensions
 	private const float IrCameraMaxWidth = 1023.0f;
@@ -97,9 +97,9 @@ public partial class WiimoteManager : Node2D
 		});
 	}
 
-    public override void _ExitTree()
-    {
-        if( _dataStream != null)
+	public override void _ExitTree()
+	{
+		if( _dataStream != null)
 		{
 			try
 			{
@@ -116,7 +116,7 @@ public partial class WiimoteManager : Node2D
 				_dataStream = null;
 			}
 		}
-    }
+	}
 
 
 	private void HandleWiimoteA()
@@ -174,14 +174,14 @@ public partial class WiimoteManager : Node2D
 				//notice that both the x and the y coordinate both share the same byte for their last two bits. This is why we have to bitwise mask the data to get the correct bits for each coordinate.
 				//That also optimizes space, as we use the same byte for both coordinates.
 
-
+				GD.Print($"Raw IR Camera bytes: {buffer[6]}, {buffer[9]}");
 				if (buffer[6] != 0xFF)
 				{
 					//this line of code is clicking both bytes together to make a 10 bit integer for the x coordinate. The first part is the 8 bit data, the second part is the last two bits of data that are stored in a different byte.
-    				dot1X = buffer[6] | ((buffer[8] & 0x30) << 4);
+					dot1X = buffer[6] | ((buffer[8] & 0x30) << 4);
 					//this line of code is clicking both bytes together to make a 10 bit integer for the y coordinate. The first part is the 8 bit data, the second part is the last two bits of data that are stored in a different byte.
-    				dot1Y = buffer[7] | ((buffer[8] & 0xC0) << 2);
-    				GD.Print($"Wiimote IR Dot 1 Position: ({dot1X}, {dot1Y})");
+					dot1Y = buffer[7] | ((buffer[8] & 0xC0) << 2);
+					GD.Print($"Wiimote IR Dot 1 Position: ({dot1X}, {dot1Y})");
 				}
 				//Same thing. This is just the y coordinate following the same logic with the next avaliable bytes.
 				if(buffer[9] != 0xFF)
@@ -193,13 +193,13 @@ public partial class WiimoteManager : Node2D
 				//We now find the midpoint that the wiimote will use to show cursor.
 				if (buffer[6] != 0xFF && buffer[9] != 0xFF)
 				{
-    			xMidpoint = (dot1X + dot2X) / 2.0f;
-    			yMidpoint = (dot1Y + dot2Y) / 2.0f;
-    			rawMidpoint = new Vector2(xMidpoint, yMidpoint);
+				xMidpoint = (dot1X + dot2X) / 2.0f;
+				yMidpoint = (dot1Y + dot2Y) / 2.0f;
+				rawMidpoint = new Vector2(xMidpoint, yMidpoint);
 
-    			// Invert the optical pinhole effect so moving right increases X and aiming up decreases Y. Camera lenses are funky.
-    			Vector2 invertedMidpoint = new Vector2(IrCameraMaxWidth - rawMidpoint.X, IrCameraMaxHeight - rawMidpoint.Y);
-    			GD.Print($"Aiming Midpoint: ({invertedMidpoint.X}, {invertedMidpoint.Y})");
+				// Invert the optical pinhole effect so moving right increases X and aiming up decreases Y. Camera lenses are funky.
+				Vector2 invertedMidpoint = new Vector2(IrCameraMaxWidth - rawMidpoint.X, IrCameraMaxHeight - rawMidpoint.Y);
+				GD.Print($"Aiming Midpoint: ({invertedMidpoint.X}, {invertedMidpoint.Y})");
 
 				//convert to percentage 0.0 - 1.0 "What percentage of the screen is taken up"
 				normalizedX = invertedMidpoint.X / IrCameraMaxWidth;
@@ -263,26 +263,40 @@ public partial class WiimoteManager : Node2D
 	}
 
 	private void InitializeWiimote()
+{
+	try
 	{
-		try
-		{
-			byte[] modes = {ChangeOperatingMode , ContinousReporting , IRWiimoteMode };
-			byte[] firstCameraRegister = {WriteMemoryReport, ControlRegisterFlag, MemoryAddressPart1, MemoryAddressPart2, MemoryAddressPart3, PayloadDataSize, CameraEnableValue};
-			//second is very similar, but not identical.
-			byte[] secondCameraRegister = {WriteMemoryReport, ControlRegisterFlag, MemoryAddressPart1, MemoryAddressPart2, MemoryAddressPart2, PayloadDataSize, CameraEnableValue};
-			_dataStream.Write(modes, 0, modes.Length);
-			_dataStream.Write(firstCameraRegister, 0, firstCameraRegister.Length);
-			//should give the microcontroller time to store into the first register before trying to move on.
-			System.Threading.Thread.Sleep(50);
-			_dataStream.Write(secondCameraRegister, 0, secondCameraRegister.Length);
+		// 1. Tell Wiimote to send Button + IR data
+		byte[] modes = { ChangeOperatingMode, ContinousReporting, IRWiimoteMode };
+		_dataStream.Write(modes, 0, modes.Length);
 
-			
-		}
-		catch (Exception ex)
-		{
-			GD.PushError($"Error initializing Wiimote reporting mode: {ex.Message}");
-		}
+		// 2. Power on the IR camera logic
+		byte[] enableIr1 = { 0x13, 0x04 };
+		byte[] enableIr2 = { 0x1A, 0x04 };
+		_dataStream.Write(enableIr1, 0, enableIr1.Length);
+		_dataStream.Write(enableIr2, 0, enableIr2.Length);
+		System.Threading.Thread.Sleep(50);
+
+		// 3. Start Camera Setup (Write 0x08 to register 0x04B00030)
+		byte[] startSetup = { WriteMemoryReport, ControlRegisterFlag, MemoryAddressPart1, MemoryAddressPart2, 0x30, PayloadDataSize, 0x08 };
+		_dataStream.Write(startSetup, 0, startSetup.Length);
+		System.Threading.Thread.Sleep(50);
+
+		// 4. Set Camera to "Extended Mode" (Write 0x03 to register 0x04B00033)
+		// This forces the camera to package the 10-bit data exactly how bit-shifting code written in ReadIncomingData() expects it.
+		byte[] setMode = { WriteMemoryReport, ControlRegisterFlag, MemoryAddressPart1, MemoryAddressPart2, 0x33, PayloadDataSize, 0x03 };
+		_dataStream.Write(setMode, 0, setMode.Length);
+		System.Threading.Thread.Sleep(50);
+
+		// 5. Finish Camera Setup (Write 0x08 to register 0x04B00030 again)
+		byte[] finishSetup = { WriteMemoryReport, ControlRegisterFlag, MemoryAddressPart1, MemoryAddressPart2, 0x30, PayloadDataSize, 0x08 };
+		_dataStream.Write(finishSetup, 0, finishSetup.Length);
 	}
+	catch (Exception ex)
+	{
+		GD.PushError($"Error initializing Wiimote reporting mode: {ex.Message}");
+	}
+}
 	public event Action OnWiimoteAClicked;
 	public event Action OnWiimoteBClicked;
 
