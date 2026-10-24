@@ -18,16 +18,10 @@ public partial class InputManager : Node
 
 	public override void _Process(double delta)
 	{
-		PointerPosition = GetViewport().GetMousePosition();
 
 		SelectPressed = Input.IsActionJustPressed("select");
 		BackPressed = Input.IsActionJustPressed("back");
 		PausePressed = Input.IsActionJustPressed("pause");
-		if (SelectPressed)
-		GD.Print("Select pressed");
-		if (BackPressed)
-		GD.Print("Back pressed");
-		if (PausePressed)
-		GD.Print("Pause pressed");
+
 	}
 }

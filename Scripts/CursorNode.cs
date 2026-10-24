@@ -25,8 +25,16 @@ public partial class CursorNode : Node2D
 	public Vector2 ScreenPosition
 	{
 		get => _screenPosition;
-		set => _screenPosition = value.Clamp(Vector2.Zero, GetViewportRect().Size);
+		set
+		{
+			_screenPosition = value.Clamp(Vector2.Zero, GetViewportRect().Size);
+			if (InputManager.Instance != null)
+			{
+				InputManager.Instance.PointerPosition = _screenPosition;
+			}
+		}
 	}
+
 
 	public bool IsPrimaryHeld { get; private set; }
 
