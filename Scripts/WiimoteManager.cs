@@ -77,8 +77,11 @@ public partial class WiimoteManager : Node2D
 	//math is handled anticipating a 1080p screen. Will need to make changes if a different resolution is wanted.
 	private const float ScreenWidth = 1920.0f;
 	private const float ScreenHeight = 1080.0f;
+
 	private  Vector2 _cursorPosition = Vector2.Zero;
 
+
+	[Export] public float Sensitivity = 1.8f; //Variable decides how drastic hand movements are used. 1.8 is somewhat arbitrary. so it could be changed.
 	//use this for other scripts! These are the cursor coordinates!!!
 	public Vector2 CursorPosition => _cursorPosition; 
 
@@ -142,7 +145,8 @@ public partial class WiimoteManager : Node2D
 		Vector2 rawMidpoint;
 		float normalizedX = 0.0f;
 		float normalizedY = 0.0f;
-
+		float centeredX = 0.0f;
+		float centeredY = 0.0f; 
 
 		while(_isReading)
 		{
@@ -197,13 +201,18 @@ public partial class WiimoteManager : Node2D
 				yMidpoint = (dot1Y + dot2Y) / 2.0f;
 				rawMidpoint = new Vector2(xMidpoint, yMidpoint);
 
-				// Invert the optical pinhole effect so moving right increases X and aiming up decreases Y. Camera lenses are funky.
-				Vector2 invertedMidpoint = new Vector2(IrCameraMaxWidth - rawMidpoint.X, IrCameraMaxHeight - rawMidpoint.Y);
+				// Invert the optical pinhole effect so moving right increases X. Camera lenses are funky.
+				Vector2 invertedMidpoint = new Vector2(IrCameraMaxWidth - rawMidpoint.X, rawMidpoint.Y);
+
+
+				centeredX = (invertedMidpoint.X - (IrCameraMaxWidth / 2.0f)) * Sensitivity;
+				centeredY = (invertedMidpoint.Y - (IrCameraMaxHeight/ 2.0f)) * Sensitivity;
+				
 				GD.Print($"Aiming Midpoint: ({invertedMidpoint.X}, {invertedMidpoint.Y})");
 
 				//convert to percentage 0.0 - 1.0 "What percentage of the screen is taken up"
-				normalizedX = invertedMidpoint.X / IrCameraMaxWidth;
-				normalizedY = invertedMidpoint.Y / IrCameraMaxHeight;
+				normalizedX = (centeredX + (IrCameraMaxWidth / 2.0f)) / IrCameraMaxWidth;
+				normalizedY = (centeredY + (IrCameraMaxHeight / 2.0f)) / IrCameraMaxHeight;
 
 				//Scale to Screen Pixels of the actual screen resolution.
 				_cursorPosition = new Vector2(normalizedX * ScreenWidth, normalizedY * ScreenHeight);
@@ -332,11 +341,12 @@ public partial class WiimoteManager : Node2D
 			GD.Print("Wiimote 'B button' clicked at: " + CurrentAimPosition);
 		}
 		
+
 		// Ensure the global InputManager singleton exists in the scene before writing to it
 		if (InputManager.Instance != null)
 			{
-    			// Pass the Wiimote's calculated screen coordinates to the central input manager
-    			InputManager.Instance.PointerPosition = CurrentAimPosition;
+				// Pass the Wiimote's calculated screen coordinates to the central input manager
+				InputManager.Instance.PointerPosition = CurrentAimPosition;
 			}
 	}
 }
