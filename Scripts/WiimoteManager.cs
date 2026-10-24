@@ -80,8 +80,11 @@ public partial class WiimoteManager : Node2D
 
 	private  Vector2 _cursorPosition = Vector2.Zero;
 
+	//
+	[Export] public float SensitivityX = 2.4f;
+	[Export] public float SensitivityY = 1.8f;
+	
 
-	[Export] public float Sensitivity = 1.8f; //Variable decides how drastic hand movements are used. 1.8 is somewhat arbitrary. so it could be changed.
 	//use this for other scripts! These are the cursor coordinates!!!
 	public Vector2 CursorPosition => _cursorPosition; 
 
@@ -205,8 +208,8 @@ public partial class WiimoteManager : Node2D
 				Vector2 invertedMidpoint = new Vector2(IrCameraMaxWidth - rawMidpoint.X, rawMidpoint.Y);
 
 
-				centeredX = (invertedMidpoint.X - (IrCameraMaxWidth / 2.0f)) * Sensitivity;
-				centeredY = (invertedMidpoint.Y - (IrCameraMaxHeight/ 2.0f)) * Sensitivity;
+				centeredX = (invertedMidpoint.X - (IrCameraMaxWidth / 2.0f)) * SensitivityX;
+				centeredY = (invertedMidpoint.Y - (IrCameraMaxHeight/ 2.0f)) * SensitivityY;
 				
 				GD.Print($"Aiming Midpoint: ({invertedMidpoint.X}, {invertedMidpoint.Y})");
 
