@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 using HidSharp;
+using Vector2 = Godot.Vector2;
 
 public partial class WiimoteManager : Node2D
 {
@@ -69,6 +70,19 @@ public partial class WiimoteManager : Node2D
 	private const string WiiAAction = "wii_a_button";
     private const string WiiBAction = "wii_b_trigger";
 
+	//These variables are the wiimote camera dimensions
+	private const float IrCameraMaxWidth = 1023.0f;
+	private const float IrCameraMaxHeight = 767.0f;
+
+	//math is handled anticipating a 1080p screen. Will need to make changes if a different resolution is wanted.
+	private const float ScreenWidth = 1920.0f;
+	private const float ScreenHeight = 1080.0f;
+	private  Vector2 _cursorPosition = Vector2.Zero;
+
+	//use this for other scripts! These are the cursor coordinates!!!
+	public Vector2 CursorPosition => _cursorPosition; 
+
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -119,10 +133,17 @@ public partial class WiimoteManager : Node2D
 		byte[] buffer = new byte[InputBufferSize];
 		//These variables are used to store the IR dot positions.
 		//The wiimote calculates the center of the screen based on Dot 1 + Dot 2 / 2. 
-		int dot1X;
-		int dot1Y;
-		int dot2X;
-		int dot2Y;
+		int dot1X = 0;
+		int dot1Y = 0;
+		int dot2X = 0;
+		int dot2Y = 0;
+		float xMidpoint = 0.0f;
+		float yMidpoint = 0.0f;
+		Vector2 rawMidpoint;
+		float normalizedX = 0.0f;
+		float normalizedY = 0.0f;
+
+
 		while(_isReading)
 		{
 			try
@@ -169,7 +190,25 @@ public partial class WiimoteManager : Node2D
 					dot2Y = buffer[10] | ((buffer[11] & 0xC0) << 2);
 				}
 
+				//We now find the midpoint that the wiimote will use to show cursor.
+				if (buffer[6] != 0xFF && buffer[9] != 0xFF)
+				{
+    			xMidpoint = (dot1X + dot2X) / 2.0f;
+    			yMidpoint = (dot1Y + dot2Y) / 2.0f;
+    			rawMidpoint = new Vector2(xMidpoint, yMidpoint);
 
+    			// Invert the optical pinhole effect so moving right increases X and aiming up decreases Y. Camera lenses are funky.
+    			Vector2 invertedMidpoint = new Vector2(IrCameraMaxWidth - rawMidpoint.X, IrCameraMaxHeight - rawMidpoint.Y);
+    			GD.Print($"Aiming Midpoint: ({invertedMidpoint.X}, {invertedMidpoint.Y})");
+
+				//convert to percentage 0.0 - 1.0 "What percentage of the screen is taken up"
+				normalizedX = invertedMidpoint.X / IrCameraMaxWidth;
+				normalizedY = invertedMidpoint.Y / IrCameraMaxHeight;
+
+				//Scale to Screen Pixels of the actual screen resolution.
+				_cursorPosition = new Vector2(normalizedX * ScreenWidth, normalizedY * ScreenHeight);
+				GD.Print($"Mapped Screen Cursor: ({_cursorPosition.X}, {_cursorPosition.Y})");
+			}
 
 			}
 			catch (Exception ex)
