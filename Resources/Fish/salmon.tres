@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://vcvv03disa07"]
+
+[ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_p1hr3"]
+[ext_resource type="Texture2D" uid="uid://d0l1j6y8vichl" path="res://Assets/Fish/CutFish/salmon.png" id="1_ph1tc"]
+[ext_resource type="Texture2D" uid="uid://c6puqrxq8gvh1" path="res://Assets/Fish/UncutFish/salmon.png" id="2_0bk3u"]
+[ext_resource type="Texture2D" uid="uid://o5ug4ws32yr1" path="res://Assets/Fish/SwimmingFish/salmon.png" id="3_qkn5s"]
+
+[resource]
+script = ExtResource("1_p1hr3")
+FishName = "Salmon"
+GoneFishingSprite = ExtResource("3_qkn5s")
+FishNinjaSprite = ExtResource("2_0bk3u")
+FishNinjaCutSprite = ExtResource("1_ph1tc")
+Points = 15
+Speed = 120.0
+metadata/_custom_type_script = "uid://o4uag27rp8gg"

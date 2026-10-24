@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://4cdnlhcgty63"]
+
+[ext_resource type="Texture2D" uid="uid://p35ffbqw87vh" path="res://Assets/Fish/SwimmingFish/jellyfish.png" id="1_me8u5"]
+[ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_wboye"]
+
+[resource]
+script = ExtResource("1_wboye")
+FishName = "Jellyfish"
+GoneFishingSprite = ExtResource("1_me8u5")
+Points = 25
+Speed = 55.0
+DoNotCut = true
+Rarity = 1
+metadata/_custom_type_script = "uid://o4uag27rp8gg"

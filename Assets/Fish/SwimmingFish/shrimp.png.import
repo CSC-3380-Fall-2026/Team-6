@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cvkogwgiy0xhq"
-path="res://.godot/imported/bluefish.png-1c8e95fc83771d56550b9ae180c67c5f.ctex"
+uid="uid://ddw75x0kfkslb"
+path="res://.godot/imported/shrimp.png-b56d5f2650132865d836f7208b2371a0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Fish/bluefish.png"
-dest_files=["res://.godot/imported/bluefish.png-1c8e95fc83771d56550b9ae180c67c5f.ctex"]
+source_file="res://Assets/Fish/SwimmingFish/shrimp.png"
+dest_files=["res://.godot/imported/shrimp.png-b56d5f2650132865d836f7208b2371a0.ctex"]
 
 [params]
 
