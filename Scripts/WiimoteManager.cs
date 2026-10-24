@@ -113,9 +113,16 @@ public partial class WiimoteManager : Node2D
 	{
 		GD.Print("Wiimote 'B button' clicked!");
 	}
+	//This method is intended to read the data stream from the wiimote and check for button presses and interact with IR data.
 	private void ReadIncomingData()
 	{
 		byte[] buffer = new byte[InputBufferSize];
+		//These variables are used to store the IR dot positions.
+		//The wiimote calculates the center of the screen based on Dot 1 + Dot 2 / 2. 
+		int dot1X;
+		int dot1Y;
+		int dot2X;
+		int dot2Y;
 		while(_isReading)
 		{
 			try
@@ -138,6 +145,32 @@ public partial class WiimoteManager : Node2D
 
 				_wasAPressed = _isAPressed;
 				_wasBPressed = _isBPressed;
+				//Here we are building a 10 bit integer coorindate with the 8 bit pieces nintendo provides. 
+				//It is a bit confusing at first, ask me(Ford) if confused. Easier than it looks!
+				
+				//In essence. Nintendo provides 10 bits of data for the X and Y coordinates, but the last two bits are stored in a different byte.
+				//This is why we have to bitwise mask the 8 bit data and then shift it over to the left by 4 or 2 bits to make room for the last two bits. (x coorindate uses bits 4 and 5, y coorindate uses bits 6 and 7 of byte[8]).
+				//notice that both the x and the y coordinate both share the same byte for their last two bits. This is why we have to bitwise mask the data to get the correct bits for each coordinate.
+				//That also optimizes space, as we use the same byte for both coordinates.
+
+
+				if (buffer[6] != 0xFF)
+				{
+					//this line of code is clicking both bytes together to make a 10 bit integer for the x coordinate. The first part is the 8 bit data, the second part is the last two bits of data that are stored in a different byte.
+    				dot1X = buffer[6] | ((buffer[8] & 0x30) << 4);
+					//this line of code is clicking both bytes together to make a 10 bit integer for the y coordinate. The first part is the 8 bit data, the second part is the last two bits of data that are stored in a different byte.
+    				dot1Y = buffer[7] | ((buffer[8] & 0xC0) << 2);
+    				GD.Print($"Wiimote IR Dot 1 Position: ({dot1X}, {dot1Y})");
+				}
+				//Same thing. This is just the y coordinate following the same logic with the next avaliable bytes.
+				if(buffer[9] != 0xFF)
+				{
+					dot2X = buffer[9] | ((buffer[11] & 0x30) << 4); //should add variables here to make what these hex values do more clear. They're just bit masks.
+					dot2Y = buffer[10] | ((buffer[11] & 0xC0) << 2);
+				}
+
+
+
 			}
 			catch (Exception ex)
 			{
