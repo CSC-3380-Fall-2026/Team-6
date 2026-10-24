@@ -312,5 +312,9 @@ public partial class WiimoteManager : Node2D
 			GD.Print("Wiimote 'B button' clicked at: " + CurrentAimPosition);
 		}
 		}
+		else
+		{
+			CurrentAimPosition = _cursorPosition;
+		}
 	}
 }
