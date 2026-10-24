@@ -11,12 +11,14 @@ public partial class CursorNode : Node2D
 	[Signal] public delegate void RecalibratedEventHandler();
 
 	[Export] public float KeyboardSpeed = 600f;
-
+	//Controls how quickly the cursor will catch up to the Wiimote.
+	[Export] public float SmoothingSpeed = 18.0f;
+	[Export] public float JitterCushion = 0.1f;
 	[Export] public bool HideSystemCursor = true;
 
 	/// Tint applied to the cursor, can be removed if wanted by dev/gitmaster.
 	[Export] public Color PressedTint = new Color(1f, 0.8f, 0.2f);
-
+	
 	private Vector2 _screenPosition;
 
 
@@ -77,6 +79,14 @@ public partial class CursorNode : Node2D
 		if (direction != Vector2.Zero) {
 			ScreenPosition += direction * KeyboardSpeed * (float)delta;
 		}
+
+		if(InputManager.Instance != null)
+		{
+			Vector2 targetPosition = InputManager.Instance.PointerPosition;
+			_screenPosition = _screenPosition.Lerp(targetPosition, JitterCushion);
+			_screenPosition = _screenPosition.Clamp(Vector2.Zero, GetViewportRect().Size);
+		}
+
 
 		UpdateGlobalPosition();
 	}
