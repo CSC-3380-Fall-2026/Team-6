@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://w8ln04uqpqxt"]
 
 [ext_resource type="Script" uid="uid://xe8ps136u3al" path="res://Scripts/TestLevel.cs" id="1_test"]
 
@@ -9,7 +9,7 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
-[node name="TestLevel" type="Control" node_paths=PackedStringArray("gameMarker", "backButton")]
+[node name="TestLevel" type="Control" unique_id=836524250 node_paths=PackedStringArray("gameMarker", "backButton")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +20,7 @@ script = ExtResource("1_test")
 gameMarker = NodePath("GameMarker")
 backButton = NodePath("BackButton")
 
-[node name="BackgroundColor" type="ColorRect" parent="."]
+[node name="BackgroundColor" type="ColorRect" parent="." unique_id=2115029501]
 z_index = -100
 layout_mode = 1
 anchors_preset = 15
@@ -31,7 +31,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.69803923, 0.85490197, 0.89411765, 1)
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=430789578]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -42,7 +42,7 @@ theme_override_font_sizes/font_size = 120
 text = "Test Screen"
 horizontal_alignment = 1
 
-[node name="GameMarker" type="Label" parent="."]
+[node name="GameMarker" type="Label" parent="." unique_id=93693659]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -57,7 +57,7 @@ text = "No game selected"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BackButton" type="Button" parent="."]
+[node name="BackButton" type="Button" parent="." unique_id=1605337387]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0

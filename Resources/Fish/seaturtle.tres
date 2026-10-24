@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://b47cxacy05ths"]
+
+[ext_resource type="Texture2D" uid="uid://cpum1k0oqe70c" path="res://Assets/Fish/SwimmingFish/seaturtle.png" id="1_uswws"]
+[ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_uwpcc"]
+
+[resource]
+script = ExtResource("1_uwpcc")
+FishName = "SeaTurtle"
+GoneFishingSprite = ExtResource("1_uswws")
+Points = 50
+Speed = 60.0
+DoNotCut = true
+Rarity = 2
+metadata/_custom_type_script = "uid://o4uag27rp8gg"
