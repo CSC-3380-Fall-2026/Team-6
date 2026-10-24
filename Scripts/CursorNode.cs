@@ -28,6 +28,7 @@ public partial class CursorNode : Node2D
 		set
 		{
 			_screenPosition = value.Clamp(Vector2.Zero, GetViewportRect().Size);
+			
 			if (InputManager.Instance != null)
 			{
 				InputManager.Instance.PointerPosition = _screenPosition;
