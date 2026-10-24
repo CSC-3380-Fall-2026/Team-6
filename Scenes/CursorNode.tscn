@@ -1,7 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://mgmh4cp7od8o"]
 
-[ext_resource type="Script" path="res://Scripts/CursorNode.cs" id="1_cursor"]
-[ext_resource type="Texture2D" path="res://Assets/crosshair.svg" id="2_crosshair"]
+[ext_resource type="Script" uid="uid://dl832hes558bg" path="res://Scripts/CursorNode.cs" id="1_cursor"]
+[ext_resource type="Texture2D" uid="uid://be7qo81sou1cf" path="res://Assets/crosshair.svg" id="2_crosshair"]
 
 [node name="Cursor" type="CanvasLayer"]
 process_mode = 3

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://w8ln04uqpqxt"]
 
 [ext_resource type="Script" uid="uid://xe8ps136u3al" path="res://Scripts/TestLevel.cs" id="1_test"]
+[ext_resource type="PackedScene" path="res://Scenes/CursorNode.tscn" id="2_5ms4e"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_back"]
 bg_color = Color(0.101960786, 0.20784314, 0.40392157, 1)
@@ -20,7 +21,9 @@ script = ExtResource("1_test")
 gameMarker = NodePath("GameMarker")
 backButton = NodePath("BackButton")
 
-[node name="BackgroundColor" type="ColorRect" parent="." unique_id=1324253859]
+[node name="Cursor" parent="." unique_id=1836107215 instance=ExtResource("2_5ms4e")]
+
+[node name="BackgroundColor" type="ColorRect" parent="." unique_id=709489448]
 z_index = -100
 layout_mode = 1
 anchors_preset = 15
