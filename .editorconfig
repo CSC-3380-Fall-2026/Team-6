@@ -2,3 +2,6 @@ root = true
 
 [*]
 charset = utf-8
+[*.cs]
+# Disable SonarQube S3903: Types should be in namespaces. Namespaces will be unhelpful for our small scale project.
+dotnet_diagnostic.S3903.severity = none
