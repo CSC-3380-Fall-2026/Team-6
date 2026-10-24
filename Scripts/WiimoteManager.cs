@@ -312,6 +312,12 @@ public partial class WiimoteManager : Node2D
 		{
 			CurrentAimPosition = GetGlobalMousePosition();
 
+		}
+		else
+		{
+			CurrentAimPosition = _cursorPosition;
+		}
+
 		if(Input.IsActionJustPressed(WiiAAction))
 		{
 			OnWiimoteAClicked?.Invoke();
@@ -325,10 +331,12 @@ public partial class WiimoteManager : Node2D
 
 			GD.Print("Wiimote 'B button' clicked at: " + CurrentAimPosition);
 		}
-		}
-		else
-		{
-			CurrentAimPosition = _cursorPosition;
-		}
+		
+		// Ensure the global InputManager singleton exists in the scene before writing to it
+		if (InputManager.Instance != null)
+			{
+    			// Pass the Wiimote's calculated screen coordinates to the central input manager
+    			InputManager.Instance.PointerPosition = CurrentAimPosition;
+			}
 	}
 }
