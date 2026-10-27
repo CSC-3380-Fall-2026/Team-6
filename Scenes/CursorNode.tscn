@@ -1,11 +1,15 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://mgmh4cp7od8o"]
 
-[ext_resource type="Script" path="res://Scripts/CursorNode.cs" id="1_cursor"]
-[ext_resource type="Texture2D" path="res://Assets/crosshair.svg" id="2_crosshair"]
+[ext_resource type="Script" uid="uid://dl832hes558bg" path="res://Scripts/CursorNode.cs" id="1_cursor"]
+[ext_resource type="Texture2D" uid="uid://be7qo81sou1cf" path="res://Assets/crosshair.svg" id="2_crosshair"]
 
-[node name="Cursor" type="Node2D"]
+[node name="Cursor" type="CanvasLayer"]
+process_mode = 3
+layer = 128
+
+[node name="CursorNode" type="Node2D" parent="."]
 z_index = 4096
 script = ExtResource("1_cursor")
 
-[node name="Crosshair" type="Sprite2D" parent="."]
+[node name="Crosshair" type="Sprite2D" parent="CursorNode"]
 texture = ExtResource("2_crosshair")

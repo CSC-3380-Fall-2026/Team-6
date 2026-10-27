@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://w8ln04uqpqxt"]
 
 [ext_resource type="Script" uid="uid://xe8ps136u3al" path="res://Scripts/TestLevel.cs" id="1_test"]
+[ext_resource type="PackedScene" path="res://Scenes/CursorNode.tscn" id="2_5ms4e"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_back"]
 bg_color = Color(0.101960786, 0.20784314, 0.40392157, 1)
@@ -9,7 +10,7 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
-[node name="TestLevel" type="Control" unique_id=836524250 node_paths=PackedStringArray("gameMarker", "backButton")]
+[node name="TestLevel" type="Control" unique_id=1256143024 node_paths=PackedStringArray("gameMarker", "backButton")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +21,9 @@ script = ExtResource("1_test")
 gameMarker = NodePath("GameMarker")
 backButton = NodePath("BackButton")
 
-[node name="BackgroundColor" type="ColorRect" parent="." unique_id=2115029501]
+[node name="Cursor" parent="." unique_id=1836107215 instance=ExtResource("2_5ms4e")]
+
+[node name="BackgroundColor" type="ColorRect" parent="." unique_id=709489448]
 z_index = -100
 layout_mode = 1
 anchors_preset = 15
@@ -31,7 +34,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.69803923, 0.85490197, 0.89411765, 1)
 
-[node name="Title" type="Label" parent="." unique_id=430789578]
+[node name="Title" type="Label" parent="." unique_id=1630909068]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -42,7 +45,7 @@ theme_override_font_sizes/font_size = 120
 text = "Test Screen"
 horizontal_alignment = 1
 
-[node name="GameMarker" type="Label" parent="." unique_id=93693659]
+[node name="GameMarker" type="Label" parent="." unique_id=1232057090]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -57,7 +60,7 @@ text = "No game selected"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BackButton" type="Button" parent="." unique_id=1605337387]
+[node name="BackButton" type="Button" parent="." unique_id=1455233194]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -67,6 +70,7 @@ offset_top = -160.0
 offset_right = 360.0
 offset_bottom = -60.0
 grow_vertical = 0
+focus_mode = 0
 theme_override_font_sizes/font_size = 45
 theme_override_styles/normal = SubResource("StyleBoxFlat_back")
 text = "Back"
