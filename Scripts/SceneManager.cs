@@ -8,9 +8,9 @@ public partial class SceneManager : Node
 	// Keep all scene paths in one place
 	public const string MainMenu = "res://Scenes/MainMenu.tscn";
 	public const string TestLevel = "res://Scenes/TestLevel.tscn";
+	public const string FishingLevel = "res://Scenes/GoneFishing.tscn";
 
 	// Opens the testing level for now until real levels are made
-	public const string GoneFishing = TestLevel;
 	public const string FishNinja = TestLevel;
 
 	// Name of the last minigame picked, so the next scene knows which game to run
