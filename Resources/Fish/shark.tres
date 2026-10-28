@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://8f6byjxcjp17"]
+
+[ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_jtgxk"]
+[ext_resource type="Texture2D" uid="uid://bgyv3riilwie" path="res://Assets/Fish/SwimmingFish/shark.png" id="1_t0fty"]
+
+[resource]
+script = ExtResource("1_jtgxk")
+FishName = "Shark"
+GoneFishingSprite = ExtResource("1_t0fty")
+Points = 100
+Speed = 160.0
+DoNotCut = true
+Rarity = 3
+metadata/_custom_type_script = "uid://o4uag27rp8gg"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://bq2jqtf3vanwp"]
+
+[ext_resource type="Texture2D" uid="uid://byxht0uufsmf7" path="res://Assets/Fish/CutFish/yellowfish.png" id="1_723nx"]
+[ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_er2tg"]
+[ext_resource type="Texture2D" uid="uid://bus86c83ctfr8" path="res://Assets/Fish/UncutFish/yellowfish.png" id="2_q86y7"]
+[ext_resource type="Texture2D" uid="uid://ck64jwsxmwncx" path="res://Assets/Fish/SwimmingFish/yellowfinfish.png" id="3_wtph3"]
+
+[resource]
+script = ExtResource("1_er2tg")
+FishName = "YellowFinFish"
+GoneFishingSprite = ExtResource("3_wtph3")
+FishNinjaSprite = ExtResource("2_q86y7")
+FishNinjaCutSprite = ExtResource("1_723nx")
+Points = 10
+Speed = 100.0
+metadata/_custom_type_script = "uid://o4uag27rp8gg"

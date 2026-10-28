@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://ci5s1mf2vqb8q"]
+
+[ext_resource type="Texture2D" uid="uid://kbmjo2ef4ffx" path="res://Assets/Fish/CutFish/clownfsh.png" id="1_0eust"]
+[ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_2n0ic"]
+[ext_resource type="Texture2D" uid="uid://bv7ua3spf45a5" path="res://Assets/Fish/SwimmingFish/clownfsh.png" id="1_btwj0"]
+[ext_resource type="Texture2D" uid="uid://cs02alb757nv4" path="res://Assets/Fish/UncutFish/clownfsh.png" id="2_s0l17"]
+
+[resource]
+script = ExtResource("1_2n0ic")
+FishName = "Clownfish"
+GoneFishingSprite = ExtResource("1_btwj0")
+FishNinjaSprite = ExtResource("2_s0l17")
+FishNinjaCutSprite = ExtResource("1_0eust")
+Points = 10
+Speed = 80.0
+DoNotCut = true
+metadata/_custom_type_script = "uid://o4uag27rp8gg"

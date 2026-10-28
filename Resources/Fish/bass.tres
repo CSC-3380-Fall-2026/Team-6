@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://sum177qda3u0"]
+
+[ext_resource type="Texture2D" uid="uid://d1ha4gupgwbkj" path="res://Assets/Fish/SwimmingFish/greenbass.png" id="1_cj8jk"]
+[ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_dcxj3"]
+[ext_resource type="Texture2D" uid="uid://06sfhs7lapbp" path="res://Assets/Fish/CutFish/greenbass.png" id="1_xwo6t"]
+[ext_resource type="Texture2D" uid="uid://rbs6vw6vkmwc" path="res://Assets/Fish/UncutFish/greenbass.png" id="2_pc0lr"]
+
+[resource]
+script = ExtResource("1_dcxj3")
+FishName = "Bass"
+GoneFishingSprite = ExtResource("1_cj8jk")
+FishNinjaSprite = ExtResource("2_pc0lr")
+FishNinjaCutSprite = ExtResource("1_xwo6t")
+Points = 10
+Speed = 110.0
+metadata/_custom_type_script = "uid://o4uag27rp8gg"
