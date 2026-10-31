@@ -15,7 +15,7 @@ public partial class Clickable : Area2D
 
 	private const string OutlineShaderPath = "res://Shaders/ClickableOutline.gdshader";
 
-	// Assigned in the Inspector, this makes the sprite glow or outline when hovered. If null the sprite itself is used.
+	// Assigned in the Inspector, this makes the sprite glow or outline when hovered. If null the sprite switches off
 	[Export] private Node2D visual;
 	[Export] private bool clickable = true;
 	[Export] private HighlightStyle highlightStyle = HighlightStyle.Outline;
@@ -23,6 +23,8 @@ public partial class Clickable : Area2D
 	[Export] private float outlineWidth = 1f;
 	[Export] private float glowStrength = 1.4f;
 	[Export] private float clickPulseScale = 1.15f;
+	[Export] private float clickPulseGrowTime = 0.06f;
+	[Export] private float clickPulseShrinkTime = 0.1f;
 	// This is for when the game gets sound
 	[Export] private AudioStreamPlayer2D clickSound;
 
@@ -45,7 +47,7 @@ public partial class Clickable : Area2D
 			}
 		}
 	}
-	// This is for if the visual slot is empty, saving the sprite's original color and outline
+	// This is for if the visual slot is empty, saving the sprite's original color and size
 	public override void _Ready()
 	{
 		if (visual == null) {
@@ -136,7 +138,7 @@ public partial class Clickable : Area2D
 		}
 		return IsGreaterThan(other);
 	}
-	//Gives the outline for a shader material, or a glow effect if the shader is not used. If the visual already has a material, it will not be applied.
+	//Gives the outline for a shader material. If the visual already has a material, it will not be applied.
 	private void SetUpOutline()
 	{
 		if (visual.Material != null) {
@@ -186,8 +188,8 @@ public partial class Clickable : Area2D
 		clickTween?.Kill();
 		visual.Scale = baseVisualScale;
 		clickTween = CreateTween();
-		clickTween.TweenProperty(visual, "scale", baseVisualScale * clickPulseScale, 0.06);
-		clickTween.TweenProperty(visual, "scale", baseVisualScale, 0.1);
+		clickTween.TweenProperty(visual, "scale", baseVisualScale * clickPulseScale, clickPulseGrowTime);
+		clickTween.TweenProperty(visual, "scale", baseVisualScale, clickPulseShrinkTime);
 
 		if (clickSound != null) {
 			clickSound.Play();
