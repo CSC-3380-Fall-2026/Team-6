@@ -1,5 +1,8 @@
 [gd_scene format=3 uid="uid://b4ph7i6yexn5u"]
 
+[ext_resource type="Script" uid="uid://dpt2bfa0cr2qv" path="res://Scripts/PauseMenu.cs" id="1_pause"]
+[ext_resource type="PackedScene" path="res://Scenes/CalibrationScreen.tscn" id="2_calib"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut64v"]
 bg_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
 border_width_left = 8
@@ -22,8 +25,13 @@ corner_radius_bottom_left = 20
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nr1gc"]
 bg_color = Color(0.7647059, 0.24705882, 0.27058825, 1)
 
-[node name="MenuOverlay" type="Node" unique_id=1468554513]
+[node name="MenuOverlay" type="Node" unique_id=1468554513 node_paths=PackedStringArray("menuLayer", "recalibrateButton", "closeButton")]
 process_mode = 3
+script = ExtResource("1_pause")
+menuLayer = NodePath("MenuOverlay")
+recalibrateButton = NodePath("MenuOverlay/Overlay/MenuPanel/ButtonContainer/RecalibrateButton")
+closeButton = NodePath("MenuOverlay/Overlay/MenuPanel/CloseButton")
+calibrationScene = ExtResource("2_calib")
 
 [node name="MenuOverlay" type="CanvasLayer" parent="." unique_id=1910394550]
 
