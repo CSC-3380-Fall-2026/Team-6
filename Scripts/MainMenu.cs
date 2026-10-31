@@ -20,7 +20,7 @@ public partial class MainMenu : Control
 
 	private void OnGoneFishingPressed()
 	{
-		SceneManager.Instance.StartGame("Gone Fishing", SceneManager.GoneFishing);
+		SceneManager.Instance.StartGame("Gone Fishing", SceneManager.FishingLevel);
 	}
 
 	private void OnFishNinjaPressed()

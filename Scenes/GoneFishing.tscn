@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://b51jrdkiiuawl"]
+
+[ext_resource type="Script" uid="uid://ddwbb4vhjuh8w" path="res://Scripts/GoneFishing.cs" id="1_g3asb"]
+[ext_resource type="Script" uid="uid://dl832hes558bg" path="res://Scripts/CursorNode.cs" id="2_nxjxa"]
+
+[node name="GoneFishing" type="Control" unique_id=691912027 node_paths=PackedStringArray("_FishingRod", "_waterShape", "_cursorNode")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g3asb")
+_FishingRod = NodePath("RodPivot")
+_waterShape = NodePath("WaterArea/WaterShape")
+_cursorNode = NodePath("CursorNode")
+metadata/_edit_lock_ = true
+
+[node name="Background Grass" type="ColorRect" parent="." unique_id=1701405512]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.4, 0.6392157, 0.28627452, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="WaterArea" type="Area2D" parent="." unique_id=1241967109]
+metadata/_edit_lock_ = true
+
+[node name="WaterShape" type="Polygon2D" parent="WaterArea" unique_id=1277273584]
+color = Color(0.35686275, 0.4745098, 0.5882353, 1)
+polygon = PackedVector2Array(682, 196, 1236, 192, 1341, 225, 1518, 314, 1591, 379, 1661, 534, 1664, 673, 1594, 789, 1352, 930, 1247, 959, 654, 956, 505, 902, 339, 796, 283, 713, 256, 510, 343, 367, 534, 250)
+metadata/_edit_lock_ = true
+
+[node name="CollisionArea" type="CollisionPolygon2D" parent="WaterArea" unique_id=607201733]
+polygon = PackedVector2Array(682, 196, 1236, 192, 1341, 225, 1518, 314, 1591, 379, 1661, 534, 1664, 673, 1594, 789, 1352, 930, 1247, 959, 654, 956, 505, 902, 339, 796, 283, 713, 256, 510, 343, 367, 534, 250)
+metadata/_edit_lock_ = true
+
+[node name="CursorNode" type="Node2D" parent="." unique_id=868867043]
+script = ExtResource("2_nxjxa")
+
+[node name="RodPivot" type="Node2D" parent="." unique_id=642977651]
+position = Vector2(960, 1076)
+
+[node name="FishingRodTemp" type="ColorRect" parent="RodPivot" unique_id=197211057]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -11.0
+offset_top = -405.0
+offset_right = 11.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(11, 409)
+color = Color(0.56078434, 0.38039216, 0.27058825, 1)
