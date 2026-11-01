@@ -23,6 +23,7 @@ corner_radius_bottom_left = 20
 bg_color = Color(0.7647059, 0.24705882, 0.27058825, 1)
 
 [node name="MenuOverlay" type="Node" unique_id=1468554513]
+process_mode = 3
 
 [node name="MenuOverlay" type="CanvasLayer" parent="." unique_id=1910394550]
 
@@ -87,6 +88,7 @@ theme_override_constants/separation = 70
 [node name="RecalibrateButton" type="Button" parent="MenuOverlay/Overlay/MenuPanel/ButtonContainer" unique_id=1607751968]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
+focus_mode = 0
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxFlat_hlhnc")
 text = "Recalibrate Remote"
@@ -94,6 +96,7 @@ text = "Recalibrate Remote"
 [node name="RestartButton" type="Button" parent="MenuOverlay/Overlay/MenuPanel/ButtonContainer" unique_id=253263300]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
+focus_mode = 0
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxFlat_hlhnc")
 text = "Restart Game"
@@ -101,6 +104,7 @@ text = "Restart Game"
 [node name="HomeButton" type="Button" parent="MenuOverlay/Overlay/MenuPanel/ButtonContainer" unique_id=1097222112]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
+focus_mode = 0
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxFlat_hlhnc")
 text = "Back to Home"
@@ -111,6 +115,7 @@ offset_left = 689.5
 offset_top = -16.5
 offset_right = 779.5
 offset_bottom = 73.5
+focus_mode = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxFlat_nr1gc")
