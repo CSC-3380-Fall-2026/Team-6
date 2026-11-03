@@ -1,7 +1,25 @@
+<<<<<<< Updated upstream
 [gd_resource type="Resource" script_class="FishData" format=3 uid="uid://2s7hhslipct8"]
 
 [ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_vqwgr"]
 
 [resource]
 script = ExtResource("1_vqwgr")
+=======
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://tyxtkcac73ri"]
+
+[ext_resource type="Texture2D" path="res://Assets/Fish/UncutFish/eel.png" id="1_k4f5r"]
+[ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_vqwgr"]
+[ext_resource type="Texture2D" path="res://Assets/Fish/SwimmingFish/eel.png" id="2_st1u1"]
+
+[resource]
+script = ExtResource("1_vqwgr")
+FishName = "Eel"
+GoneFishingSprite = ExtResource("2_st1u1")
+FishNinjaSprite = ExtResource("1_k4f5r")
+Points = 25
+Speed = 120.0
+DoNotCut = true
+Rarity = 1
+>>>>>>> Stashed changes
 metadata/_custom_type_script = "uid://o4uag27rp8gg"

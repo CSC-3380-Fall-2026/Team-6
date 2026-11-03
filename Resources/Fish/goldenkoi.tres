@@ -1,7 +1,25 @@
+<<<<<<< Updated upstream
 [gd_resource type="Resource" script_class="FishData" format=3 uid="uid://c5spcowr5tvpa"]
 
 [ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_q4eaw"]
 
 [resource]
 script = ExtResource("1_q4eaw")
+=======
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://cjq6fbw6fj7mn"]
+
+[ext_resource type="Texture2D" path="res://Assets/Fish/UncutFish/goldenkoi.png" id="1_dfwny"]
+[ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_q4eaw"]
+[ext_resource type="Texture2D" path="res://Assets/Fish/SwimmingFish/goldenkoi.png" id="2_g1sul"]
+
+[resource]
+script = ExtResource("1_q4eaw")
+FishName = "Golden Koi"
+GoneFishingSprite = ExtResource("2_g1sul")
+FishNinjaSprite = ExtResource("1_dfwny")
+Points = 100
+Speed = 200.0
+DoNotCut = true
+Rarity = 4
+>>>>>>> Stashed changes
 metadata/_custom_type_script = "uid://o4uag27rp8gg"
