@@ -1,0 +1,208 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://xwujgkytwepm" path="res://Scripts/HighScoresScreen.cs" id="1_scores"]
+[ext_resource type="Script" uid="uid://bv05h4bob4l5f" path="res://Scripts/Components/CrosshairButtons.cs" id="2_crosshair"]
+
+[sub_resource type="Theme" id="Theme_scores"]
+default_font_size = 40
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 40.0
+content_margin_top = 30.0
+content_margin_right = 40.0
+content_margin_bottom = 30.0
+bg_color = Color(0.101960786, 0.20784314, 0.40392157, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_back"]
+bg_color = Color(0.101960786, 0.20784314, 0.40392157, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[node name="HighScoresScreen" type="Control" node_paths=PackedStringArray("goneFishingTable", "fishNinjaTable", "backButton", "debugLabel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = SubResource("Theme_scores")
+script = ExtResource("1_scores")
+goneFishingTable = NodePath("GoneFishingPanel/Rows/Table")
+fishNinjaTable = NodePath("FishNinjaPanel/Rows/Table")
+backButton = NodePath("BackButton")
+debugLabel = NodePath("DebugLabel")
+
+[node name="BackgroundColor" type="ColorRect" parent="."]
+z_index = -100
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.69803923, 0.85490197, 0.89411765, 1)
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 60.0
+offset_bottom = 225.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.101960786, 0.20784314, 0.40392157, 1)
+theme_override_font_sizes/font_size = 120
+text = "High Scores"
+horizontal_alignment = 1
+
+[node name="GoneFishingPanel" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 260.0
+offset_right = 900.0
+offset_bottom = 860.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Rows" type="VBoxContainer" parent="GoneFishingPanel"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Heading" type="Label" parent="GoneFishingPanel/Rows"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Gone Fishing"
+horizontal_alignment = 1
+
+[node name="Table" type="GridContainer" parent="GoneFishingPanel/Rows"]
+layout_mode = 2
+theme_override_constants/h_separation = 30
+theme_override_constants/v_separation = 14
+columns = 4
+
+[node name="RankHeading" type="Label" parent="GoneFishingPanel/Rows/Table"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
+text = "#"
+horizontal_alignment = 1
+
+[node name="ScoreHeading" type="Label" parent="GoneFishingPanel/Rows/Table"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
+text = "Score"
+horizontal_alignment = 1
+
+[node name="TimeHeading" type="Label" parent="GoneFishingPanel/Rows/Table"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
+text = "Time"
+horizontal_alignment = 1
+
+[node name="DateHeading" type="Label" parent="GoneFishingPanel/Rows/Table"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
+text = "Date"
+horizontal_alignment = 1
+
+[node name="FishNinjaPanel" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 1020.0
+offset_top = 260.0
+offset_right = 1800.0
+offset_bottom = 860.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Rows" type="VBoxContainer" parent="FishNinjaPanel"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Heading" type="Label" parent="FishNinjaPanel/Rows"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Fish Ninja"
+horizontal_alignment = 1
+
+[node name="Table" type="GridContainer" parent="FishNinjaPanel/Rows"]
+layout_mode = 2
+theme_override_constants/h_separation = 30
+theme_override_constants/v_separation = 14
+columns = 4
+
+[node name="RankHeading" type="Label" parent="FishNinjaPanel/Rows/Table"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
+text = "#"
+horizontal_alignment = 1
+
+[node name="ScoreHeading" type="Label" parent="FishNinjaPanel/Rows/Table"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
+text = "Score"
+horizontal_alignment = 1
+
+[node name="TimeHeading" type="Label" parent="FishNinjaPanel/Rows/Table"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
+text = "Time"
+horizontal_alignment = 1
+
+[node name="DateHeading" type="Label" parent="FishNinjaPanel/Rows/Table"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
+text = "Date"
+horizontal_alignment = 1
+
+[node name="DebugLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 878.0
+offset_bottom = 920.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.101960786, 0.20784314, 0.40392157, 1)
+theme_override_font_sizes/font_size = 30
+text = "Debug: press 1 to add a random Gone Fishing score, or 2 for Fish Ninja"
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = -160.0
+offset_right = 360.0
+offset_bottom = -60.0
+grow_vertical = 0
+focus_mode = 0
+theme_override_font_sizes/font_size = 45
+theme_override_styles/normal = SubResource("StyleBoxFlat_back")
+text = "Back"
+
+[node name="Instructions" type="Label" parent="."]
+layout_mode = 0
+offset_left = 560.0
+offset_top = 950.0
+offset_right = 1360.0
+offset_bottom = 1013.0
+theme_override_colors/font_color = Color(0.101960786, 0.20784314, 0.40392157, 1)
+theme_override_font_sizes/font_size = 45
+text = "Press B to go back"
+horizontal_alignment = 1
+
+[node name="CrosshairButtons" type="Node" parent="."]
+script = ExtResource("2_crosshair")
