@@ -28,19 +28,6 @@ public partial class GoneFishing : Node
 			//Without it, the rod point is 90 degrees offset to the left.
 			float angle = Mathf.Atan2(direction.Y, direction.X) + Mathf.Pi / 2;
 			
-			//this makes the rod not SNAP over to the cursor, giving it a feeling of weight.
-			if(direction.Length() > rodDeadzone)
-			{
-				_FishingRod.Rotation = Mathf.LerpAngle(_FishingRod.Rotation, angle, rodRotation * (float)delta);
-			
-			}
-			if(_cursorNode.IsPrimaryHeld)
-			{
-				//TODO CASTING LOGIC GOES HERE.
-			}
 		}
-
-
-
 	}
 }
