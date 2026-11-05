@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://4mydybhdhrux"]
+
+[ext_resource type="Script" uid="uid://dm80u6xjwn80m" path="res://Scenes/GameHud.cs" id="1_q8rwo"]
+
+[node name="GameHud" type="Control" unique_id=1629236125]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_q8rwo")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=404171554]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 76.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1457698990]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TimerPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer" unique_id=1235809577]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/TimerPanel" unique_id=154267060]
+layout_mode = 2
+
+[node name="TimeTitle" type="Label" parent="MarginContainer/HBoxContainer/TimerPanel/VBoxContainer" unique_id=1616491074]
+layout_mode = 2
+text = "TIME
+"
+
+[node name="TimeValue" type="Label" parent="MarginContainer/HBoxContainer/TimerPanel/VBoxContainer" unique_id=672144275]
+layout_mode = 2
+text = "00:00"
+
+[node name="ScorePanel" type="PanelContainer" parent="MarginContainer/HBoxContainer" unique_id=1575204952]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ScorePanel" unique_id=748036048]
+layout_mode = 2
+
+[node name="ScoreTitle" type="Label" parent="MarginContainer/HBoxContainer/ScorePanel/VBoxContainer" unique_id=930370434]
+layout_mode = 2
+text = "SCORE"
+
+[node name="ScoreValue" type="Label" parent="MarginContainer/HBoxContainer/ScorePanel/VBoxContainer" unique_id=1365370095]
+layout_mode = 2
+text = "0"
+
+[node name="HighScorePanel" type="PanelContainer" parent="MarginContainer/HBoxContainer" unique_id=578101651]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/HighScorePanel" unique_id=207267044]
+layout_mode = 2
+
+[node name="HighScoreTitle" type="Label" parent="MarginContainer/HBoxContainer/HighScorePanel/VBoxContainer" unique_id=1289860060]
+layout_mode = 2
+text = "HIGH SCORE"
+
+[node name="HighScoreValue" type="Label" parent="MarginContainer/HBoxContainer/HighScorePanel/VBoxContainer" unique_id=2029587554]
+layout_mode = 2
+text = "0"
+
+[node name="GameSpecificSlot" type="Control" parent="MarginContainer/HBoxContainer" unique_id=1323703571]
+layout_mode = 2
+size_flags_horizontal = 3
