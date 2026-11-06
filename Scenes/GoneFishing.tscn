@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://b51jrdkiiuawl"]
 
 [ext_resource type="Script" uid="uid://ddwbb4vhjuh8w" path="res://Scripts/GoneFishing.cs" id="1_g3asb"]
+[ext_resource type="Texture2D" uid="uid://bv34fkiydo1sc" path="res://Assets/grass.png" id="2_ndjx8"]
 [ext_resource type="Script" uid="uid://dl832hes558bg" path="res://Scripts/CursorNode.cs" id="2_nxjxa"]
+[ext_resource type="Texture2D" uid="uid://jdxc523lage2" path="res://Assets/water.png" id="3_wgts6"]
 
 [node name="GoneFishing" type="Control" unique_id=691912027 node_paths=PackedStringArray("_FishingRod", "_waterShape", "_cursorNode")]
 layout_mode = 3
@@ -16,21 +18,25 @@ _waterShape = NodePath("WaterArea/WaterShape")
 _cursorNode = NodePath("CursorNode")
 metadata/_edit_lock_ = true
 
-[node name="Background Grass" type="ColorRect" parent="." unique_id=1701405512]
+[node name="Background Grass" type="TextureRect" parent="." unique_id=625236661]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.4, 0.6392157, 0.28627452, 1)
+texture = ExtResource("2_ndjx8")
+stretch_mode = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="WaterArea" type="Area2D" parent="." unique_id=1241967109]
 metadata/_edit_lock_ = true
 
 [node name="WaterShape" type="Polygon2D" parent="WaterArea" unique_id=1277273584]
-color = Color(0.35686275, 0.4745098, 0.5882353, 1)
+texture_filter = 1
+texture_repeat = 2
+texture = ExtResource("3_wgts6")
 polygon = PackedVector2Array(682, 196, 1236, 192, 1341, 225, 1518, 314, 1591, 379, 1661, 534, 1664, 673, 1594, 789, 1352, 930, 1247, 959, 654, 956, 505, 902, 339, 796, 283, 713, 256, 510, 343, 367, 534, 250)
 metadata/_edit_lock_ = true
 
