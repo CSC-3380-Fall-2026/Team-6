@@ -49,20 +49,4 @@ public partial class FishSpawner : Node2D
             }
         }
     }
-
-    // Helper method to execute our Rejection Sampling algorithm
-    private Vector2 GetRandomWaterPoint()
-    {
-        while (true)
-        {
-            float x = (float)GD.RandRange(_minX, _maxX);
-            float y = (float)GD.RandRange(_minY, _maxY);
-            Vector2 point = new Vector2(x, y);
-
-            if (Geometry2D.IsPointInPolygon(point, _waterShape.Polygon))
-            {
-                return point;
-            }
-        }
-    }
 }
