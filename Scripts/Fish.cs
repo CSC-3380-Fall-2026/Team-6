@@ -55,6 +55,19 @@ public partial class Fish : Area2D
         float targetAngle = Mathf.Atan2(direction.Y, direction.X);
         Rotation = Mathf.LerpAngle(Rotation, targetAngle, _rotationSpeed * (float)delta);
     }
+
+	// This method takes the FishData resource rolled by the spawner and applies its stats
+    public void ApplyData(FishData data)
+    {
+        if (data == null)
+        {
+            GD.PushError("Fish received null FishData!");
+            return;
+        }
+
+        // Overwrite the default speed with the speed defined in the Godot Inspector for this specific fish
+        _speed = data.Speed;
+    }
     public void Despawn()
     {
         OnDespawn?.Invoke(this);
