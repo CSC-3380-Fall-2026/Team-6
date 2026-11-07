@@ -11,10 +11,11 @@ public partial class Fish : Area2D
 
     [Export]
     private float _lifespan = 30f;
-    private const float ArrivalDistanceSquared = 10.0f;
+    private const float ArrivalDistanceSquared = 100.0f;
 
     private Vector2 _targetPosition;
     private float _timeAlive = 0f;
+    
     public event Action<Fish> OnReachedWaypoint;
     public event Action<Fish> OnDespawn;
 
@@ -35,12 +36,11 @@ public partial class Fish : Area2D
 
         if (_timeAlive > _lifespan)
         {
-            OnDespawn?.Invoke(this);
-            QueueFree();
+            Despawn();
             return;
         }
 
-        // Check if we are close enough to our target waypoint using our extracted constant
+        // Check if we are close enough to our target waypoint
         if (GlobalPosition.DistanceSquaredTo(_targetPosition) < ArrivalDistanceSquared)
         {
             OnReachedWaypoint?.Invoke(this);
@@ -54,5 +54,10 @@ public partial class Fish : Area2D
         Vector2 direction = _targetPosition - GlobalPosition;
         float targetAngle = Mathf.Atan2(direction.Y, direction.X);
         Rotation = Mathf.LerpAngle(Rotation, targetAngle, _rotationSpeed * (float)delta);
+    }
+    public void Despawn()
+    {
+        OnDespawn?.Invoke(this);
+        QueueFree();
     }
 }
