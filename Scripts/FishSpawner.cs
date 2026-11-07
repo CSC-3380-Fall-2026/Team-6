@@ -25,7 +25,7 @@ public partial class FishSpawner : Node2D
 
     public override void _Ready()
     {
-        // 1. Calculate the bounding box exactly ONCE at startup
+		//Calculate the bounding box exactly ONCE at startup
         if (_waterPolygon != null && _waterPolygon.Polygon.Length >= 3)
         {
             _minX = _maxX = _waterPolygon.Polygon[0].X;
@@ -33,7 +33,6 @@ public partial class FishSpawner : Node2D
 
             foreach (Vector2 point in _waterPolygon.Polygon)
             {
-                // RUBRIC FIX: Mandatory braces added
                 if (point.X < _minX) { _minX = point.X; }
                 if (point.X > _maxX) { _maxX = point.X; }
                 if (point.Y < _minY) { _minY = point.Y; }
@@ -93,9 +92,6 @@ public partial class FishSpawner : Node2D
         {
             return null;
         }
-
-        // Simple unweighted fallback for now; you can expand this to use the Rarity enum weights
-        // (e.g. Legendary = 1%, Common = 50%) as a fun algorithm exercise!
         int randomIndex = (int)(GD.Randi() % _availableFish.Length);
         return _availableFish[randomIndex];
     }
