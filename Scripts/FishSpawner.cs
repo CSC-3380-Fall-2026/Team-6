@@ -1,52 +1,91 @@
 using Godot;
-using System;
 
-// Godot 4 requires the 'partial' keyword so it can inject its own generated C# code behind the scenes.
 public partial class FishSpawner : Node2D
 {
     [Export]
-    private Polygon2D _waterShape;
-
+    private PackedScene _fishScene;
+    
     [Export]
-    private FishData[] _availableFish;
+    private int _maxFishCount = 10;
+    
+    [Export]
+    private Polygon2D _waterPolygon;
 
-    private float _minX;
-    private float _maxX;
-    private float _minY;
-    private float _maxY;
+    private int _currentFishCount = 0;
 
     public override void _Ready()
     {
+        for (int i = 0; i < _maxFishCount; i++)
+        {
+            SpawnFish();
+        }
+    }
+
+    private void SpawnFish()
+    {
+        if (_currentFishCount >= _maxFishCount) return;
+
+        Fish newFish = _fishScene.Instantiate<Fish>();
+        newFish.GlobalPosition = GetRandomWaterPoint();
         
-        if (_waterShape.Polygon.Length == 0)
+        // Subscribe to movement and cleanup events
+        newFish.OnReachedWaypoint += AssignNewWaypoint;
+        newFish.OnDespawn += HandleFishDespawn;
+
+        AddChild(newFish);
+        
+        // Give the fish its first destination
+        newFish.SetTarget(GetRandomWaterPoint());
+        
+        _currentFishCount++;
+    }
+
+    private void AssignNewWaypoint(Fish fish)
+    {
+        fish.SetTarget(GetRandomWaterPoint());
+    }
+
+    private void HandleFishDespawn(Fish fish)
+    {
+        fish.OnReachedWaypoint -= AssignNewWaypoint;
+        fish.OnDespawn -= HandleFishDespawn;
+        
+        _currentFishCount--;
+        SpawnFish();
+    }
+
+    private Vector2 GetRandomWaterPoint()
+    {
+        if (_waterPolygon == null || _waterPolygon.Polygon.Length < 3)
         {
-            // The equivalent to System.err.println() in Godot C# is GD.PushError()
-            GD.PushError("Water shape polygon is empty");
-            return;
+            return GlobalPosition; 
         }
 
-    
-        _minX = _maxX = _waterShape.Polygon[0].X;
-        _minY = _maxY = _waterShape.Polygon[0].Y;
+        Vector2[] vertices = _waterPolygon.Polygon;
 
-        foreach (Vector2 point in _waterShape.Polygon)
+        float minX = float.MaxValue, maxX = float.MinValue;
+        float minY = float.MaxValue, maxY = float.MinValue;
+
+        foreach (Vector2 point in vertices)
         {
-            if (point.X < _minX) 
-            { 
-                _minX = point.X; 
-            }
-            if (point.X > _maxX) 
-            { 
-                _maxX = point.X; 
-            }
-            if (point.Y < _minY) 
-            { 
-                _minY = point.Y; 
-            }
-            if (point.Y > _maxY) 
-            { 
-                _maxY = point.Y; 
+            if (point.X < minX) minX = point.X;
+            if (point.X > maxX) maxX = point.X;
+            if (point.Y < minY) minY = point.Y;
+            if (point.Y > maxY) maxY = point.Y;
+        }
+
+        for (int i = 0; i < 30; i++)
+        {
+            float randomX = (float)GD.RandRange(minX, maxX);
+            float randomY = (float)GD.RandRange(minY, maxY);
+            Vector2 candidatePoint = new Vector2(randomX, randomY);
+
+            if (Geometry2D.IsPointInPolygon(candidatePoint, vertices))
+            {
+                return _waterPolygon.ToGlobal(candidatePoint);
             }
         }
+
+        return _waterPolygon.ToGlobal(vertices[0]);
     }
 }
