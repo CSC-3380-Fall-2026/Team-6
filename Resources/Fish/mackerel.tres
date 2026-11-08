@@ -1,11 +1,3 @@
-<<<<<<< Updated upstream
-[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://by2usp8qikhei"]
-
-[ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_recdj"]
-
-[resource]
-script = ExtResource("1_recdj")
-=======
 [gd_resource type="Resource" script_class="FishData" format=3 uid="uid://dyymstefwsn1n"]
 
 [ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_recdj"]
@@ -22,5 +14,4 @@ FishNinjaCutSprite = ExtResource("1_vbtt5")
 Points = 25
 Speed = 125.0
 Rarity = 1
->>>>>>> Stashed changes
 metadata/_custom_type_script = "uid://o4uag27rp8gg"
