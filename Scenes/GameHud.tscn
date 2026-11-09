@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dm80u6xjwn80m" path="res://Scenes/GameHud.cs" id="1_q8rwo"]
 
-[node name="GameHud" type="Control" unique_id=1629236125]
+[node name="GameHud" type="Control" unique_id=1629236125 node_paths=PackedStringArray("TimeValue", "ScoreValue", "HighScoreValue")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,6 +10,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_q8rwo")
+TimeValue = NodePath("MarginContainer/HBoxContainer/TimerPanel/VBoxContainer/TimeValue")
+ScoreValue = NodePath("MarginContainer/HBoxContainer/ScorePanel/VBoxContainer/ScoreValue")
+HighScoreValue = NodePath("MarginContainer/HBoxContainer/HighScorePanel/VBoxContainer/HighScoreValue")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=404171554]
 layout_mode = 1
