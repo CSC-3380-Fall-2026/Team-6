@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ck64jwsxmwncx"
-path="res://.godot/imported/yellowfish.png-9ec7dc0f9f988893ae479b4b43d8ea1c.ctex"
+uid="uid://btauty1e2hdlh"
+path="res://.godot/imported/mackerel.png-9ceb1448d5f187c45b22a75ead9e56aa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Fish/yellowfish.png"
-dest_files=["res://.godot/imported/yellowfish.png-9ec7dc0f9f988893ae479b4b43d8ea1c.ctex"]
+source_file="res://Assets/Fish/CutFish/mackerel.png"
+dest_files=["res://.godot/imported/mackerel.png-9ceb1448d5f187c45b22a75ead9e56aa.ctex"]
 
 [params]
 

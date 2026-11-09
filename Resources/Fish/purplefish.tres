@@ -1,0 +1,25 @@
+<<<<<<< Updated upstream
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://dpf4jyumccaod"]
+
+[ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_sg6wf"]
+
+[resource]
+script = ExtResource("1_sg6wf")
+=======
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://dry74f06hyp5c"]
+
+[ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_sg6wf"]
+[ext_resource type="Texture2D" path="res://Assets/Fish/CutFish/purplefish.png" id="1_vigct"]
+[ext_resource type="Texture2D" path="res://Assets/Fish/UncutFish/purplefish.png" id="2_ej8sg"]
+[ext_resource type="Texture2D" path="res://Assets/Fish/SwimmingFish/purplefish.png" id="3_727fh"]
+
+[resource]
+script = ExtResource("1_sg6wf")
+FishName = "Purple Fish"
+GoneFishingSprite = ExtResource("3_727fh")
+FishNinjaSprite = ExtResource("2_ej8sg")
+FishNinjaCutSprite = ExtResource("1_vigct")
+Points = 10
+Speed = 75.0
+>>>>>>> Stashed changes
+metadata/_custom_type_script = "uid://o4uag27rp8gg"

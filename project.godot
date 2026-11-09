@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+SaveManager="*uid://dwr4dupmarokd"
 SceneManager="*uid://dcr4ixikllmmj"
 InputManager="*uid://phaiap613s5a"
 WiimoteManager="*uid://b0j44rycihbeq"

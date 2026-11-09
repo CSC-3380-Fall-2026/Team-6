@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://rj2kd7xp3x70"]
+
+[ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_je63u"]
+[ext_resource type="Texture2D" uid="uid://kbmjo2ef4ffx" path="res://Assets/Fish/CutFish/clownfsh.png" id="1_ln2xk"]
+[ext_resource type="Texture2D" uid="uid://dk0sbuh7046yh" path="res://Assets/Fish/UncutFish/koifish.png" id="2_iks18"]
+[ext_resource type="Texture2D" uid="uid://ctossekq6i72e" path="res://Assets/Fish/SwimmingFish/koifish.png" id="3_o2fa0"]
+
+[resource]
+script = ExtResource("1_je63u")
+FishName = "KoiFish"
+GoneFishingSprite = ExtResource("3_o2fa0")
+FishNinjaSprite = ExtResource("2_iks18")
+FishNinjaCutSprite = ExtResource("1_ln2xk")
+Points = 50
+Speed = 75.0
+Rarity = 2
+metadata/_custom_type_script = "uid://o4uag27rp8gg"
