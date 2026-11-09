@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://bv34fkiydo1sc" path="res://Assets/grass.png" id="2_ndjx8"]
 [ext_resource type="Script" uid="uid://dl832hes558bg" path="res://Scripts/CursorNode.cs" id="2_nxjxa"]
 [ext_resource type="Texture2D" uid="uid://jdxc523lage2" path="res://Assets/water.png" id="3_wgts6"]
-[ext_resource type="PackedScene" uid="uid://4mydybhdhrux" path="res://Scenes/GameHud.tscn" id="5_wgts6"]
 [ext_resource type="PackedScene" uid="uid://b4ph7i6yexn5u" path="res://Scenes/MenuOverlay.tscn" id="6_pause"]
 
 [node name="GoneFishing" type="Control" unique_id=691912027 node_paths=PackedStringArray("_FishingRod", "_waterShape", "_cursorNode")]
@@ -68,7 +67,5 @@ pivot_offset = Vector2(11, 409)
 color = Color(0.56078434, 0.38039216, 0.27058825, 1)
 
 [node name="HUDLayer" type="CanvasLayer" parent="." unique_id=1708769849]
-
-[node name="GameHud" parent="HUDLayer" unique_id=1629236125 instance=ExtResource("5_wgts6")]
 
 [node name="MenuOverlay" parent="HUDLayer" unique_id=201952899 instance=ExtResource("6_pause")]
