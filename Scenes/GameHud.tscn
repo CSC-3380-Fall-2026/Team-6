@@ -35,8 +35,7 @@ layout_mode = 2
 
 [node name="TimeTitle" type="Label" parent="MarginContainer/HBoxContainer/TimerPanel/VBoxContainer" unique_id=1616491074]
 layout_mode = 2
-text = "TIME
-"
+text = "TIME"
 
 [node name="TimeValue" type="Label" parent="MarginContainer/HBoxContainer/TimerPanel/VBoxContainer" unique_id=672144275]
 layout_mode = 2
