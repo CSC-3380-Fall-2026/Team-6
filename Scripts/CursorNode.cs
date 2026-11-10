@@ -78,12 +78,16 @@ public partial class CursorNode : Node2D
 		Vector2 direction = Input.GetVector("cursor_left", "cursor_right", "cursor_up", "cursor_down");
 		if (direction != Vector2.Zero) {
 			ScreenPosition += direction * KeyboardSpeed * (float)delta;
+			// WiimoteManager points the crosshair at the mouse every frame, so move the hidden mouse along with it
+			GetViewport().WarpMouse(ScreenPosition);
 		}
 
 		if(InputManager.Instance != null)
 		{
 			Vector2 targetPosition = InputManager.Instance.PointerPosition;
-			_screenPosition = _screenPosition.Lerp(targetPosition, JitterCushion);
+			// JitterCushion is how much of the gap closes per frame at 60 fps; scaling by delta keeps that speed at any frame rate
+			float weight = 1f - Mathf.Pow(1f - JitterCushion, (float)delta * 60f);
+			_screenPosition = _screenPosition.Lerp(targetPosition, weight);
 			_screenPosition = _screenPosition.Clamp(Vector2.Zero, GetViewportRect().Size);
 		}
 

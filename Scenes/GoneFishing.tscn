@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bv34fkiydo1sc" path="res://Assets/grass.png" id="2_ndjx8"]
 [ext_resource type="Script" uid="uid://dl832hes558bg" path="res://Scripts/CursorNode.cs" id="2_nxjxa"]
 [ext_resource type="Texture2D" uid="uid://jdxc523lage2" path="res://Assets/water.png" id="3_wgts6"]
+[ext_resource type="Script" uid="uid://do5ketj8qnl2o" path="res://Scripts/Components/BackToMainMenu.cs" id="4_back"]
 
 [node name="GoneFishing" type="Control" unique_id=691912027 node_paths=PackedStringArray("_FishingRod", "_waterShape", "_cursorNode")]
 layout_mode = 3
@@ -46,6 +47,7 @@ metadata/_edit_lock_ = true
 
 [node name="CursorNode" type="Node2D" parent="." unique_id=868867043]
 script = ExtResource("2_nxjxa")
+HideSystemCursor = false
 
 [node name="RodPivot" type="Node2D" parent="." unique_id=642977651]
 position = Vector2(960, 1076)
@@ -64,3 +66,6 @@ grow_horizontal = 2
 grow_vertical = 0
 pivot_offset = Vector2(11, 409)
 color = Color(0.56078434, 0.38039216, 0.27058825, 1)
+
+[node name="BackToMainMenu" type="Node" parent="."]
+script = ExtResource("4_back")
