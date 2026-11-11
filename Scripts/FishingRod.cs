@@ -28,6 +28,20 @@ public partial class FishingRod : Node2D
     [Export] private float _flightSpeed = 1400f; // pixels per second while bobber flies
     [Export] private float _reelSpeed = 900f; // pixels per second while reeling in
 
+    [ExportGroup("Bobbing")]
+    [Export] private float _bobSpeed = 3f; // how fast bobber floats up and down
+    [Export] private float _bobHeight = 2f; // how far bobber floats up & down
+
+    [ExportGroup("Splash")]
+    [Export] private int _splashRingCount = 2; // number of ripple rings per splash
+    [Export] private float _splashRingWidth = 3f; //thickness of each ring's line
+    [Export] private Color _splashColor = new Color(1f, 1f, 1f, 0.85f);
+    [Export] private float _splashRadius = 30f; // ring size in pixels before scaling
+    [Export] private Vector2 _splashStartScale = new Vector2(0.2f, 0.1f); // rings start small
+    [Export] private Vector2 _splashEndScale = new Vector2(1.6f, 1.6f); // rings grow to this size
+    [Export] private float _splashDuration = 0.6f; // seconds for ring to grow and fade out
+    [Export] private float _splashRingDelay = 0.12f; // seconds between each ring starting
+
     public RodState State { get; private set; } = RodState.Idle;
 
     private static readonly string[] DefaultRodPaths =
@@ -39,6 +53,9 @@ public partial class FishingRod : Node2D
         "res://Assets/Rod/rod5.png",
     };
     private const string DefaultBobberPath = "res://Assets/Rod/bobber.png";
+
+    private const int SplashRingPoints = 24; // how many points make up each ring (more = smoother circle)
+    private const float SplashSquash = 0.5f; // flattens rings into ovals so they look top-down
 
     // pixel positions inside each rod sprite found automatically in FindTipAndHandle()
     private Vector2[] _handlePixels; // where player holds rod
@@ -86,13 +103,15 @@ public partial class FishingRod : Node2D
             case RodState.Idle:
                 // rod points at whichever pond columnt the cursor is over
                 if (_cursorNode != null)
+                {
                     SetColumn(ColumnFor(_cursorNode.GlobalPosition));
+                }
                 break;
 
             case RodState.InWater:
                 // gentle float animation
                 _bobTime += (float)delta;
-                _bobber.GlobalPosition = _landedPosition + new Godot.Vector2(0, Mathf.Sin(_bobTime * 3f) * 2f);
+                _bobber.GlobalPosition = _landedPosition + new Godot.Vector2(0, Mathf.Sin(_bobTime * _bobSpeed) * _bobHeight);
                 break;
         }
 
@@ -104,19 +123,27 @@ public partial class FishingRod : Node2D
     {
         // can only cast when line is fully reeled in
         if (State != RodState.Idle)
+        {
             return;
+        }
 
         Vector2 aim = _cursorNode.GlobalPosition;
         if (IsOverWater(aim))
+        {
             StartCast(aim);
+        }
         else
+        {
             FailCast(aim);
+        }
     }
 
     private void OnSecondaryPressed(Vector2 _screenPosition)
     {
         if (State == RodState.InWater)
+        {
             StartReel();
+        }
     }
 
     // CASTING
@@ -198,7 +225,9 @@ public partial class FishingRod : Node2D
     private bool IsOverWater(Vector2 globalPoint)
     {
         if (_waterShape == null)
+        {
             return false;
+        }
         Vector2 local = _waterShape.ToLocal(globalPoint);
         return Geometry2D.IsPointInPolygon(local, _waterShape.Polygon);
     }
@@ -207,7 +236,9 @@ public partial class FishingRod : Node2D
     private int ColumnFor(Vector2 globalPoint)
     {
         if (_waterShape == null || _waterShape.Polygon.Length == 0)
+        {
             return 2;
+        }
         
         float minX = float.MaxValue;
         float maxX = float.MinValue;
@@ -249,28 +280,28 @@ public partial class FishingRod : Node2D
     private void SpawnSplash(Vector2 at)
     {
         // built from Line2D
-        for (int r = 0; r < 2; r++)
+        for (int r = 0; r < _splashRingCount; r++)
         {
             Line2D ring = new Line2D
             {
                 TopLevel = true,
-                Width = 3f,
-                DefaultColor = new Color(1, 1, 1, 0.85f),
+                Width = _splashRingWidth,
+                DefaultColor = _splashColor,
                 Closed = true,
-                Scale = new Vector2(0.2f, 0.1f),
+                Scale = _splashStartScale,
             };
-            for (int i = 0; i < 24; i++)
+            for (int i = 0; i < SplashRingPoints; i++)
             {
-                float a = i / 24f * Mathf.Tau;
-                ring.AddPoint(new Godot.Vector2(Mathf.Cos(a), Mathf.Sin(a) * 0.5f) * 30f);
+                float a = i / (float)SplashRingPoints * Mathf.Tau;
+                ring.AddPoint(new Godot.Vector2(Mathf.Cos(a), Mathf.Sin(a) * SplashSquash) * _splashRadius);
             }
             AddChild(ring);
             ring.GlobalPosition = at;
 
-            float delay = r * 0.12f;
+            float delay = r * _splashRingDelay;
             Tween t = ring.CreateTween().SetParallel();
-            t.TweenProperty(ring, "scale", new Vector2(1.6f, 1.6f), 0.6f).SetDelay(delay).SetTrans(Tween.TransitionType.Quad).SetEase(Tween.EaseType.Out);
-            t.TweenProperty(ring, "modulate:a", 0f, 0.6f).SetDelay(delay);
+            t.TweenProperty(ring, "scale", _splashEndScale, _splashDuration).SetDelay(delay).SetTrans(Tween.TransitionType.Quad).SetEase(Tween.EaseType.Out);
+            t.TweenProperty(ring, "modulate:a", 0f, _splashDuration).SetDelay(delay);
             t.Chain().TweenCallback(Callable.From(() => ring.QueueFree()));
         }
     }
@@ -285,7 +316,10 @@ public partial class FishingRod : Node2D
         for (int i = 0; i < count; i++)
         {
             Image img = _rodTextures[i].GetImage();
-            if (img.IsCompressed()) img.Decompress();
+            if (img.IsCompressed()) 
+            {
+                img.Decompress();
+            }
             int w = img.GetWidth();
             int h = img.GetHeight();
 
@@ -318,7 +352,10 @@ public partial class FishingRod : Node2D
             {
                 for (int x = 0; x < w; x++)
                 {
-                    if (img.GetPixel(x, y).A <= 0.1f) continue;
+                    if (img.GetPixel(x, y).A <= 0.1f) 
+                    {
+                        continue;
+                    }
                     Vector2 p = new Godot.Vector2(x + 0.5f, y + .5f);
                     float d = p.DistanceSquaredTo(handle);
                     if (d > best)
@@ -340,7 +377,9 @@ public partial class FishingRod : Node2D
         {
             _rodTextures = new Texture2D[DefaultRodPaths.Length];
             for (int i = 0; i < DefaultRodPaths.Length; i++)
+            {
                 _rodTextures[i] = GD.Load<Texture2D>(DefaultRodPaths[i]);
+            }
         }
         _bobberTexture ??= GD.Load<Texture2D>(DefaultBobberPath);
     }
