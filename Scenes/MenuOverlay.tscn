@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://b4ph7i6yexn5u"]
 
+[ext_resource type="Script" uid="uid://c02fqdtbpcrwb" path="res://Scenes/MenuOverlay.cs" id="1_gqglk"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut64v"]
 bg_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
 border_width_left = 8
@@ -24,6 +26,7 @@ bg_color = Color(0.7647059, 0.24705882, 0.27058825, 1)
 
 [node name="MenuOverlay" type="Node" unique_id=1468554513]
 process_mode = 3
+script = ExtResource("1_gqglk")
 
 [node name="MenuOverlay" type="CanvasLayer" parent="." unique_id=1910394550]
 
@@ -120,3 +123,5 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxFlat_nr1gc")
 text = "X"
+
+[connection signal="pressed" from="MenuOverlay/Overlay/MenuPanel/CloseButton" to="." method="_on_close_button_pressed"]
