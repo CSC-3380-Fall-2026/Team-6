@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://jdxc523lage2" path="res://Assets/water.png" id="3_wgts6"]
 [ext_resource type="PackedScene" uid="uid://4mydybhdhrux" path="res://Scenes/GameHud.tscn" id="5_wgts6"]
 [ext_resource type="PackedScene" uid="uid://b4ph7i6yexn5u" path="res://Scenes/MenuOverlay.tscn" id="6_pause"]
+[ext_resource type="Script" uid="uid://do5ketj8qnl2o" path="res://Scripts/Components/BackToMainMenu.cs" id="4_back"]
 
 [node name="GoneFishing" type="Control" unique_id=691912027 node_paths=PackedStringArray("_FishingRod", "_waterShape", "_cursorNode")]
 layout_mode = 3
@@ -48,6 +49,7 @@ metadata/_edit_lock_ = true
 
 [node name="CursorNode" type="Node2D" parent="." unique_id=868867043]
 script = ExtResource("2_nxjxa")
+HideSystemCursor = false
 
 [node name="RodPivot" type="Node2D" parent="." unique_id=642977651]
 position = Vector2(960, 1076)
@@ -72,3 +74,5 @@ color = Color(0.56078434, 0.38039216, 0.27058825, 1)
 [node name="GameHud" parent="HUDLayer" unique_id=1629236125 instance=ExtResource("5_wgts6")]
 
 [node name="MenuOverlay" parent="HUDLayer" unique_id=201952899 instance=ExtResource("6_pause")]
+[node name="BackToMainMenu" type="Node" parent="."]
+script = ExtResource("4_back")
