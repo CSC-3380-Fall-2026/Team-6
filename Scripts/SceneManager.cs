@@ -9,9 +9,12 @@ public partial class SceneManager : Node
 	public const string MainMenu = "res://Scenes/MainMenu.tscn";
 	public const string TestLevel = "res://Scenes/TestLevel.tscn";
 	public const string FishingLevel = "res://Scenes/GoneFishing.tscn";
+	public const string HighScoresScreen = "res://Scenes/HighScoresScreen.tscn";
+	public const string FishNinja = "res://Scenes/FishNinja.tscn";
 
-	// Opens the testing level for now until real levels are made
-	public const string FishNinja = TestLevel;
+	// Names of the two minigames. StartGame stores one in SelectedGame, and SaveManager keeps a high score list for each
+	public const string GoneFishingId = "Gone Fishing";
+	public const string FishNinjaId = "Fish Ninja";
 
 	// Name of the last minigame picked, so the next scene knows which game to run
 	public string SelectedGame { get; private set; } = "";

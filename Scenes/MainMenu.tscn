@@ -2,10 +2,10 @@
 
 [ext_resource type="Texture2D" uid="uid://cvkogwgiy0xhq" path="res://Assets/Fish/SwimmingFish/bluefish.png" id="1_853f1"]
 [ext_resource type="Texture2D" uid="uid://d1ha4gupgwbkj" path="res://Assets/Fish/SwimmingFish/greenbass.png" id="2_8saeu"]
-[ext_resource type="PackedScene" uid="uid://mgmh4cp7od8o" path="res://Scenes/CursorNode.tscn" id="2_8um5k"]
 [ext_resource type="Texture2D" uid="uid://p35ffbqw87vh" path="res://Assets/Fish/SwimmingFish/jellyfish.png" id="3_8saeu"]
 [ext_resource type="Texture2D" uid="uid://ck64jwsxmwncx" path="res://Assets/Fish/SwimmingFish/yellowfinfish.png" id="4_ghw46"]
 [ext_resource type="Script" uid="uid://cbib5loj7najs" path="res://Scripts/MainMenu.cs" id="5_menu"]
+[ext_resource type="Script" uid="uid://bv05h4bob4l5f" path="res://Scripts/Components/CrosshairButtons.cs" id="6_crosshair"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ghw46"]
 atlas = ExtResource("1_853f1")
@@ -420,7 +420,7 @@ corner_radius_top_right = 35
 corner_radius_bottom_right = 35
 corner_radius_bottom_left = 35
 
-[node name="MainMenu" type="Control" unique_id=2077510560 node_paths=PackedStringArray("goneFishingButton", "fishNinjaButton")]
+[node name="MainMenu" type="Control" unique_id=2077510560 node_paths=PackedStringArray("goneFishingButton", "fishNinjaButton", "highScoresButton")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -431,8 +431,7 @@ mouse_filter = 2
 script = ExtResource("5_menu")
 goneFishingButton = NodePath("GoneFishingButton")
 fishNinjaButton = NodePath("FishNinjaButton")
-
-[node name="Cursor" parent="." unique_id=1886980775 instance=ExtResource("2_8um5k")]
+highScoresButton = NodePath("HighScoresButton")
 
 [node name="BackgroundColor" type="ColorRect" parent="." unique_id=1894003716]
 z_index = -100
@@ -556,3 +555,17 @@ grow_horizontal = 2
 theme_override_font_sizes/font_size = 45
 text = "Press   A   to Select"
 metadata/_edit_use_anchors_ = true
+
+[node name="HighScoresButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 760.0
+offset_top = 870.0
+offset_right = 1160.0
+offset_bottom = 990.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_ut64v")
+text = "High Scores"
+
+[node name="CrosshairButtons" type="Node" parent="."]
+script = ExtResource("6_crosshair")

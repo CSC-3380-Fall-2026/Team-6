@@ -12,5 +12,5 @@ GoneFishingSprite = ExtResource("3_fojt8")
 FishNinjaSprite = ExtResource("2_fmlal")
 FishNinjaCutSprite = ExtResource("1_mkei7")
 Points = 10
-Speed = 70.0
+Speed = 60.0
 metadata/_custom_type_script = "uid://o4uag27rp8gg"
