@@ -6,16 +6,29 @@ public partial class Fish : Area2D
     [Export]
     private float _speed = 50f;
     private const float MinValidSpeed =0f;
+    private const float TimerExpired = 0f;
     [Export]
     private float _rotationSpeed = 5f;
-
     [Export]
     private float _minLifespan = 20f;
     [Export]
     private float _maxLifespan = 60f; //It might be worth giving rare fish a lower lifespan?
     private float _currentLifeSpan;
+   //pause time variables are intended to give 'bursty' movement to the fish.
+    [Export]
+    private float _minPauseTime = 0.5f;
+    [Export]
+    private float _maxPauseTime = 4.0f;
+    [Export]
+    private float _burstMultiplier = 1.8f;
+    [Export]
+    private float _coastMultiplier = .4f;
+    [Export]
+    private float _deceleration = 60f;
+    private float _currentSpeed;
+    private bool _restingFish = false;
+    private float _pauseTimer = 0f;
     private const float ArrivalDistanceSquared = 100.0f;
-
 
     // Controls how many animation frames play per second, exposed in the Godot Inspector
     [Export]
@@ -44,6 +57,8 @@ public partial class Fish : Area2D
 
     public void SetTarget(Vector2 newTarget)
     {
+        _restingFish = false;
+        _currentSpeed = _speed * _burstMultiplier;
         _targetPosition = newTarget;
     }
 
@@ -56,17 +71,28 @@ public partial class Fish : Area2D
             Despawn();
             return;
         }
-
-        // Check if we are close enough to our target waypoint
-        if (GlobalPosition.DistanceSquaredTo(_targetPosition) < ArrivalDistanceSquared)
+        if(_restingFish)
         {
-            OnReachedWaypoint?.Invoke(this);
+            _pauseTimer -= (float)delta; 
+            if(_pauseTimer <= TimerExpired)
+            {
+                _restingFish = false;
+                OnReachedWaypoint?.Invoke(this);
+            }
             return;
         }
+        if (GlobalPosition.DistanceSquaredTo(_targetPosition) < ArrivalDistanceSquared)
+        {
+            _restingFish = true;
+            _pauseTimer = (float)GD.RandRange(_minPauseTime, _maxPauseTime);
+            return;
+        }
+        //Helps with smoothing out burst speed to a slow coasting.
+        float coastSpeed = _speed * _coastMultiplier;
+        _currentSpeed = Mathf.MoveToward(_currentSpeed, coastSpeed, _deceleration * (float)delta);
 
-        // Move linearly toward the target
-        GlobalPosition = GlobalPosition.MoveToward(_targetPosition, _speed * (float)delta);
-
+        GlobalPosition = GlobalPosition.MoveToward(_targetPosition, _currentSpeed * (float)delta);
+        
         // Calculate the angle to the target and smoothly rotate the fish to face that direction
         Vector2 direction = _targetPosition - GlobalPosition;
         float targetAngle = Mathf.Atan2(direction.Y, direction.X);
@@ -96,7 +122,6 @@ public partial class Fish : Area2D
             int safeHeight = Mathf.Max(MinFrames, data.GoneFishingSprite.GetHeight());
             int frameCount = data.GoneFishingSprite.GetWidth() / safeHeight;
             _sprite.Hframes = Mathf.Max(MinFrames, frameCount);
-
             //loop the animation
             _sprite.Frame = 0;
         }
