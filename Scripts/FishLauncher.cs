@@ -12,6 +12,19 @@ public partial class FishLauncher : Node
 
 	private enum Edge { Bottom, Left, Right }
 
+	// Screen fractions ThrowFish picks from. X is measured from the left edge and Y from the top.
+	// Bottom fish start and land anywhere between these widths
+	private const float BottomMinX = 0.15f;
+	private const float BottomMaxX = 0.85f;
+	// Side fish start between these heights
+	private const float SideStartMinY = 0.45f;
+	private const float SideStartMaxY = 0.8f;
+	// Side fish land this far across the screen, measured from the side they were thrown from
+	private const float SideLandingMin = 0.4f;
+	private const float SideLandingMax = 0.85f;
+	// Fish always peak at least this far above where they start, as a fraction of the screen height
+	private const float MinRise = 0.15f;
+
 	// Assigned in the Inspector
 	[Export] private PackedScene fishScene;
 	[Export] private Node2D fishParent;
@@ -54,7 +67,14 @@ public partial class FishLauncher : Node
 			return;
 		}
 
-		foreach (FishData fish in FishRegistry.GetAllFish()) {
+		Godot.Collections.Array<FishData> allFish = FishRegistry.GetAllFish();
+		if (allFish == null) {
+			GD.PushError("FishLauncher: the fish registry didn't load, check Resources/Fish");
+			SetProcess(false);
+			return;
+		}
+
+		foreach (FishData fish in allFish) {
 			if (fish.FishNinjaSprite != null) {
 				fishPool.Add(fish);
 			} else {
@@ -118,17 +138,17 @@ public partial class FishLauncher : Node
 		float landingX;
 		// Side fish land on the far half of the screen so they fly across it
 		if (edge == Edge.Bottom) {
-			start = new Vector2(screen.X * random.RandfRange(0.15f, 0.85f), screen.Y + edgeMargin);
-			landingX = screen.X * random.RandfRange(0.15f, 0.85f);
+			start = new Vector2(screen.X * random.RandfRange(BottomMinX, BottomMaxX), screen.Y + edgeMargin);
+			landingX = screen.X * random.RandfRange(BottomMinX, BottomMaxX);
 		} else if (edge == Edge.Left) {
-			start = new Vector2(-edgeMargin, screen.Y * random.RandfRange(0.45f, 0.8f));
-			landingX = screen.X * random.RandfRange(0.4f, 0.85f);
+			start = new Vector2(-edgeMargin, screen.Y * random.RandfRange(SideStartMinY, SideStartMaxY));
+			landingX = screen.X * random.RandfRange(SideLandingMin, SideLandingMax);
 		} else {
-			start = new Vector2(screen.X + edgeMargin, screen.Y * random.RandfRange(0.45f, 0.8f));
-			landingX = screen.X * random.RandfRange(0.15f, 0.6f);
+			start = new Vector2(screen.X + edgeMargin, screen.Y * random.RandfRange(SideStartMinY, SideStartMaxY));
+			landingX = screen.X * (1f - random.RandfRange(SideLandingMin, SideLandingMax));
 		}
 		// Always peak at least a little above where the fish starts
-		float peakY = Mathf.Min(screen.Y * random.RandfRange(highestPeak, lowestPeak), start.Y - screen.Y * 0.15f);
+		float peakY = Mathf.Min(screen.Y * random.RandfRange(highestPeak, lowestPeak), start.Y - screen.Y * MinRise);
 
 		// Squaring the speed for gravity keeps the arc the same shape, just faster
 		float pull = gravity * SpeedMultiplier * SpeedMultiplier;
