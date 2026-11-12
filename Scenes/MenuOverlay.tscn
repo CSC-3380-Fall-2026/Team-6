@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b4ph7i6yexn5u"]
 
 [ext_resource type="Script" uid="uid://c02fqdtbpcrwb" path="res://Scenes/MenuOverlay.cs" id="1_gqglk"]
+[ext_resource type="Script" uid="uid://r1ldeyjrmqgn" path="res://Scripts/Components/HoverButton.cs" id="2_mvtk4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut64v"]
 bg_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
@@ -21,8 +22,25 @@ corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1j2q0"]
+bg_color = Color(0.05490196, 0.28627452, 0.32156864, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4yrr"]
+bg_color = Color(0.05490196, 0.28627452, 0.32156864, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nr1gc"]
 bg_color = Color(0.7647059, 0.24705882, 0.27058825, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mvtk4"]
+bg_color = Color(0.6039216, 0.1882353, 0.20784314, 1)
 
 [node name="MenuOverlay" type="Node" unique_id=1468554513]
 process_mode = 3
@@ -94,7 +112,11 @@ layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxFlat_hlhnc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hlhnc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_1j2q0")
+theme_override_styles/focus = SubResource("StyleBoxFlat_hlhnc")
 text = "Recalibrate Remote"
+script = ExtResource("2_mvtk4")
 
 [node name="RestartButton" type="Button" parent="MenuOverlay/Overlay/MenuPanel/ButtonContainer" unique_id=253263300]
 custom_minimum_size = Vector2(0, 80)
@@ -102,7 +124,11 @@ layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxFlat_hlhnc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hlhnc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_g4yrr")
+theme_override_styles/focus = SubResource("StyleBoxFlat_hlhnc")
 text = "Restart Game"
+script = ExtResource("2_mvtk4")
 
 [node name="HomeButton" type="Button" parent="MenuOverlay/Overlay/MenuPanel/ButtonContainer" unique_id=1097222112]
 custom_minimum_size = Vector2(0, 80)
@@ -110,7 +136,11 @@ layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxFlat_hlhnc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hlhnc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_g4yrr")
+theme_override_styles/focus = SubResource("StyleBoxFlat_hlhnc")
 text = "Back to Home"
+script = ExtResource("2_mvtk4")
 
 [node name="CloseButton" type="Button" parent="MenuOverlay/Overlay/MenuPanel" unique_id=1277983854]
 layout_mode = 0
@@ -122,6 +152,10 @@ focus_mode = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxFlat_nr1gc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nr1gc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_mvtk4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_nr1gc")
 text = "X"
+script = ExtResource("2_mvtk4")
 
 [connection signal="pressed" from="MenuOverlay/Overlay/MenuPanel/CloseButton" to="." method="_on_close_button_pressed"]
