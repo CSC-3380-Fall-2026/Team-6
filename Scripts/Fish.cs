@@ -5,12 +5,15 @@ public partial class Fish : Area2D
 {
     [Export]
     private float _speed = 50f;
-
+    private const float MinValidSpeed =0f;
     [Export]
     private float _rotationSpeed = 5f;
 
     [Export]
-    private float _lifespan = 30f;
+    private float _minLifespan = 20f;
+    [Export]
+    private float _maxLifespan = 60f; //It might be worth giving rare fish a lower lifespan?
+    private float _currentLifeSpan;
     private const float ArrivalDistanceSquared = 100.0f;
 
 
@@ -36,6 +39,7 @@ public partial class Fish : Area2D
     {
         ProcessMode = ProcessModeEnum.Pausable;
         _targetPosition = GlobalPosition;
+        _currentLifeSpan = (float)GD.RandRange(_minLifespan, _maxLifespan);
     }
 
     public void SetTarget(Vector2 newTarget)
@@ -47,7 +51,7 @@ public partial class Fish : Area2D
     {
         _timeAlive += (float)delta;
         UpdateAnimation((float)delta);
-        if (_timeAlive > _lifespan)
+        if (_timeAlive > _currentLifeSpan)
         {
             Despawn();
             return;
@@ -78,7 +82,11 @@ public partial class Fish : Area2D
             return;
         }
 
-        _speed = data.Speed;
+        // Overwrite the default speed with the speed defined in the Godot Inspector for this specific fish
+        if(data.Speed > MinValidSpeed)
+        {
+            _speed = data.Speed;
+        }
 
         if(_sprite != null && data.GoneFishingSprite != null)
         {
@@ -92,9 +100,7 @@ public partial class Fish : Area2D
             //loop the animation
             _sprite.Frame = 0;
         }
-
-        // Overwrite the default speed with the speed defined in the Godot Inspector for this specific fish
-        _speed = data.Speed;
+        
     }
     // Steps through the horizontal sprite sheet frames at the configured FPS rate
     private void UpdateAnimation(float delta)
