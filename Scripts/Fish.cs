@@ -13,6 +13,19 @@ public partial class Fish : Area2D
     private float _lifespan = 30f;
     private const float ArrivalDistanceSquared = 100.0f;
 
+
+    // Controls how many animation frames play per second, exposed in the Godot Inspector
+    [Export]
+    private float _animationFps = 8f;
+
+    // Prevents division-by-zero or invalid 0-frame slicing on non-square textures
+    private const int MinFrames = 1;
+
+    // Accumulates delta time between sprite frame advances
+    private float _animationTimer = 0f;
+
+    [Export]
+    private Sprite2D _sprite;
     private Vector2 _targetPosition;
     private float _timeAlive = 0f;
     
@@ -33,7 +46,7 @@ public partial class Fish : Area2D
     public override void _Process(double delta)
     {
         _timeAlive += (float)delta;
-
+        UpdateAnimation((float)delta);
         if (_timeAlive > _lifespan)
         {
             Despawn();
@@ -65,8 +78,45 @@ public partial class Fish : Area2D
             return;
         }
 
+        _speed = data.Speed;
+
+        if(_sprite != null && data.GoneFishingSprite != null)
+        {
+            _sprite.Texture = data.GoneFishingSprite;
+
+            // Calculate how many square frames fit horizontally across the strip. We're cutting up the animations here.
+            int safeHeight = Mathf.Max(MinFrames, data.GoneFishingSprite.GetHeight());
+            int frameCount = data.GoneFishingSprite.GetWidth() / safeHeight;
+            _sprite.Hframes = Mathf.Max(MinFrames, frameCount);
+
+            //loop the animation
+            _sprite.Frame = 0;
+        }
+
         // Overwrite the default speed with the speed defined in the Godot Inspector for this specific fish
         _speed = data.Speed;
+    }
+    // Steps through the horizontal sprite sheet frames at the configured FPS rate
+    private void UpdateAnimation(float delta)
+    {
+        // Skip animation if there is no proper animation in play.
+        if (_sprite == null || _sprite.Hframes <= MinFrames || _animationFps <= 0f)
+        {
+            return;
+        }
+
+        // Accumulate elapsed time since the last frame swap
+        _animationTimer += delta;
+
+        // Calculate how many seconds each single frame should stay on screen
+        float frameDuration = 1f / _animationFps;
+
+        // Once enough time has passed, advance to the next frame and wrap around with modulo
+        if (_animationTimer >= frameDuration)
+        {
+            _animationTimer -= frameDuration;
+            _sprite.Frame = (_sprite.Frame + 1) % _sprite.Hframes;
+        }
     }
     public void Despawn()
     {

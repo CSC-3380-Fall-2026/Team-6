@@ -8,6 +8,28 @@
 [ext_resource type="Script" uid="uid://do5ketj8qnl2o" path="res://Scripts/Components/BackToMainMenu.cs" id="4_back"]
 [ext_resource type="PackedScene" uid="uid://4mydybhdhrux" path="res://Scenes/GameHud.tscn" id="5_wgts6"]
 [ext_resource type="PackedScene" uid="uid://b4ph7i6yexn5u" path="res://Scenes/MenuOverlay.tscn" id="6_pause"]
+[ext_resource type="Script" uid="uid://bx5umpa6dlpt" path="res://Scripts/FishSpawner.cs" id="9_n5wfh"]
+[ext_resource type="PackedScene" uid="uid://ccy4pe4eswv5f" path="res://Scenes/FishInPond.tscn" id="10_cs8w8"]
+[ext_resource type="Resource" uid="uid://bj8hm5651aasx" path="res://Resources/Fish/anchovy.tres" id="11_qp6bd"]
+[ext_resource type="Resource" uid="uid://sum177qda3u0" path="res://Resources/Fish/bass.tres" id="12_i7acv"]
+[ext_resource type="Resource" uid="uid://1hs1h3ie4opf" path="res://Resources/Fish/bluefish.tres" id="13_71yxo"]
+[ext_resource type="Resource" uid="uid://b45f30l8upncg" path="res://Resources/Fish/catfish.tres" id="14_0ru0m"]
+[ext_resource type="Resource" uid="uid://ci5s1mf2vqb8q" path="res://Resources/Fish/clownfish.tres" id="15_xqwkd"]
+[ext_resource type="Resource" uid="uid://tyxtkcac73ri" path="res://Resources/Fish/eel.tres" id="16_ue5tg"]
+[ext_resource type="Resource" uid="uid://cjq6fbw6fj7mn" path="res://Resources/Fish/goldenkoi.tres" id="17_kdkqv"]
+[ext_resource type="Resource" uid="uid://d34gaj0o4u6rb" path="res://Resources/Fish/goldfish.tres" id="18_0pi3y"]
+[ext_resource type="Resource" uid="uid://4cdnlhcgty63" path="res://Resources/Fish/jellyfish.tres" id="19_o6uj6"]
+[ext_resource type="Resource" uid="uid://rj2kd7xp3x70" path="res://Resources/Fish/koifish.tres" id="20_0di7p"]
+[ext_resource type="Resource" uid="uid://dyymstefwsn1n" path="res://Resources/Fish/mackerel.tres" id="21_oum5a"]
+[ext_resource type="Resource" uid="uid://dry74f06hyp5c" path="res://Resources/Fish/purplefish.tres" id="22_e1ifn"]
+[ext_resource type="Resource" uid="uid://vcvv03disa07" path="res://Resources/Fish/salmon.tres" id="23_cnqsx"]
+[ext_resource type="Resource" uid="uid://dmbkoexjgn7vh" path="res://Resources/Fish/seahorse.tres" id="24_xil6c"]
+[ext_resource type="Resource" uid="uid://b47cxacy05ths" path="res://Resources/Fish/seaturtle.tres" id="25_t5rjj"]
+[ext_resource type="Resource" uid="uid://8f6byjxcjp17" path="res://Resources/Fish/shark.tres" id="26_0jl1d"]
+[ext_resource type="Resource" uid="uid://bkk36rki8gxam" path="res://Resources/Fish/shrimp.tres" id="27_f0yxi"]
+[ext_resource type="Resource" uid="uid://dqy1sr2tmq70g" path="res://Resources/Fish/swordfish.tres" id="28_rd1jp"]
+[ext_resource type="Resource" uid="uid://qnfk230wopk" path="res://Resources/Fish/trout.tres" id="29_1rdks"]
+[ext_resource type="Resource" uid="uid://bq2jqtf3vanwp" path="res://Resources/Fish/yellowfish.tres" id="30_dm3o3"]
 
 [node name="GoneFishing" type="Control" unique_id=691912027]
 layout_mode = 3
@@ -45,6 +67,8 @@ metadata/_edit_lock_ = true
 polygon = PackedVector2Array(682, 196, 1236, 192, 1341, 225, 1518, 314, 1591, 379, 1661, 534, 1664, 673, 1594, 789, 1352, 930, 1247, 959, 654, 956, 505, 902, 339, 796, 283, 713, 256, 510, 343, 367, 534, 250)
 metadata/_edit_lock_ = true
 
+[node name="FishContainer" type="Node2D" parent="." unique_id=1744862578]
+
 [node name="CursorNode" type="Node2D" parent="." unique_id=868867043]
 script = ExtResource("2_nxjxa")
 HideSystemCursor = false
@@ -65,3 +89,9 @@ _lineWidth = 4.0
 
 [node name="BackToMainMenu" type="Node" parent="." unique_id=570052545]
 script = ExtResource("4_back")
+
+[node name="FishSpawner" type="Node2D" parent="." unique_id=1924136416 node_paths=PackedStringArray("_waterPolygon")]
+script = ExtResource("9_n5wfh")
+_fishScene = ExtResource("10_cs8w8")
+_waterPolygon = NodePath("../WaterArea/WaterShape")
+_availableFish = Array[Object]([ExtResource("11_qp6bd"), ExtResource("12_i7acv"), ExtResource("13_71yxo"), ExtResource("14_0ru0m"), ExtResource("15_xqwkd"), ExtResource("16_ue5tg"), ExtResource("17_kdkqv"), ExtResource("18_0pi3y"), ExtResource("19_o6uj6"), ExtResource("20_0di7p"), ExtResource("21_oum5a"), ExtResource("22_e1ifn"), ExtResource("23_cnqsx"), ExtResource("24_xil6c"), ExtResource("25_t5rjj"), ExtResource("26_0jl1d"), ExtResource("27_f0yxi"), ExtResource("28_rd1jp"), ExtResource("29_1rdks"), ExtResource("30_dm3o3")])
