@@ -2,9 +2,12 @@ using Godot;
 
 // Runs the pause menu (MenuOverlay): the pause key (P) opens and closes it, X and Esc close it,
 // and Recalibrate Remote opens the calibration screen on top. Loaded as the PauseMenu autoload
-// so it works in every scene.
+// so one copy covers both minigames, but P only opens it while one of them is the current scene.
 public partial class PauseMenu : Node
 {
+	// The scenes P opens the menu in. Menus like the title and high score screens have nothing to pause.
+	private static readonly string[] GameScenes = { SceneManager.FishingLevel, SceneManager.FishNinja };
+
 	// Assigned in the Inspector
 	[Export] private CanvasLayer menuLayer;
 	[Export] private Button recalibrateButton;
@@ -42,16 +45,24 @@ public partial class PauseMenu : Node
 		}
 
 		if (@event.IsActionPressed("pause")) {
-			GetViewport().SetInputAsHandled();
 			if (IsOpen) {
+				GetViewport().SetInputAsHandled();
 				Close();
-			} else {
+			} else if (InGameScene()) {
+				GetViewport().SetInputAsHandled();
 				Open();
 			}
 		} else if (IsOpen && @event.IsActionPressed("back")) {
 			GetViewport().SetInputAsHandled();
 			Close();
 		}
+	}
+
+	// True while one of the minigames is the current scene
+	private bool InGameScene()
+	{
+		Node scene = GetTree().CurrentScene;
+		return scene != null && System.Array.IndexOf(GameScenes, scene.SceneFilePath) >= 0;
 	}
 
 	public void Open()

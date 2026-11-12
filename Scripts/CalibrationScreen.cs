@@ -23,6 +23,8 @@ public partial class CalibrationScreen : CanvasLayer
 	private static readonly Vector2 CheckTargetSpot = new Vector2(0.3f, 0.65f);
 	// The pointer must land within this many pixels of the check target to pass
 	private const float CheckTolerance = 90f;
+	// If the readings spread out less than this, the remote barely moved between targets and there's nothing to fit
+	private const float MinReadingSpread = 1f;
 
 	// Pretend remote used when no Wiimote is connected. Its readings are deliberately a bit off so calibration has something to correct and can be tested with a mouse.
 	private static readonly Vector2 SimulatedRange = new Vector2(0.5f, 0.6f);
@@ -79,7 +81,7 @@ public partial class CalibrationScreen : CanvasLayer
 		usingRemote = wiimote.CursorPosition != Vector2.Zero;
 		lastRemoteCursor = wiimote.CursorPosition;
 
-		oldSensitivity = new Vector2(wiimote.SensitivityX, wiimote.SensitivityY);
+		oldSensitivity = wiimote.Sensitivity;
 		oldCenterOffset = wiimote.CenterOffset;
 		wiimote.OnWiimoteAClicked += OnAPressed;
 
@@ -163,7 +165,7 @@ public partial class CalibrationScreen : CanvasLayer
 			variance += ir * ir;
 		}
 		// The remote barely moved between targets, so there's nothing to fit
-		if (variance.X < 1f || variance.Y < 1f) {
+		if (variance.X < MinReadingSpread || variance.Y < MinReadingSpread) {
 			return false;
 		}
 
@@ -213,8 +215,7 @@ public partial class CalibrationScreen : CanvasLayer
 	// Sets the values WiimoteManager uses for every reading from then on
 	private static void ApplyCalibration(WiimoteManager wiimote, Vector2 sensitivity, Vector2 centerOffset)
 	{
-		wiimote.SensitivityX = sensitivity.X;
-		wiimote.SensitivityY = sensitivity.Y;
+		wiimote.Sensitivity = sensitivity;
 		wiimote.CenterOffset = centerOffset;
 	}
 
@@ -237,9 +238,11 @@ public partial class CalibrationScreen : CanvasLayer
 		// With the mouse, the crosshair is where the "remote" points, so it stays.
 		SetCrosshairVisible(!usingRemote);
 
-		instructionsLabel.Text = usingRemote
-			? "Point the Wii Remote at the center of each target and press A."
-			: "No Wii Remote found, so the mouse stands in for it. Point at the center of each target and click (or press E).";
+		if (usingRemote) {
+			instructionsLabel.Text = "Point the Wii Remote at the center of each target and press A.";
+		} else {
+			instructionsLabel.Text = "No Wii Remote found, so the mouse stands in for it. Point at the center of each target and click (or press E).";
+		}
 		resultLabel.Text = "";
 		checkMarker.Visible = false;
 		buttonRow.Visible = false;
@@ -315,9 +318,11 @@ public partial class CalibrationScreen : CanvasLayer
 		}
 
 		float miss = MapIrToScreen(raw, newSensitivity, newCenterOffset).DistanceTo(checkTarget);
-		resultLabel.Text = miss <= CheckTolerance
-			? $"Looks good! The pointer landed {miss:0} pixels from the target."
-			: $"The pointer landed {miss:0} pixels from the target, so you may want to retry.";
+		if (miss <= CheckTolerance) {
+			resultLabel.Text = $"Looks good! The pointer landed {miss:0} pixels from the target.";
+		} else {
+			resultLabel.Text = $"The pointer landed {miss:0} pixels from the target, so you may want to retry.";
+		}
 		instructionsLabel.Text = "Accept this calibration, or retry it.";
 		ShowChoice(true);
 	}
@@ -361,8 +366,7 @@ public partial class CalibrationScreen : CanvasLayer
 	{
 		if (usingRemote) {
 			// WiimoteManager only shares the screen position, so work back to the raw reading it came from
-			Vector2 sensitivity = new Vector2(wiimote.SensitivityX, wiimote.SensitivityY);
-			raw = ScreenToIr(wiimote.CursorPosition, sensitivity, wiimote.CenterOffset);
+			raw = ScreenToIr(wiimote.CursorPosition, wiimote.Sensitivity, wiimote.CenterOffset);
 			return Time.GetTicksMsec() - lastRemoteMoveMs < SignalTimeoutMs;
 		}
 		raw = SimulatedIr(GetPointer());
