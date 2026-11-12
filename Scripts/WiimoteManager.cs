@@ -100,8 +100,9 @@ public partial class WiimoteManager : Node2D
 	private  Vector2 _cursorPosition = Vector2.Zero;
 
 	//
-	[Export] public float SensitivityX = 2.4f;
-	[Export] public float SensitivityY = 1.8f;
+	[Export] public Vector2 Sensitivity = new Vector2(2.4f, 1.8f);
+	// Calibration: screen pixels subtracted from the cursor position. Set by the calibration screen.
+	[Export] public Vector2 CenterOffset = Vector2.Zero;
 	
 
 	//use this for other scripts! These are the cursor coordinates!!!
@@ -227,8 +228,8 @@ public partial class WiimoteManager : Node2D
 				Vector2 invertedMidpoint = new Vector2(IrCameraMaxWidth - rawMidpoint.X, rawMidpoint.Y);
 
 
-				centeredX = (invertedMidpoint.X - (IrCameraMaxWidth / MidpointDivisor)) * SensitivityX;
-				centeredY = (invertedMidpoint.Y - (IrCameraMaxHeight/ MidpointDivisor)) * SensitivityY;
+				centeredX = (invertedMidpoint.X - (IrCameraMaxWidth / MidpointDivisor)) * Sensitivity.X;
+				centeredY = (invertedMidpoint.Y - (IrCameraMaxHeight/ MidpointDivisor)) * Sensitivity.Y;
 				
 				GD.Print($"Aiming Midpoint: ({invertedMidpoint.X}, {invertedMidpoint.Y})");
 
@@ -237,7 +238,7 @@ public partial class WiimoteManager : Node2D
 				normalizedY = (centeredY + (IrCameraMaxHeight / MidpointDivisor)) / IrCameraMaxHeight;
 
 				//Scale to Screen Pixels of the actual screen resolution.
-				_cursorPosition = new Vector2(normalizedX * ScreenWidth, normalizedY * ScreenHeight);
+				_cursorPosition = new Vector2(normalizedX * ScreenWidth, normalizedY * ScreenHeight) - CenterOffset;
 				GD.Print($"Mapped Screen Cursor: ({_cursorPosition.X}, {_cursorPosition.Y})");
 			}
 
