@@ -13,3 +13,4 @@ rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_ri8h3")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1794507363]
+rotation = 1.5707964

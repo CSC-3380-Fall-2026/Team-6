@@ -67,7 +67,20 @@ metadata/_edit_lock_ = true
 polygon = PackedVector2Array(682, 196, 1236, 192, 1341, 225, 1518, 314, 1591, 379, 1661, 534, 1664, 673, 1594, 789, 1352, 930, 1247, 959, 654, 956, 505, 902, 339, 796, 283, 713, 256, 510, 343, 367, 534, 250)
 metadata/_edit_lock_ = true
 
-[node name="FishContainer" type="Node2D" parent="." unique_id=1744862578]
+[node name="FishSpawner" type="Node2D" parent="." unique_id=1924136416 node_paths=PackedStringArray("_waterPolygon")]
+script = ExtResource("9_n5wfh")
+_fishScene = ExtResource("10_cs8w8")
+_maxFishCount = 7
+_waterPolygon = NodePath("../WaterArea/WaterShape")
+_availableFish = Array[Object]([ExtResource("11_qp6bd"), ExtResource("12_i7acv"), ExtResource("13_71yxo"), ExtResource("14_0ru0m"), ExtResource("15_xqwkd"), ExtResource("16_ue5tg"), ExtResource("17_kdkqv"), ExtResource("18_0pi3y"), ExtResource("19_o6uj6"), ExtResource("20_0di7p"), ExtResource("21_oum5a"), ExtResource("22_e1ifn"), ExtResource("23_cnqsx"), ExtResource("24_xil6c"), ExtResource("25_t5rjj"), ExtResource("26_0jl1d"), ExtResource("27_f0yxi"), ExtResource("28_rd1jp"), ExtResource("29_1rdks"), ExtResource("30_dm3o3")])
+
+[node name="WaterOverlay" type="Polygon2D" parent="." unique_id=1429903034]
+texture_filter = 1
+texture_repeat = 2
+color = Color(0.09803922, 0.4509804, 0.7647059, 0.38039216)
+texture = ExtResource("3_wgts6")
+polygon = PackedVector2Array(682, 196, 1236, 192, 1341, 225, 1518, 314, 1591, 379, 1661, 534, 1664, 673, 1594, 789, 1352, 930, 1247, 959, 654, 956, 505, 902, 339, 796, 283, 713, 256, 510, 343, 367, 534, 250)
+metadata/_edit_lock_ = true
 
 [node name="CursorNode" type="Node2D" parent="." unique_id=868867043]
 script = ExtResource("2_nxjxa")
@@ -89,9 +102,3 @@ _lineWidth = 4.0
 
 [node name="BackToMainMenu" type="Node" parent="." unique_id=570052545]
 script = ExtResource("4_back")
-
-[node name="FishSpawner" type="Node2D" parent="." unique_id=1924136416 node_paths=PackedStringArray("_waterPolygon")]
-script = ExtResource("9_n5wfh")
-_fishScene = ExtResource("10_cs8w8")
-_waterPolygon = NodePath("../WaterArea/WaterShape")
-_availableFish = Array[Object]([ExtResource("11_qp6bd"), ExtResource("12_i7acv"), ExtResource("13_71yxo"), ExtResource("14_0ru0m"), ExtResource("15_xqwkd"), ExtResource("16_ue5tg"), ExtResource("17_kdkqv"), ExtResource("18_0pi3y"), ExtResource("19_o6uj6"), ExtResource("20_0di7p"), ExtResource("21_oum5a"), ExtResource("22_e1ifn"), ExtResource("23_cnqsx"), ExtResource("24_xil6c"), ExtResource("25_t5rjj"), ExtResource("26_0jl1d"), ExtResource("27_f0yxi"), ExtResource("28_rd1jp"), ExtResource("29_1rdks"), ExtResource("30_dm3o3")])
