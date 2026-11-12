@@ -132,11 +132,14 @@ public partial class SaveManager : Node
 	}
 
 	// Wiimote calibration: multiplies how far the pointer moves when the Wiimote moves. 1 is normal speed.
-	public float WiimoteSensitivity
+	public Vector2 WiimoteSensitivity
 	{
-		get => save.GetValue(SettingsSection, WiimoteSensitivityKey, 1f).AsSingle();
+		get => save.GetValue(SettingsSection, WiimoteSensitivityKey, Vector2.One).AsVector2();
 		set => SetSetting(WiimoteSensitivityKey, value);
 	}
+
+	// True once the player has saved a calibration
+	public bool HasWiimoteCalibration => save.HasSectionKey(SettingsSection, WiimoteSensitivityKey) && save.HasSectionKey(SettingsSection, WiimoteCenterOffsetKey);
 
 	private void SetSetting(string key, Variant value)
 	{
