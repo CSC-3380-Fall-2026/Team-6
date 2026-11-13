@@ -13,6 +13,10 @@ public partial class Fish : Area2D
     private float _minLifespan = 20f;
     [Export]
     private float _maxLifespan = 60f; //It might be worth giving rare fish a lower lifespan?
+    [Export]
+    private float _fadeDuration = 1.0f;
+    private const float TransparentAlpha = 0f;
+    private bool _isLeaving = false;
     private float _currentLifeSpan;
    //pause time variables are intended to give 'bursty' movement to the fish.
     [Export]
@@ -62,13 +66,29 @@ public partial class Fish : Area2D
         _targetPosition = newTarget;
     }
 
+    private void StartDespawnFade()
+    {
+        _isLeaving = true;
+        //Makes it so fading fish can't be caught
+        Monitoring = false;
+        Monitorable = false;
+        Tween fadeTween = CreateTween();
+        fadeTween.TweenProperty(this, "modulate:a", TransparentAlpha, _fadeDuration);
+        fadeTween.Finished += Despawn;
+    }
     public override void _Process(double delta)
     {
         _timeAlive += (float)delta;
         UpdateAnimation((float)delta);
+
+        if(_isLeaving)
+        {
+            return;
+        }
+
         if (_timeAlive > _currentLifeSpan)
         {
-            Despawn();
+            StartDespawnFade();
             return;
         }
         if(_restingFish)
