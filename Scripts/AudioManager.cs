@@ -5,7 +5,8 @@ using System.Collections.Generic;
 // the Music bus (set up in default_bus_layout.tres), so each can have its own volume.
 // The sounds are picked in the Inspector on Scenes/AudioManager.tscn, and the files go in Assets/Audio.
 // Every slot starts empty and an empty slot just plays nothing, so the game works before any sounds are chosen.
-// Music changes by itself when the scene changes, with a short crossfade, and pauses while the game is paused.
+// Each scene starts its own music by calling AudioManager.Instance.PlayMusic(...) in its _Ready.
+// The music crossfades when the track changes, and pauses while the game is paused.
 public partial class AudioManager : Node
 {
 	// Lets any script call AudioManager.Instance.PlaySFX(AudioManager.Catch)
@@ -22,7 +23,8 @@ public partial class AudioManager : Node
 	public const string LifeLost = "life_lost";
 	public const string GameOver = "game_over";
 
-	// Every sound effect name, for picking one from a list in the Inspector (like Clickable's click sound)
+	// Every sound effect name, comma separated, for the Inspector. Clickable uses it with PropertyHint.EnumSuggestion
+	// to show these names as a dropdown on its hover and click sounds, while still allowing the field to be left blank for no sound.
 	public const string SfxNames = MenuHover + "," + MenuClick + "," + Cast + "," + BobberSplash + "," + Catch + ","
 		+ FishEscape + "," + Slice + "," + LifeLost + "," + GameOver;
 
@@ -92,10 +94,6 @@ public partial class AudioManager : Node
 		musicA = AddMusicPlayer("MusicA");
 		musicB = AddMusicPlayer("MusicB");
 		currentMusic = musicA;
-
-		GetTree().SceneChanged += PlaySceneMusic;
-		// The first scene isn't in the tree yet, so pick its music once it is
-		CallDeferred(MethodName.PlaySceneMusic);
 	}
 
 	// Plays one of the sound effect names above. Does nothing if that sound hasn't been picked yet.
@@ -113,7 +111,7 @@ public partial class AudioManager : Node
 		}
 	}
 
-	// Crossfades from the current music to one of the track names above.
+	// Crossfades from the current music to one of the track names above. Call it from a scene's _Ready.
 	// Asking for the track that's already playing keeps it going, and an empty slot just fades the music out.
 	public void PlayMusic(string track)
 	{
@@ -140,23 +138,6 @@ public partial class AudioManager : Node
 			crossfade.TweenProperty(currentMusic, "volume_linear", 1f, crossfadeSeconds);
 		}
 		crossfade.Chain().TweenCallback(Callable.From(fadingOut.Stop));
-	}
-
-	// Each scene's music. Scenes that aren't listed keep whatever is already playing.
-	private void PlaySceneMusic()
-	{
-		switch (GetTree().CurrentScene?.SceneFilePath) {
-			case SceneManager.MainMenu:
-			case SceneManager.HighScoresScreen:
-				PlayMusic(MenuMusic);
-				break;
-			case SceneManager.FishingLevel:
-				PlayMusic(GoneFishingMusic);
-				break;
-			case SceneManager.FishNinja:
-				PlayMusic(FishNinjaMusic);
-				break;
-		}
 	}
 
 	private void AddSfx(string name, AudioStream stream)
