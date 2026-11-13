@@ -3,9 +3,13 @@
 [ext_resource type="Script" uid="uid://ddwbb4vhjuh8w" path="res://Scripts/GoneFishing.cs" id="1_g3asb"]
 [ext_resource type="Texture2D" uid="uid://bv34fkiydo1sc" path="res://Assets/grass.png" id="2_ndjx8"]
 [ext_resource type="Script" uid="uid://dl832hes558bg" path="res://Scripts/CursorNode.cs" id="2_nxjxa"]
+[ext_resource type="Script" uid="uid://cjn1hiw7ildcx" path="res://Scripts/FishingRod.cs" id="3_nxjxa"]
 [ext_resource type="Texture2D" uid="uid://jdxc523lage2" path="res://Assets/water.png" id="3_wgts6"]
+[ext_resource type="Script" uid="uid://do5ketj8qnl2o" path="res://Scripts/Components/BackToMainMenu.cs" id="4_back"]
+[ext_resource type="PackedScene" uid="uid://4mydybhdhrux" path="res://Scenes/GameHud.tscn" id="5_wgts6"]
+[ext_resource type="PackedScene" uid="uid://b4ph7i6yexn5u" path="res://Scenes/MenuOverlay.tscn" id="6_pause"]
 
-[node name="GoneFishing" type="Control" unique_id=691912027 node_paths=PackedStringArray("_FishingRod", "_waterShape", "_cursorNode")]
+[node name="GoneFishing" type="Control" unique_id=691912027]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,9 +17,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_g3asb")
-_FishingRod = NodePath("RodPivot")
-_waterShape = NodePath("WaterArea/WaterShape")
-_cursorNode = NodePath("CursorNode")
 metadata/_edit_lock_ = true
 
 [node name="Background Grass" type="TextureRect" parent="." unique_id=625236661]
@@ -46,21 +47,21 @@ metadata/_edit_lock_ = true
 
 [node name="CursorNode" type="Node2D" parent="." unique_id=868867043]
 script = ExtResource("2_nxjxa")
+HideSystemCursor = false
 
-[node name="RodPivot" type="Node2D" parent="." unique_id=642977651]
+[node name="RodPivot" type="Node2D" parent="." unique_id=642977651 node_paths=PackedStringArray("_waterShape", "_cursorNode")]
 position = Vector2(960, 1076)
+script = ExtResource("3_nxjxa")
+_waterShape = NodePath("../WaterArea/WaterShape")
+_cursorNode = NodePath("../CursorNode")
+_bobberScale = 7.0
+_lineWidth = 4.0
 
-[node name="FishingRodTemp" type="ColorRect" parent="RodPivot" unique_id=197211057]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -11.0
-offset_top = -405.0
-offset_right = 11.0
-offset_bottom = 4.0
-grow_horizontal = 2
-grow_vertical = 0
-pivot_offset = Vector2(11, 409)
-color = Color(0.56078434, 0.38039216, 0.27058825, 1)
+[node name="HUDLayer" type="CanvasLayer" parent="." unique_id=1708769849]
+
+[node name="GameHud" parent="HUDLayer" unique_id=1629236125 instance=ExtResource("5_wgts6")]
+
+[node name="MenuOverlay" parent="HUDLayer" unique_id=201952899 instance=ExtResource("6_pause")]
+
+[node name="BackToMainMenu" type="Node" parent="." unique_id=570052545]
+script = ExtResource("4_back")

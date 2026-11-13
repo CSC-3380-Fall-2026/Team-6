@@ -1,11 +1,3 @@
-<<<<<<< Updated upstream
-[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://c40jxponrenqk"]
-
-[ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_llhc2"]
-
-[resource]
-script = ExtResource("1_llhc2")
-=======
 [gd_resource type="Resource" script_class="FishData" format=3 uid="uid://bj8hm5651aasx"]
 
 [ext_resource type="Texture2D" path="res://Assets/Fish/CutFish/anchovy.png" id="1_36f3i"]
@@ -21,5 +13,4 @@ FishNinjaSprite = ExtResource("2_t4o5o")
 FishNinjaCutSprite = ExtResource("1_36f3i")
 Points = 10
 Speed = 125.0
->>>>>>> Stashed changes
 metadata/_custom_type_script = "uid://o4uag27rp8gg"

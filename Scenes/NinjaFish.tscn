@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://blpek0lo6rgjg" path="res://Scripts/NinjaFish.cs" id="1_fish"]
+
+[node name="NinjaFish" type="Node2D" node_paths=PackedStringArray("sprite")]
+script = ExtResource("1_fish")
+sprite = NodePath("Sprite")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(5, 5)

@@ -2,11 +2,11 @@
 
 [ext_resource type="Texture2D" uid="uid://cvkogwgiy0xhq" path="res://Assets/Fish/SwimmingFish/bluefish.png" id="1_853f1"]
 [ext_resource type="Texture2D" uid="uid://d1ha4gupgwbkj" path="res://Assets/Fish/SwimmingFish/greenbass.png" id="2_8saeu"]
-[ext_resource type="PackedScene" uid="uid://mgmh4cp7od8o" path="res://Scenes/CursorNode.tscn" id="2_8um5k"]
 [ext_resource type="Texture2D" uid="uid://p35ffbqw87vh" path="res://Assets/Fish/SwimmingFish/jellyfish.png" id="3_8saeu"]
 [ext_resource type="Texture2D" uid="uid://ck64jwsxmwncx" path="res://Assets/Fish/SwimmingFish/yellowfinfish.png" id="4_ghw46"]
 [ext_resource type="Script" uid="uid://cbib5loj7najs" path="res://Scripts/MainMenu.cs" id="5_menu"]
 [ext_resource type="Script" uid="uid://bv05h4bob4l5f" path="res://Scripts/Components/CrosshairButtons.cs" id="6_crosshair"]
+[ext_resource type="Script" uid="uid://r1ldeyjrmqgn" path="res://Scripts/Components/HoverButton.cs" id="6_xim88"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ghw46"]
 atlas = ExtResource("1_853f1")
@@ -402,8 +402,22 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xim88"]
+bg_color = Color(0.039376896, 0.10305779, 0.22096737, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hlhnc"]
 bg_color = Color(0.101960786, 0.20784314, 0.40392157, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_koqhg"]
+bg_color = Color(0.039215688, 0.101960786, 0.21960784, 1)
 corner_radius_top_left = 30
 corner_radius_top_right = 30
 corner_radius_bottom_right = 30
@@ -421,6 +435,13 @@ corner_radius_top_right = 35
 corner_radius_bottom_right = 35
 corner_radius_bottom_left = 35
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cmrfp"]
+bg_color = Color(0.039215688, 0.101960786, 0.21960784, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
 [node name="MainMenu" type="Control" unique_id=2077510560 node_paths=PackedStringArray("goneFishingButton", "fishNinjaButton", "highScoresButton")]
 layout_mode = 3
 anchors_preset = 15
@@ -433,8 +454,6 @@ script = ExtResource("5_menu")
 goneFishingButton = NodePath("GoneFishingButton")
 fishNinjaButton = NodePath("FishNinjaButton")
 highScoresButton = NodePath("HighScoresButton")
-
-[node name="Cursor" parent="." unique_id=1886980775 instance=ExtResource("2_8um5k")]
 
 [node name="BackgroundColor" type="ColorRect" parent="." unique_id=1894003716]
 z_index = -100
@@ -523,7 +542,11 @@ offset_bottom = 706.0
 focus_mode = 0
 theme_override_font_sizes/font_size = 60
 theme_override_styles/normal = SubResource("StyleBoxFlat_ut64v")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ut64v")
+theme_override_styles/hover = SubResource("StyleBoxFlat_xim88")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ut64v")
 text = "Gone Fishing"
+script = ExtResource("6_xim88")
 
 [node name="FishNinjaButton" type="Button" parent="." unique_id=1304846840]
 layout_mode = 0
@@ -534,7 +557,11 @@ offset_bottom = 706.0
 focus_mode = 0
 theme_override_font_sizes/font_size = 60
 theme_override_styles/normal = SubResource("StyleBoxFlat_hlhnc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hlhnc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_koqhg")
+theme_override_styles/focus = SubResource("StyleBoxFlat_hlhnc")
 text = "Fish Ninja"
+script = ExtResource("6_xim88")
 
 [node name="Circle" type="Panel" parent="." unique_id=1172068770]
 layout_mode = 0
@@ -559,7 +586,7 @@ theme_override_font_sizes/font_size = 45
 text = "Press   A   to Select"
 metadata/_edit_use_anchors_ = true
 
-[node name="HighScoresButton" type="Button" parent="."]
+[node name="HighScoresButton" type="Button" parent="." unique_id=1514951837]
 layout_mode = 0
 offset_left = 760.0
 offset_top = 870.0
@@ -568,7 +595,11 @@ offset_bottom = 990.0
 focus_mode = 0
 theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxFlat_ut64v")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ut64v")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cmrfp")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ut64v")
 text = "High Scores"
+script = ExtResource("6_xim88")
 
-[node name="CrosshairButtons" type="Node" parent="."]
+[node name="CrosshairButtons" type="Node" parent="." unique_id=1126375633]
 script = ExtResource("6_crosshair")
