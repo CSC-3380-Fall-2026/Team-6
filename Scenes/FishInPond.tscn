@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://ccy4pe4eswv5f"]
+
+[ext_resource type="Script" uid="uid://dcii0cfmck2v2" path="res://Scripts/Fish.cs" id="1_p4bgn"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ri8h3"]
+
+[node name="FishInPond" type="Area2D" unique_id=1824471434 node_paths=PackedStringArray("_sprite")]
+script = ExtResource("1_p4bgn")
+_sprite = NodePath("Sprite2D")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=933380902]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_ri8h3")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1794507363]
+rotation = 1.5707964
+scale = Vector2(2, 2)
