@@ -52,6 +52,9 @@ public partial class Fish : Area2D
     public event Action<Fish> OnReachedWaypoint;
     public event Action<Fish> OnDespawn;
 
+    // The level this fish was spawned on, so the bite and reel code can read its reaction window and pull strength
+    public FishingLevel LevelSettings { get; private set; }
+
     public override void _Ready()
     {
         ProcessMode = ProcessModeEnum.Pausable;
@@ -120,7 +123,8 @@ public partial class Fish : Area2D
     }
 
 	// This method takes the FishData resource rolled by the spawner and applies its stats
-    public void ApplyData(FishData data)
+    // The level's settings (if any) make the fish swim faster on harder levels
+    public void ApplyData(FishData data, FishingLevel level = null)
     {
         if (data == null)
         {
@@ -132,6 +136,12 @@ public partial class Fish : Area2D
         if(data.Speed > MinValidSpeed)
         {
             _speed = data.Speed;
+        }
+
+        if (level != null)
+        {
+            LevelSettings = level;
+            _speed *= level.SwimSpeedMultiplier;
         }
 
         if(_sprite != null && data.GoneFishingSprite != null)
