@@ -1,6 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bgu2tsxk7j073"]
 
 [ext_resource type="Script" uid="uid://xwujgkytwepm" path="res://Scripts/HighScoresScreen.cs" id="1_scores"]
+[ext_resource type="Script" uid="uid://r1ldeyjrmqgn" path="res://Scripts/Components/HoverButton.cs" id="2_4ebwt"]
 [ext_resource type="Script" uid="uid://bv05h4bob4l5f" path="res://Scripts/Components/CrosshairButtons.cs" id="2_crosshair"]
 
 [sub_resource type="Theme" id="Theme_scores"]
@@ -24,7 +25,14 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
-[node name="HighScoresScreen" type="Control" node_paths=PackedStringArray("goneFishingTable", "fishNinjaTable", "backButton", "debugLabel")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ta0og"]
+bg_color = Color(0.039215688, 0.101960786, 0.21960784, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[node name="HighScoresScreen" type="Control" unique_id=767935960 node_paths=PackedStringArray("goneFishingTable", "fishNinjaTable", "backButton", "debugLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -39,7 +47,7 @@ fishNinjaTable = NodePath("FishNinjaPanel/Rows/Table")
 backButton = NodePath("BackButton")
 debugLabel = NodePath("DebugLabel")
 
-[node name="BackgroundColor" type="ColorRect" parent="."]
+[node name="BackgroundColor" type="ColorRect" parent="." unique_id=1216379525]
 z_index = -100
 layout_mode = 1
 anchors_preset = 15
@@ -50,7 +58,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.69803923, 0.85490197, 0.89411765, 1)
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=1166376941]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -62,7 +70,7 @@ theme_override_font_sizes/font_size = 120
 text = "High Scores"
 horizontal_alignment = 1
 
-[node name="GoneFishingPanel" type="PanelContainer" parent="."]
+[node name="GoneFishingPanel" type="PanelContainer" parent="." unique_id=1669416146]
 layout_mode = 0
 offset_left = 120.0
 offset_top = 260.0
@@ -70,51 +78,51 @@ offset_right = 900.0
 offset_bottom = 860.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="Rows" type="VBoxContainer" parent="GoneFishingPanel"]
+[node name="Rows" type="VBoxContainer" parent="GoneFishingPanel" unique_id=1746925381]
 layout_mode = 2
 theme_override_constants/separation = 24
 
-[node name="Heading" type="Label" parent="GoneFishingPanel/Rows"]
+[node name="Heading" type="Label" parent="GoneFishingPanel/Rows" unique_id=1622447837]
 layout_mode = 2
 theme_override_font_sizes/font_size = 64
 text = "Gone Fishing"
 horizontal_alignment = 1
 
-[node name="Table" type="GridContainer" parent="GoneFishingPanel/Rows"]
+[node name="Table" type="GridContainer" parent="GoneFishingPanel/Rows" unique_id=1370446843]
 layout_mode = 2
 theme_override_constants/h_separation = 30
 theme_override_constants/v_separation = 14
 columns = 4
 
-[node name="RankHeading" type="Label" parent="GoneFishingPanel/Rows/Table"]
+[node name="RankHeading" type="Label" parent="GoneFishingPanel/Rows/Table" unique_id=1917085703]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
 text = "#"
 horizontal_alignment = 1
 
-[node name="ScoreHeading" type="Label" parent="GoneFishingPanel/Rows/Table"]
+[node name="ScoreHeading" type="Label" parent="GoneFishingPanel/Rows/Table" unique_id=1869013528]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
 text = "Score"
 horizontal_alignment = 1
 
-[node name="TimeHeading" type="Label" parent="GoneFishingPanel/Rows/Table"]
+[node name="TimeHeading" type="Label" parent="GoneFishingPanel/Rows/Table" unique_id=131814276]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
 text = "Time"
 horizontal_alignment = 1
 
-[node name="DateHeading" type="Label" parent="GoneFishingPanel/Rows/Table"]
+[node name="DateHeading" type="Label" parent="GoneFishingPanel/Rows/Table" unique_id=1207032017]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
 text = "Date"
 horizontal_alignment = 1
 
-[node name="FishNinjaPanel" type="PanelContainer" parent="."]
+[node name="FishNinjaPanel" type="PanelContainer" parent="." unique_id=1487098499]
 layout_mode = 0
 offset_left = 1020.0
 offset_top = 260.0
@@ -122,51 +130,51 @@ offset_right = 1800.0
 offset_bottom = 860.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="Rows" type="VBoxContainer" parent="FishNinjaPanel"]
+[node name="Rows" type="VBoxContainer" parent="FishNinjaPanel" unique_id=1056781914]
 layout_mode = 2
 theme_override_constants/separation = 24
 
-[node name="Heading" type="Label" parent="FishNinjaPanel/Rows"]
+[node name="Heading" type="Label" parent="FishNinjaPanel/Rows" unique_id=758799515]
 layout_mode = 2
 theme_override_font_sizes/font_size = 64
 text = "Fish Ninja"
 horizontal_alignment = 1
 
-[node name="Table" type="GridContainer" parent="FishNinjaPanel/Rows"]
+[node name="Table" type="GridContainer" parent="FishNinjaPanel/Rows" unique_id=722190991]
 layout_mode = 2
 theme_override_constants/h_separation = 30
 theme_override_constants/v_separation = 14
 columns = 4
 
-[node name="RankHeading" type="Label" parent="FishNinjaPanel/Rows/Table"]
+[node name="RankHeading" type="Label" parent="FishNinjaPanel/Rows/Table" unique_id=680040037]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
 text = "#"
 horizontal_alignment = 1
 
-[node name="ScoreHeading" type="Label" parent="FishNinjaPanel/Rows/Table"]
+[node name="ScoreHeading" type="Label" parent="FishNinjaPanel/Rows/Table" unique_id=754234125]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
 text = "Score"
 horizontal_alignment = 1
 
-[node name="TimeHeading" type="Label" parent="FishNinjaPanel/Rows/Table"]
+[node name="TimeHeading" type="Label" parent="FishNinjaPanel/Rows/Table" unique_id=88627482]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
 text = "Time"
 horizontal_alignment = 1
 
-[node name="DateHeading" type="Label" parent="FishNinjaPanel/Rows/Table"]
+[node name="DateHeading" type="Label" parent="FishNinjaPanel/Rows/Table" unique_id=536125572]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
 text = "Date"
 horizontal_alignment = 1
 
-[node name="DebugLabel" type="Label" parent="."]
+[node name="DebugLabel" type="Label" parent="." unique_id=633890952]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -178,7 +186,7 @@ theme_override_font_sizes/font_size = 30
 text = "Debug: press 1 to add a random Gone Fishing score, or 2 for Fish Ninja"
 horizontal_alignment = 1
 
-[node name="BackButton" type="Button" parent="."]
+[node name="BackButton" type="Button" parent="." unique_id=438855975]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -191,9 +199,13 @@ grow_vertical = 0
 focus_mode = 0
 theme_override_font_sizes/font_size = 45
 theme_override_styles/normal = SubResource("StyleBoxFlat_back")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_back")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ta0og")
+theme_override_styles/focus = SubResource("StyleBoxFlat_back")
 text = "Back"
+script = ExtResource("2_4ebwt")
 
-[node name="Instructions" type="Label" parent="."]
+[node name="Instructions" type="Label" parent="." unique_id=2100097266]
 layout_mode = 0
 offset_left = 560.0
 offset_top = 950.0
@@ -204,5 +216,5 @@ theme_override_font_sizes/font_size = 45
 text = "Press B to go back"
 horizontal_alignment = 1
 
-[node name="CrosshairButtons" type="Node" parent="."]
+[node name="CrosshairButtons" type="Node" parent="." unique_id=764132171]
 script = ExtResource("2_crosshair")
