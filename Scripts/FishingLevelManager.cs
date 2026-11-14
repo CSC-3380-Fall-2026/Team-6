@@ -10,6 +10,7 @@ public partial class FishingLevelManager : Node
     [Export] private Label _levelLabel; // shows points needed to reach new level
     [Export] private Label _banner; // shows new level
     [Export] private Label _statsLabel; // score and time
+    [Export] private ProgressBar _levelProgress; // shows progress to new level
 
     [ExportGroup("Levels")]
     [Export] private int[] _scoreTargets = { 100, 250, 450, 700 }; // score needed to finish each level
@@ -31,10 +32,14 @@ public partial class FishingLevelManager : Node
     private const float BannerStartScale = 0.1f; // banner starts tiny and pops up from middle
     private const float Invisible = 0f;
     private const int SecondsPerMinute = 60;
+    private const int StartingScore = 0;
 
     public int CurrentLevel { get; private set; } = FirstLevel;
     public int LevelCount => _scoreTargets.Length;
     public int CurrentTarget => _scoreTargets[CurrentLevel - 1];
+    // score the current level started at
+    // otherwise previous level's target
+    public int PreviousTarget => CurrentLevel == FirstLevel ? StartingScore : _scoreTargets[CurrentLevel - 2];
 
     private bool _changingLevel = false; //true while banner is up so target isn't reached twice
     private bool _runOver = false;
@@ -183,6 +188,13 @@ public partial class FishingLevelManager : Node
         int score = _hud.GetScore();
         _lastShownScore = score;
         _levelLabel.Text = $"Lv {CurrentLevel} · {score} / {CurrentTarget}";
+
+        if (_levelProgress != null)
+        {
+            _levelProgress.MinValue = PreviousTarget;
+            _levelProgress.MaxValue = CurrentTarget;
+            _levelProgress.Value = score;
+        }
     }
 
     // BANNER

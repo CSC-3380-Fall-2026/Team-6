@@ -33,11 +33,36 @@
 [ext_resource type="Script" uid="uid://ffgpxd1a6iw1" path="res://Scripts/FishingLevelManager.cs" id="31_cs8w8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut64v"]
-content_margin_left = 16.0
+content_margin_left = 28.0
 content_margin_top = 10.0
-content_margin_right = 16.0
+content_margin_right = 28.0
 content_margin_bottom = 10.0
-bg_color = Color(0.19355729, 0.19355729, 0.19355729, 0.7490196)
+bg_color = Color(0.047058824, 0.10980392, 0.23921569, 0.6666667)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="LabelSettings" id="LabelSettings_q8rwo"]
+font_size = 36
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hlhnc"]
+bg_color = Color(0, 0, 0, 0.47058824)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nr1gc"]
+bg_color = Color(0.47058824, 0.8627451, 0.54901963, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="GoneFishing" type="Control" unique_id=691912027]
 layout_mode = 3
@@ -136,27 +161,40 @@ vertical_alignment = 1
 
 [node name="MenuOverlay" parent="HUDLayer" unique_id=201952899 instance=ExtResource("6_pause")]
 
-[node name="LevelLabel" type="Label" parent="HUDLayer" unique_id=679216861]
+[node name="LevelInfo" type="VBoxContainer" parent="HUDLayer" unique_id=999312501]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -228.0
-offset_top = 16.0
-offset_right = -21.0
-offset_bottom = 65.0
+offset_left = -292.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 118.0
 grow_horizontal = 0
-theme_override_font_sizes/font_size = 35
+theme_override_constants/separation = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="LevelLabel" type="Label" parent="HUDLayer/LevelInfo" unique_id=679216861]
+layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_ut64v")
 text = "Lv 1 · 0 / 100"
+label_settings = SubResource("LabelSettings_q8rwo")
 horizontal_alignment = 2
+
+[node name="LevelProgress" type="ProgressBar" parent="HUDLayer/LevelInfo" unique_id=1797591566]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_hlhnc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_nr1gc")
+show_percentage = false
 
 [node name="BackToMainMenu" type="Node" parent="." unique_id=570052545]
 script = ExtResource("4_back")
 
-[node name="FishingLevelmanager" type="Node" parent="." unique_id=970986357 node_paths=PackedStringArray("_hud", "_fishSpawner", "_levelLabel", "_banner", "_statsLabel")]
+[node name="FishingLevelmanager" type="Node" parent="." unique_id=970986357 node_paths=PackedStringArray("_hud", "_fishSpawner", "_levelLabel", "_banner", "_statsLabel", "_levelProgress")]
 script = ExtResource("31_cs8w8")
 _hud = NodePath("../HUDLayer/GameHud")
 _fishSpawner = NodePath("../FishSpawner")
-_levelLabel = NodePath("../HUDLayer/LevelLabel")
+_levelLabel = NodePath("../HUDLayer/LevelInfo/LevelLabel")
 _banner = NodePath("../HUDLayer/LevelBanner")
 _statsLabel = NodePath("../HUDLayer/LevelBanner/StatsLabel")
+_levelProgress = NodePath("../HUDLayer/LevelInfo/LevelProgress")
