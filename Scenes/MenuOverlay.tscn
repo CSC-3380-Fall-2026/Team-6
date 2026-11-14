@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://dpt2bfa0cr2qv" path="res://Scripts/PauseMenu.cs" id="1_pause"]
 [ext_resource type="PackedScene" path="res://Scenes/CalibrationScreen.tscn" id="2_calib"]
-[ext_resource type="Script" uid="uid://c02fqdtbpcrwb" path="res://Scenes/MenuOverlay.cs" id="1_gqglk"]
 [ext_resource type="Script" uid="uid://r1ldeyjrmqgn" path="res://Scripts/Components/HoverButton.cs" id="2_mvtk4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut64v"]
@@ -44,12 +43,13 @@ bg_color = Color(0.7647059, 0.24705882, 0.27058825, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mvtk4"]
 bg_color = Color(0.6039216, 0.1882353, 0.20784314, 1)
 
-[node name="MenuOverlay" type="Node" unique_id=1468554513 node_paths=PackedStringArray("menuLayer", "recalibrateButton", "closeButton")]
+[node name="MenuOverlay" type="Node" unique_id=1468554513 node_paths=PackedStringArray("menuLayer", "recalibrateButton", "closeButton", "restartButton")]
 process_mode = 3
 script = ExtResource("1_pause")
 menuLayer = NodePath("MenuOverlay")
 recalibrateButton = NodePath("MenuOverlay/Overlay/MenuPanel/ButtonContainer/RecalibrateButton")
 closeButton = NodePath("MenuOverlay/Overlay/MenuPanel/CloseButton")
+restartButton = NodePath("MenuOverlay/Overlay/MenuPanel/ButtonContainer/RestartButton")
 calibrationScene = ExtResource("2_calib")
 
 [node name="MenuOverlay" type="CanvasLayer" parent="." unique_id=1910394550]
