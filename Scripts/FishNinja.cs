@@ -5,6 +5,11 @@ using Godot;
 // Esc goes back to the title screen until the pause menu's Back to Home button is hooked up.
 public partial class FishNinja : Control
 {
+	public override void _Ready()
+	{
+		AudioManager.Instance?.PlayMusic(AudioManager.FishNinjaMusic);
+	}
+
 	public override void _UnhandledInput(InputEvent @event)
 	{
 		if (@event.IsActionPressed("back")) {

@@ -20,6 +20,9 @@ public partial class HighScoresScreen : Control
 
 	public override void _Ready()
 	{
+		// Same track as the main menu, so it keeps playing instead of restarting
+		AudioManager.Instance?.PlayMusic(AudioManager.MenuMusic);
+
 		if (goneFishingTable == null || fishNinjaTable == null || backButton == null || debugLabel == null) {
 			GD.PushError("HighScoresScreen: assign the tables, BackButton and DebugLabel in the Inspector");
 			return;
