@@ -30,6 +30,14 @@
 [ext_resource type="Resource" uid="uid://dqy1sr2tmq70g" path="res://Resources/Fish/swordfish.tres" id="28_rd1jp"]
 [ext_resource type="Resource" uid="uid://qnfk230wopk" path="res://Resources/Fish/trout.tres" id="29_1rdks"]
 [ext_resource type="Resource" uid="uid://bq2jqtf3vanwp" path="res://Resources/Fish/yellowfish.tres" id="30_dm3o3"]
+[ext_resource type="Script" uid="uid://ffgpxd1a6iw1" path="res://Scripts/FishingLevelManager.cs" id="31_cs8w8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut64v"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.19355729, 0.19355729, 0.19355729, 0.7490196)
 
 [node name="GoneFishing" type="Control" unique_id=691912027]
 layout_mode = 3
@@ -96,9 +104,59 @@ _lineWidth = 4.0
 
 [node name="HUDLayer" type="CanvasLayer" parent="." unique_id=1708769849]
 
+[node name="LevelBanner" type="Label" parent="HUDLayer" unique_id=1831350864]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 15
+theme_override_font_sizes/font_size = 100
+text = "Level 2!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatsLabel" type="Label" parent="HUDLayer/LevelBanner" unique_id=1676054832]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 110.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 75
+text = "Score: 700     Time: 0:42"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="GameHud" parent="HUDLayer" unique_id=1629236125 instance=ExtResource("5_wgts6")]
 
 [node name="MenuOverlay" parent="HUDLayer" unique_id=201952899 instance=ExtResource("6_pause")]
 
+[node name="LevelLabel" type="Label" parent="HUDLayer" unique_id=679216861]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -228.0
+offset_top = 16.0
+offset_right = -21.0
+offset_bottom = 65.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 35
+theme_override_styles/normal = SubResource("StyleBoxFlat_ut64v")
+text = "Lv 1 · 0 / 100"
+horizontal_alignment = 2
+
 [node name="BackToMainMenu" type="Node" parent="." unique_id=570052545]
 script = ExtResource("4_back")
+
+[node name="FishingLevelmanager" type="Node" parent="." unique_id=970986357 node_paths=PackedStringArray("_hud", "_fishSpawner", "_levelLabel", "_banner", "_statsLabel")]
+script = ExtResource("31_cs8w8")
+_hud = NodePath("../HUDLayer/GameHud")
+_fishSpawner = NodePath("../FishSpawner")
+_levelLabel = NodePath("../HUDLayer/LevelLabel")
+_banner = NodePath("../HUDLayer/LevelBanner")
+_statsLabel = NodePath("../HUDLayer/LevelBanner/StatsLabel")
