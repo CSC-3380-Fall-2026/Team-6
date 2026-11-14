@@ -12,6 +12,7 @@ public partial class PauseMenu : Node
 	[Export] private CanvasLayer menuLayer;
 	[Export] private Button recalibrateButton;
 	[Export] private Button closeButton;
+	[Export] private Button homeButton;
 	[Export] private PackedScene calibrationScene;
 
 	private CalibrationScreen calibration;
@@ -35,6 +36,10 @@ public partial class PauseMenu : Node
 		menuLayer.Visible = false;
 		recalibrateButton.Pressed += OpenCalibration;
 		closeButton.Pressed += Close;
+		if (homeButton != null)
+		{
+			homeButton.Pressed += GoHome;
+		}
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -75,6 +80,20 @@ public partial class PauseMenu : Node
 	{
 		menuLayer.Visible = false;
 		GetTree().Paused = false;
+	}
+
+	private void GoHome()
+	{
+		Close();
+		FishingLevelManager levels = GetTree().CurrentScene?.GetNodeOrNull<FishingLevelManager>("FishingLevelManager");
+		if (levels != null)
+		{
+			levels.EndRun();
+		}
+		else
+		{
+			SceneManager.Instance.ChangeScene(SceneManager.MainMenu);
+		}
 	}
 
 	private void OpenCalibration()
