@@ -9,6 +9,10 @@
 [ext_resource type="PackedScene" uid="uid://4mydybhdhrux" path="res://Scenes/GameHud.tscn" id="5_wgts6"]
 [ext_resource type="PackedScene" uid="uid://b4ph7i6yexn5u" path="res://Scenes/MenuOverlay.tscn" id="6_pause"]
 [ext_resource type="Script" uid="uid://bx5umpa6dlpt" path="res://Scripts/FishSpawner.cs" id="9_n5wfh"]
+[ext_resource type="Resource" path="res://Resources/Levels/level1.tres" id="9_level1"]
+[ext_resource type="Resource" path="res://Resources/Levels/level2.tres" id="9_level2"]
+[ext_resource type="Resource" path="res://Resources/Levels/level3.tres" id="9_level3"]
+[ext_resource type="Resource" path="res://Resources/Levels/level4.tres" id="9_level4"]
 [ext_resource type="PackedScene" uid="uid://ccy4pe4eswv5f" path="res://Scenes/FishInPond.tscn" id="10_cs8w8"]
 [ext_resource type="Resource" uid="uid://bj8hm5651aasx" path="res://Resources/Fish/anchovy.tres" id="11_qp6bd"]
 [ext_resource type="Resource" uid="uid://sum177qda3u0" path="res://Resources/Fish/bass.tres" id="12_i7acv"]
@@ -73,6 +77,7 @@ _fishScene = ExtResource("10_cs8w8")
 _maxFishCount = 7
 _waterPolygon = NodePath("../WaterArea/WaterShape")
 _availableFish = Array[Object]([ExtResource("11_qp6bd"), ExtResource("12_i7acv"), ExtResource("13_71yxo"), ExtResource("14_0ru0m"), ExtResource("15_xqwkd"), ExtResource("16_ue5tg"), ExtResource("17_kdkqv"), ExtResource("18_0pi3y"), ExtResource("19_o6uj6"), ExtResource("20_0di7p"), ExtResource("21_oum5a"), ExtResource("22_e1ifn"), ExtResource("23_cnqsx"), ExtResource("24_xil6c"), ExtResource("25_t5rjj"), ExtResource("26_0jl1d"), ExtResource("27_f0yxi"), ExtResource("28_rd1jp"), ExtResource("29_1rdks"), ExtResource("30_dm3o3")])
+_levels = Array[Object]([ExtResource("9_level1"), ExtResource("9_level2"), ExtResource("9_level3"), ExtResource("9_level4")])
 
 [node name="WaterOverlay" type="Polygon2D" parent="." unique_id=1429903034]
 texture_filter = 1
