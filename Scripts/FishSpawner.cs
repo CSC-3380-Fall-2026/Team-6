@@ -14,6 +14,7 @@ public partial class FishSpawner : Node2D
     private FishData[] _availableFish;
 
     private int _currentFishCount = 0;
+    private readonly Godot.Collections.Array<Fish> _activeFish = new();
 
     // Cache the bounding box so we don't recalculate it hundreds of times a minute
     private float _minX;
@@ -66,6 +67,7 @@ public partial class FishSpawner : Node2D
         newFish.OnDespawn += HandleFishDespawn;
 
         AddChild(newFish);
+        _activeFish.Add(newFish);
         newFish.SetTarget(GetRandomWaterPoint());
         
         _currentFishCount++;
@@ -78,6 +80,8 @@ public partial class FishSpawner : Node2D
 
     private void HandleFishDespawn(Fish fish)
     {
+        _activeFish.Remove(fish);
+
         fish.OnReachedWaypoint -= AssignNewWaypoint;
         fish.OnDespawn -= HandleFishDespawn;
         
@@ -119,5 +123,26 @@ public partial class FishSpawner : Node2D
         }
 
         return _waterPolygon.ToGlobal(vertices[0]);
+    }
+    public Fish GetFishNearPosition(Vector2 position, float radius)
+    {
+        Fish closestFish = null;
+        float closestDistanceSquared = radius * radius;
+        
+        foreach (Fish fish in _activeFish)
+        {
+            if (fish == null || !fish.Monitorable)
+            continue;
+            
+            float distanceSquared = fish.GlobalPosition.DistanceSquaredTo(position);
+            
+            if (distanceSquared <= closestDistanceSquared)
+            {
+                closestDistanceSquared = distanceSquared;
+                closestFish = fish;
+            }
+        }
+        
+        return closestFish;
     }
 }

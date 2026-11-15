@@ -86,11 +86,12 @@ metadata/_edit_lock_ = true
 script = ExtResource("2_nxjxa")
 HideSystemCursor = false
 
-[node name="RodPivot" type="Node2D" parent="." unique_id=642977651 node_paths=PackedStringArray("_waterShape", "_cursorNode")]
+[node name="RodPivot" type="Node2D" parent="." unique_id=642977651 node_paths=PackedStringArray("_waterShape", "_cursorNode", "_fishSpawner")]
 position = Vector2(960, 1076)
 script = ExtResource("3_nxjxa")
 _waterShape = NodePath("../WaterArea/WaterShape")
 _cursorNode = NodePath("../CursorNode")
+_fishSpawner = NodePath("../FishSpawner")
 _bobberScale = 7.0
 _lineWidth = 4.0
 
