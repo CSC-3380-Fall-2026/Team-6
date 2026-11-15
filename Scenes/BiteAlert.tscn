@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://brqwf7lix4d0v"]
+
+[ext_resource type="Script" uid="uid://bfi6y6ul3kv0" path="res://Scripts/BiteAlert.cs" id="1_alert"]
+
+[node name="BiteAlert" type="Node2D" node_paths=PackedStringArray("mark")]
+z_index = 10
+script = ExtResource("1_alert")
+mark = NodePath("Mark")
+
+[node name="Mark" type="Node2D" parent="."]
+position = Vector2(0, -70)
+
+[node name="Label" type="Label" parent="Mark"]
+offset_left = -40.0
+offset_top = -50.0
+offset_right = 40.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0.15, 0.1, 0.05, 1)
+theme_override_constants/outline_size = 14
+theme_override_font_sizes/font_size = 80
+text = "!"
+horizontal_alignment = 1
+vertical_alignment = 1
