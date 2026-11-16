@@ -52,6 +52,11 @@ public partial class Fish : Area2D
     public event Action<Fish> OnReachedWaypoint;
     public event Action<Fish> OnDespawn;
 
+    // The data the spawner rolled for this fish, so other scripts (like the bite logic) can read its stats
+    public FishData Data { get; private set; }
+    // While true the fish keeps animating but stops wandering and aging, so BiteController can steer it
+    public bool IsBiting { get; set; }
+
     public override void _Ready()
     {
         ProcessMode = ProcessModeEnum.Pausable;
@@ -81,7 +86,7 @@ public partial class Fish : Area2D
         _timeAlive += (float)delta;
         UpdateAnimation((float)delta);
 
-        if(_isLeaving)
+        if(_isLeaving || IsBiting)
         {
             return;
         }
@@ -127,6 +132,7 @@ public partial class Fish : Area2D
             GD.PushError("Fish received null FishData!");
             return;
         }
+        Data = data;
 
         // Overwrite the default speed with the speed defined in the Godot Inspector for this specific fish
         if(data.Speed > MinValidSpeed)

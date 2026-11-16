@@ -14,4 +14,6 @@ FishNinjaCutSprite = ExtResource("1_ln2xk")
 Points = 50
 Speed = 75.0
 Rarity = 2
+NoticeChance = 0.15
+BiteDelay = 2.0
 metadata/_custom_type_script = "uid://o4uag27rp8gg"
