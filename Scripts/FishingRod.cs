@@ -73,8 +73,11 @@ public partial class FishingRod : Node2D
 	private Tween _activeTween;
 
 	// Reeling Progress
-	[Export] private float _reelDuration = 3f;
+	[Export] private float _reelDuration = 0f;
 	private float _reelProgress = 0f;
+
+	[Export] private float _manualReelDelay = 0f;
+	private float _timeInWater = 0f;
 
 	private bool _fishHooked = false;
 	private bool _canReel = false;
@@ -121,22 +124,15 @@ public partial class FishingRod : Node2D
 
 			case RodState.InWater:
 			case RodState.Bite:
+
+			if (State == RodState.InWater)
+			{
+				_timeInWater += (float)delta;
+			}
 				// gentle float animation
 				_bobTime += (float)delta;
 				_bobber.GlobalPosition = _landedPosition + new Godot.Vector2(0, Mathf.Sin(_bobTime * _bobSpeed) * _bobHeight);
 				
-				// Increase reel progress while A is held
-				if (_fishHooked && _canReel && _cursorNode != null && _cursorNode.IsPrimaryHeld)
-				{
-					_reelProgress += (float)delta;
-
-					if (_reelProgress >= _reelDuration)
-					{
-						_reelProgress = _reelDuration;
-						_canReel = false;
-						CatchFish();
-					}
-				}
 
 				break;
 		}
@@ -151,6 +147,7 @@ public partial class FishingRod : Node2D
 		if (State == RodState.Idle)
 		{
 			Vector2 aim = _cursorNode.GlobalPosition;
+
 			if (IsOverWater(aim))
 			{
 				StartCast(aim);
@@ -163,14 +160,14 @@ public partial class FishingRod : Node2D
 			return;
 		}
 
-		// Hook the fish when it bites
-		if (State == RodState.Bite && !_fishHooked)
+		// Reel in whenever bobber is in the water
+		if (State == RodState.InWater || State == RodState.Bite)
 		{
-			_fishHooked = true;
-			_canReel = true;
+			_fishHooked = false;
+			_canReel = false;
 			_reelProgress = 0f;
 			
-			GD.Print("Fish hooked! Hold A to reel. ");
+			StartReel();
 		}
 	}
 
@@ -208,6 +205,7 @@ public partial class FishingRod : Node2D
 	private void Land(Vector2 target)
 	{
 		_landedPosition = target;
+		_timeInWater = 0f;
 		_bobTime = 0f;
 		_bobber.Scale = Vector2.One * _bobberScale;
 		SpawnSplash(target);
