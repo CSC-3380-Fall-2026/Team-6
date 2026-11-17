@@ -48,7 +48,7 @@ public partial class BiteController : Node2D
 	// How far back from the bobber the fish waits between nibbles
 	[Export] private float nibbleBackoff = 14f;
 	[Export] private int minNibbles = 1;
-	[Export] private int maxNibbles = 2;
+	[Export] private int maxNibbles = 5;
 
 	[ExportGroup("Bobber")]
 	// Pixels the bobber jerks down when nibbled
