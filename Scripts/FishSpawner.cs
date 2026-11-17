@@ -13,6 +13,9 @@ public partial class FishSpawner : Node2D
     [Export]
     private FishData[] _availableFish;
 
+    [Export]
+    private float _edgeMargin = 40f; // how far fish centers stay away from shore so they don't poke out onto grass
+
     // One FishingLevel per level (Resources/Levels/level1.tres to level4.tres): which fish spawn, how many,
     // and how fast they swim. Level 1's settings replace _availableFish and _maxFishCount when the game starts.
     [Export]
@@ -38,6 +41,8 @@ public partial class FishSpawner : Node2D
     
     private const int MaxSpawnAttempts = 30;
 
+    private Vector2[] _swimArea; // pond shrunk inward by _edgeMargin
+
     public override void _Ready()
     {
 		//Calculate the bounding box exactly ONCE at startup
@@ -53,6 +58,8 @@ public partial class FishSpawner : Node2D
                 if (point.Y < _minY) { _minY = point.Y; }
                 if (point.Y > _maxY) { _maxY = point.Y; }
             }
+
+            _swimArea = ShrinkPond(_waterPolygon.Polygon);
         }
 
         CheckLevels();
@@ -180,6 +187,29 @@ public partial class FishSpawner : Node2D
         return _availableFish[randomIndex];
     }
 
+    // returns pond shrunk inward by _edgeMargin on every side
+    private Vector2[] ShrinkPond(Vector2[] pond)
+    {
+        Godot.Collections.Array<Vector2[]> shrunk = Geometry2D.OffsetPolygon(pond, -_edgeMargin);
+        if (shrunk.Count == 0)
+        {
+            GD.PushWarning("FishSpawner: Edge Margin is too big for the pond, so fish can swim right up to the shore");
+            return pond;
+        }
+        return shrunk[0];
+    }
+
+    // middle fo the swim area, used if no random point is found
+    private Vector2 SwimAreaCenter()
+    {
+        Vector2 sum = Vector2.Zero;
+        foreach (Vector2 point in _swimArea)
+        {
+            sum += point;
+        }
+        return sum / _swimArea.Length;
+    }
+
     private Vector2 GetRandomWaterPoint()
     {
         if (_waterPolygon == null || _waterPolygon.Polygon.Length < 3)
@@ -187,21 +217,19 @@ public partial class FishSpawner : Node2D
             return GlobalPosition; 
         }
 
-        Vector2[] vertices = _waterPolygon.Polygon;
-
         for (int i = 0; i < MaxSpawnAttempts; i++)
         {
             float randomX = (float)GD.RandRange(_minX, _maxX);
             float randomY = (float)GD.RandRange(_minY, _maxY);
             Vector2 candidatePoint = new Vector2(randomX, randomY);
 
-            if (Geometry2D.IsPointInPolygon(candidatePoint, vertices))
+            if (Geometry2D.IsPointInPolygon(candidatePoint, _swimArea))
             {
                 // Convert the local polygon point to a global screen position
                 return _waterPolygon.ToGlobal(candidatePoint);
             }
         }
 
-        return _waterPolygon.ToGlobal(vertices[0]);
+        return _waterPolygon.ToGlobal(SwimAreaCenter());
     }
 }
