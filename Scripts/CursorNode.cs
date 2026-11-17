@@ -89,6 +89,10 @@ public partial class CursorNode : Node2D
 			float weight = 1f - Mathf.Pow(1f - JitterCushion, (float)delta * 60f);
 			_screenPosition = _screenPosition.Lerp(targetPosition, weight);
 			_screenPosition = _screenPosition.Clamp(Vector2.Zero, GetViewportRect().Size);
+				
+			//This should force the OS/Engine mouse to snap to be the same as the Wiimote crosshair.
+			//In doing so, the mouse and the wiimote cursor should be treated as one in the same.
+			GetViewport().WarpMouse(_screenPosition);
 		}
 
 
