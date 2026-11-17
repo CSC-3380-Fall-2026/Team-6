@@ -102,6 +102,7 @@ public partial class WiimoteManager : Node2D
 	private HidStream _dataStream;
 
 	public Vector2 CurrentAimPosition { get; private set; }
+	public bool IsWiimoteActive => _dataStream != null;
 
 	//These variables are the wiimote camera dimensions
 	private const float IrCameraMaxWidth = 1023.0f;
@@ -455,8 +456,21 @@ public partial class WiimoteManager : Node2D
 		InputEventMouseButton clickEvent = new InputEventMouseButton();
 		clickEvent.ButtonIndex = MouseButton.Left;
 		clickEvent.Pressed = isDown;
-		clickEvent.Position = _cursorPosition;
-		clickEvent.GlobalPosition = _cursorPosition;
+		
+		if (isDown)
+		{
+			clickEvent.ButtonMask = MouseButtonMask.Left;
+		}
+		else
+		{
+			clickEvent.ButtonMask = 0;
+		}
+		
+		// Instead of the raw math, grab the exact coordinate the Viewport is currently using.
+		Vector2 exactMousePos = GetViewport().GetMousePosition();
+		clickEvent.Position = exactMousePos;
+		clickEvent.GlobalPosition = exactMousePos;
+		
 		Input.ParseInputEvent(clickEvent);
 	}
 }
