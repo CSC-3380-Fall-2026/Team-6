@@ -66,28 +66,31 @@ public partial class WiimoteManager : Node2D
 	//----------
   	//00001000  (Result is not zero. The A button is pressed)
 
+	//These are the signals that the wii mote sends off upon button clicks.
 	private const byte ButtonAMask = 0x08;
 	private const byte ButtonBMask = 0x04;
-
+	private const byte ButtonPlusMask = 0x10;
 	private const int InputBufferSize = 22;
 
 	//volatile so that the data isn't cached. All these volatile methods are for Godot to play nice with threads.
 	private volatile bool _isReading;
 	private volatile bool _isAPressed;
 	private volatile bool _isBPressed;
-
+	private volatile bool _isPlusPressed;
 	//past tense versions of the button pressing to allow for coding that prevents like 1000 things menus from opening on a single click.
 	private bool _wasAPressed;
 	private bool _wasBPressed;
-	
+	private bool _wasPlusPressed;
+	//Variables to store buttons so it's easier to call later.
+	private const string WiiAAction = "wii_a_button";
+	private const string WiiBAction = "wii_b_trigger";
+	private const string WiiPlusAction = "wii_+_button";
+
 	//These variables make it clear what hardware to call.
 	private HidDevice _connectedDevice;
 	private HidStream _dataStream;
 
 	public Vector2 CurrentAimPosition { get; private set; }
-	//Variables to store 'A' and 'B' so it's easier to call later.
-	private const string WiiAAction = "wii_a_button";
-	private const string WiiBAction = "wii_b_trigger";
 
 	//These variables are the wiimote camera dimensions
 	private const float IrCameraMaxWidth = 1023.0f;
@@ -112,11 +115,13 @@ public partial class WiimoteManager : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		//Task.run should set the ConnectToWiimote method to be a separate thread.
-		//Without it, Godot would literally just wait until windows was 'done' scanning for bluetooth.
 		OnWiimoteAClicked += HandleWiimoteA;
 		OnWiimoteBClicked += HandleWiimoteB;
+		OnWiimotePlusClicked += HandleWiimotePlus;
 		
+		
+		//Task.run should set the ConnectToWiimote method to be a separate thread.
+		//Without it, Godot would literally just wait until windows was 'done' scanning for bluetooth.
 		Task.Run(() =>
 		{
 			ConnectToWiimote();
@@ -144,7 +149,7 @@ public partial class WiimoteManager : Node2D
 		}
 	}
 
-
+	//All terminal messages acknoledging button presses will go here.
 	private void HandleWiimoteA()
 	{
 		GD.Print("Wiimote 'A button' clicked!");
@@ -153,6 +158,16 @@ public partial class WiimoteManager : Node2D
 	{
 		GD.Print("Wiimote 'B button' clicked!");
 	}
+
+	private void HandleWiimotePlus()
+	{
+		GD.Print("Wiimote '+' clicked!");
+	}
+
+	public event Action OnWiimoteAClicked;
+	public event Action OnWiimoteBClicked;
+	public event Action OnWiimotePlusClicked;
+
 	//This method is intended to read the data stream from the wiimote and check for button presses and interact with IR data.
 	private void ReadIncomingData()
 	{
@@ -175,6 +190,7 @@ public partial class WiimoteManager : Node2D
 		{
 			try
 			{
+				//This section checks for button presses.
 				_dataStream.Read(buffer, 0 , buffer.Length);
 				//We look for the A button byte mask to match the buffer recieved.
 				//if the two bytes do not match, the & comparator returns false and A is not pressed.
@@ -190,9 +206,18 @@ public partial class WiimoteManager : Node2D
 				{
 					Callable.From(() => OnWiimoteBClicked?.Invoke()).CallDeferred();
 				}
+				_isPlusPressed = ((buffer[2] & ButtonPlusMask) != 0);
+				if(_isPlusPressed && !(_wasPlusPressed))
+				{
+					Callable.From(() => OnWiimotePlusClicked?.Invoke()).CallDeferred();
+				}
+
 
 				_wasAPressed = _isAPressed;
 				_wasBPressed = _isBPressed;
+				_wasPlusPressed = _isPlusPressed;
+				
+				//Coordinate handling begins here.
 				//Here we are building a 10 bit integer coorindate with the 8 bit pieces nintendo provides. 
 				//It is a bit confusing at first, ask me(Ford) if confused. Easier than it looks!
 				
@@ -329,10 +354,6 @@ public partial class WiimoteManager : Node2D
 		GD.PushError($"Error initializing Wiimote reporting mode: {ex.Message}");
 	}
 }
-	public event Action OnWiimoteAClicked;
-	public event Action OnWiimoteBClicked;
-
-
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	//This is a Godot thing^.
 	public override void _Process(double delta)
@@ -362,6 +383,13 @@ public partial class WiimoteManager : Node2D
 			OnWiimoteBClicked?.Invoke();
 
 			GD.Print("Wiimote 'B button' clicked at: " + CurrentAimPosition);
+		}
+
+		if(Input.IsActionJustPressed(WiiPlusAction))
+		{
+			OnWiimotePlusClicked?.Invoke();
+
+			GD.Print("Wiimote '+ button' clicked.");
 		}
 		
 

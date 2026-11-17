@@ -27,6 +27,7 @@ public partial class PauseMenu : Node
 		if (wiimote != null) {
 			wiimote.ProcessMode = ProcessModeEnum.Always;
 			CalibrationScreen.ApplySavedCalibration(wiimote);
+			wiimote.OnWiimotePlusClicked += OnWiimotePlusPressed;
 		}
 
 		if (menuLayer == null || recalibrateButton == null || closeButton == null || calibrationScene == null) {
@@ -46,6 +47,22 @@ public partial class PauseMenu : Node
 			restartButton.Pressed += Restart;
 		}
 		
+	}
+
+	private void OnWiimotePlusPressed()
+	{
+		if (menuLayer == null || calibration != null)
+		{
+			return;
+		}
+		if (IsOpen)
+		{
+			Close();
+		}
+		else if (InGameScene() && !GetTree().Paused)
+		{
+			Open();
+		}
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
