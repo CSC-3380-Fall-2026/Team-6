@@ -70,6 +70,8 @@ public partial class WiimoteManager : Node2D
 	private const byte ButtonAMask = 0x08;
 	private const byte ButtonBMask = 0x04;
 	private const byte ButtonPlusMask = 0x10;
+	private const byte ButtonOneMask = 0x02;
+	private const byte ButtonTwoMask = 0x01;
 	private const int InputBufferSize = 22;
 
 	//volatile so that the data isn't cached. All these volatile methods are for Godot to play nice with threads.
@@ -77,10 +79,14 @@ public partial class WiimoteManager : Node2D
 	private volatile bool _isAPressed;
 	private volatile bool _isBPressed;
 	private volatile bool _isPlusPressed;
+	private volatile bool _isOnePressed;
+	private volatile bool _isTwoPressed;
 	//past tense versions of the button pressing to allow for coding that prevents like 1000 things menus from opening on a single click.
 	private bool _wasAPressed;
 	private bool _wasBPressed;
 	private bool _wasPlusPressed;
+	private bool _wasOnePressed;
+	private bool _wasTwoPressed;
 	//Variables to store buttons so it's easier to call later.
 	private const string WiiAAction = "wii_a_button";
 	private const string WiiBAction = "wii_b_trigger";
@@ -167,6 +173,8 @@ public partial class WiimoteManager : Node2D
 	public event Action OnWiimoteAClicked;
 	public event Action OnWiimoteBClicked;
 	public event Action OnWiimotePlusClicked;
+	public event Action OnWiimote1Clicked;
+	public event Action OnWiimote2Clicked;
 
 	//This method is intended to read the data stream from the wiimote and check for button presses and interact with IR data.
 	private void ReadIncomingData()
@@ -206,16 +214,28 @@ public partial class WiimoteManager : Node2D
 				{
 					Callable.From(() => OnWiimoteBClicked?.Invoke()).CallDeferred();
 				}
-				_isPlusPressed = ((buffer[2] & ButtonPlusMask) != 0);
+				_isPlusPressed = ((buffer[1] & ButtonPlusMask) != 0);
 				if(_isPlusPressed && !(_wasPlusPressed))
 				{
 					Callable.From(() => OnWiimotePlusClicked?.Invoke()).CallDeferred();
+				}
+				_isOnePressed = ((buffer[2] & ButtonOneMask) != 0);
+				if(_isOnePressed && !_wasOnePressed)
+				{
+					Callable.From(() => OnWiimote1Clicked?.Invoke()).CallDeferred();
+				}
+				_isTwoPressed = ((buffer[2] & ButtonTwoMask) != 0);
+				if(_isTwoPressed && !_wasTwoPressed)
+				{
+					Callable.From(() => OnWiimote2Clicked?.Invoke()).CallDeferred();
 				}
 
 
 				_wasAPressed = _isAPressed;
 				_wasBPressed = _isBPressed;
 				_wasPlusPressed = _isPlusPressed;
+				_wasOnePressed = _isOnePressed;
+				_wasTwoPressed = _isTwoPressed;
 				
 				//Coordinate handling begins here.
 				//Here we are building a 10 bit integer coorindate with the 8 bit pieces nintendo provides. 
