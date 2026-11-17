@@ -142,16 +142,36 @@ public partial class BiteController : Node2D
 	private void OnRodStateChanged(int newState)
 	{
 		FishingRod.RodState state = (FishingRod.RodState)newState;
-		if (stage == Stage.Idle || state == FishingRod.RodState.InWater || state == FishingRod.RodState.Bite) {
+		if (stage == Stage.Idle || state == FishingRod.RodState.InWater || state == FishingRod.RodState.Bite) 
+		{
+			return;
+		}
+
+		// If fish is already hooed, keep it attached for the reel animation.
+		if (stage == Stage.Hooked && state == FishingRod.RodState.Reeling)
+		{
+			StopFishMotion();
+			bobberMotion?.Kill();
+			stage = Stage.Idle;
+
+			if (alert != null)
+			{
+				alert.Dismiss();
+				alert = null;
+			}
+
 			return;
 		}
 
 		LetFishGo();
 		ResetBobber();
-		if (alert != null) {
+
+		if (alert != null) 
+		{
 			alert.Dismiss();
 			alert = null;
 		}
+
 		stage = Stage.Idle;
 	}
 
@@ -240,21 +260,35 @@ public partial class BiteController : Node2D
 	private void Bite(Vector2 mouthSpot)
 	{
 		stage = Stage.Hooked;
+
 		fishMotion?.Kill();
-		fishMotion = CreateTween();
-		fishMotion.TweenProperty(fish, "global_position", mouthSpot, BiteLungeTime);
+		bobberMotion?.Kill();
+
+		// Register the fish as hooked immediately.
+		fishingRod.Bite(fish);
 
 		Sprite2D bobber = fishingRod.Bobber;
-		bobberMotion?.Kill();
+
+        // Move the fish and dip the bobber at the same time.
+		fishMotion = CreateTween().SetParallel();
 		bobberMotion = CreateTween().SetParallel();
+
+		fishMotion.TweenProperty(fish, "global_position", mouthSpot, BiteLungeTime);
+		
 		bobberMotion.TweenProperty(bobber, "offset", BobberOffset(dipDepth), DipTime);
 		bobberMotion.TweenProperty(bobber, "self_modulate:a", dippedAlpha, DipTime);
 
-		alert = biteAlertScene.Instantiate<BiteAlert>();
-		AddChild(alert);
-		alert.GlobalPosition = bobberPosition;
+		fishMotion.Chain().TweenCallback(Callable.From(() =>
+		{
+			if (!IsInstanceValid(fish))
+			{
+				return;
+			}
+			alert = biteAlertScene.Instantiate<BiteAlert>();
+			AddChild(alert);
+			alert.GlobalPosition = bobberPosition;
+		}));
 
-		fishingRod.Bite(fish);
 	}
 
 	// Hands the fish back to its own swimming, darting away from the bobber
