@@ -254,7 +254,7 @@ public partial class BiteController : Node2D
 		AddChild(alert);
 		alert.GlobalPosition = bobberPosition;
 
-		fishingRod.Bite(fish.Data);
+		fishingRod.Bite(fish);
 	}
 
 	// Hands the fish back to its own swimming, darting away from the bobber
