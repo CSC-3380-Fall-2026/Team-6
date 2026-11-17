@@ -99,6 +99,17 @@ public partial class FishingRod : Node2D
 		{
 			GD.PushWarning("FishingRod: no CursorNode assigned in the Inspector, casting won't work.");
 		}
+
+		WiimoteManager wiimote = GetTree().Root.GetNodeOrNull<WiimoteManager>("WiimoteManager");
+		
+		if (wiimote != null)
+		{
+			// 2. Subscribe to the C# Events using the += operator.
+			// When Wiimote A is clicked, we just call the exact same method the mouse uses!
+			wiimote.OnWiimoteAClicked += OnWiimoteAPressed;
+			// Note: If you need to track when the A button is RELEASED for the hold-to-reel mechanic,
+			// WiimoteManager would need an 'OnWiimoteAReleased' event. For now, we trigger the press.
+		}
 	}
 
 	public override void _ExitTree()
@@ -107,6 +118,12 @@ public partial class FishingRod : Node2D
 		{
 			_cursorNode.PrimaryPressed -= OnPrimaryPressed;
 			_cursorNode.PrimaryReleased -= OnPrimaryReleased;
+		}
+
+		WiimoteManager wiimote = GetTree().Root.GetNodeOrNull<WiimoteManager>("WiimoteManager");
+		if (wiimote != null)
+		{
+			wiimote.OnWiimoteAClicked -= OnWiimoteAPressed;
 		}
 	}
 
@@ -146,15 +163,13 @@ public partial class FishingRod : Node2D
 		// can only cast when line is fully reeled in
 		if (State == RodState.Idle)
 		{
-			Vector2 aim = _cursorNode.GlobalPosition;
-
-			if (IsOverWater(aim))
+			if (IsOverWater(_screenPosition))
 			{
-				StartCast(aim);
+				StartCast(_screenPosition);
 			}
 			else
 			{
-				FailCast(aim);
+				FailCast(_screenPosition);
 			}
 			
 			return;
@@ -176,6 +191,19 @@ public partial class FishingRod : Node2D
 		// Reel progress only increases while A is held.
 	}
 
+
+	// --- NEW WIIMOTE BRIDGE METHOD ---
+	private void OnWiimoteAPressed()
+	{
+		// Grab the WiimoteManager to get the current aiming cursor position
+		WiimoteManager wiimote = GetTree().Root.GetNodeOrNull<WiimoteManager>("WiimoteManager");
+		if (wiimote != null)
+		{
+			// Pass the Wiimote's aiming cursor directly into your existing logic
+			Vector2 aim = wiimote.CurrentAimPosition;
+			OnPrimaryPressed(aim);
+		}
+	}
 	// CASTING
 	private void StartCast(Vector2 target)
 	{
