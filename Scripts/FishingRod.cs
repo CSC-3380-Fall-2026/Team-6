@@ -3,13 +3,14 @@ using System;
 
 public partial class FishingRod : Node2D
 {
-    public enum RodState { Idle, Casting, InWater, Reeling }
+    public enum RodState { Idle, Casting, InWater, Reeling, Bite }
 
     // signals other scripts can listen to
     [Signal] public delegate void StateChangedEventHandler(int newState);
     [Signal] public delegate void CastLandedEventHandler(Vector2 bobberPosition);
     [Signal] public delegate void CastFailedEventHandler(Vector2 aimPosition);
     [Signal] public delegate void ReelFinishedEventHandler();
+    [Signal] public delegate void FishBitEventHandler(FishData fish); // carries the biting fish's data for reeling in
 
     [Export] private Polygon2D _waterShape;
     [Export] private CursorNode _cursorNode;
@@ -43,6 +44,7 @@ public partial class FishingRod : Node2D
     [Export] private float _splashRingDelay = 0.12f; // seconds between each ring starting
 
     public RodState State { get; private set; } = RodState.Idle;
+    public Sprite2D Bobber => _bobber; // the bite logic twitches and dips it through its Offset and SelfModulate
 
     private static readonly string[] DefaultRodPaths =
     {
@@ -109,6 +111,7 @@ public partial class FishingRod : Node2D
                 break;
 
             case RodState.InWater:
+            case RodState.Bite:
                 // gentle float animation
                 _bobTime += (float)delta;
                 _bobber.GlobalPosition = _landedPosition + new Godot.Vector2(0, Mathf.Sin(_bobTime * _bobSpeed) * _bobHeight);
@@ -140,7 +143,8 @@ public partial class FishingRod : Node2D
 
     private void OnSecondaryPressed(Vector2 _screenPosition)
     {
-        if (State == RodState.InWater)
+        // reeling during a bite just pulls the line in for now, until the reel-in task takes over
+        if (State == RodState.InWater || State == RodState.Bite)
         {
             StartReel();
         }
@@ -192,6 +196,18 @@ public partial class FishingRod : Node2D
         _activeTween.TweenProperty(_rodSprite, "rotation", 0.04f, 0.05f);
         _activeTween.TweenProperty(_rodSprite, "rotation", 0f, 0.05f);
         EmitSignal(SignalName.CastFailed, aim);
+    }
+
+    // BITING
+    // called by BiteController when a fish bites the bobber
+    public void Bite(FishData fish)
+    {
+        if (State != RodState.InWater)
+        {
+            return;
+        }
+        SetState(RodState.Bite);
+        EmitSignal(SignalName.FishBit, fish);
     }
 
     // REELING
