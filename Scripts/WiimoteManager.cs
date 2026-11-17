@@ -72,6 +72,7 @@ public partial class WiimoteManager : Node2D
 	private const byte ButtonPlusMask = 0x10;
 	private const byte ButtonOneMask = 0x02;
 	private const byte ButtonTwoMask = 0x01;
+	private const byte ButtonMinusMask = 0x10;
 	private const int InputBufferSize = 22;
 
 	//volatile so that the data isn't cached. All these volatile methods are for Godot to play nice with threads.
@@ -81,16 +82,20 @@ public partial class WiimoteManager : Node2D
 	private volatile bool _isPlusPressed;
 	private volatile bool _isOnePressed;
 	private volatile bool _isTwoPressed;
+	private volatile bool _isMinusPressed;
 	//past tense versions of the button pressing to allow for coding that prevents like 1000 things menus from opening on a single click.
 	private bool _wasAPressed;
 	private bool _wasBPressed;
 	private bool _wasPlusPressed;
 	private bool _wasOnePressed;
 	private bool _wasTwoPressed;
+	private bool _wasMinusPressed;
 	//Variables to store buttons so it's easier to call later.
 	private const string WiiAAction = "wii_a_button";
 	private const string WiiBAction = "wii_b_trigger";
 	private const string WiiPlusAction = "wii_+_button";
+	private const string WiiOneAction = "wii_1_button";
+	private const string WiiTwoAction = "wii_2_button";
 
 	//These variables make it clear what hardware to call.
 	private HidDevice _connectedDevice;
@@ -169,12 +174,25 @@ public partial class WiimoteManager : Node2D
 	{
 		GD.Print("Wiimote '+' clicked!");
 	}
+	private void HandleWiimoteMinus()
+	{
+		GD.Print("Wiimote '-' clicked!");
+	}
+	private void HandleWiimote1()
+	{
+		GD.Print("Wiimote '1 button' clicked!");
+	}
+	private void HandleWiimote2()
+	{
+		GD.Print("Wiimote '2 button' clicked!");
+	}
 
 	public event Action OnWiimoteAClicked;
 	public event Action OnWiimoteBClicked;
 	public event Action OnWiimotePlusClicked;
 	public event Action OnWiimote1Clicked;
 	public event Action OnWiimote2Clicked;
+	public event Action OnWiimoteMinusClicked;
 
 	//This method is intended to read the data stream from the wiimote and check for button presses and interact with IR data.
 	private void ReadIncomingData()
@@ -229,6 +247,11 @@ public partial class WiimoteManager : Node2D
 				{
 					Callable.From(() => OnWiimote2Clicked?.Invoke()).CallDeferred();
 				}
+				_isMinusPressed = ((buffer[2] & ButtonMinusMask) != 0);
+				if(_isMinusPressed && !_wasMinusPressed)
+				{
+					Callable.From(() => OnWiimoteMinusClicked?.Invoke()).CallDeferred();
+				}
 
 
 				_wasAPressed = _isAPressed;
@@ -236,6 +259,7 @@ public partial class WiimoteManager : Node2D
 				_wasPlusPressed = _isPlusPressed;
 				_wasOnePressed = _isOnePressed;
 				_wasTwoPressed = _isTwoPressed;
+				_wasMinusPressed = _isMinusPressed;
 				
 				//Coordinate handling begins here.
 				//Here we are building a 10 bit integer coorindate with the 8 bit pieces nintendo provides. 
