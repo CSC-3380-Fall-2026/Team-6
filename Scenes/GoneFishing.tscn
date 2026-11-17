@@ -8,34 +8,34 @@
 [ext_resource type="Script" uid="uid://do5ketj8qnl2o" path="res://Scripts/Components/BackToMainMenu.cs" id="4_back"]
 [ext_resource type="PackedScene" uid="uid://4mydybhdhrux" path="res://Scenes/GameHud.tscn" id="5_wgts6"]
 [ext_resource type="PackedScene" uid="uid://b4ph7i6yexn5u" path="res://Scenes/MenuOverlay.tscn" id="6_pause"]
-[ext_resource type="Script" uid="uid://bx5umpa6dlpt" path="res://Scripts/FishSpawner.cs" id="9_n5wfh"]
 [ext_resource type="Resource" path="res://Resources/Levels/level1.tres" id="9_level1"]
 [ext_resource type="Resource" path="res://Resources/Levels/level2.tres" id="9_level2"]
 [ext_resource type="Resource" path="res://Resources/Levels/level3.tres" id="9_level3"]
 [ext_resource type="Resource" path="res://Resources/Levels/level4.tres" id="9_level4"]
+[ext_resource type="Script" uid="uid://bx5umpa6dlpt" path="res://Scripts/FishSpawner.cs" id="9_n5wfh"]
 [ext_resource type="PackedScene" uid="uid://ccy4pe4eswv5f" path="res://Scenes/FishInPond.tscn" id="10_cs8w8"]
-[ext_resource type="Resource" uid="uid://bj8hm5651aasx" path="res://Resources/Fish/anchovy.tres" id="11_qp6bd"]
+[ext_resource type="Resource" path="res://Resources/Fish/anchovy.tres" id="11_qp6bd"]
 [ext_resource type="Resource" uid="uid://sum177qda3u0" path="res://Resources/Fish/bass.tres" id="12_i7acv"]
 [ext_resource type="Resource" uid="uid://1hs1h3ie4opf" path="res://Resources/Fish/bluefish.tres" id="13_71yxo"]
-[ext_resource type="Resource" uid="uid://b45f30l8upncg" path="res://Resources/Fish/catfish.tres" id="14_0ru0m"]
+[ext_resource type="Resource" path="res://Resources/Fish/catfish.tres" id="14_0ru0m"]
 [ext_resource type="Resource" uid="uid://ci5s1mf2vqb8q" path="res://Resources/Fish/clownfish.tres" id="15_xqwkd"]
 [ext_resource type="Resource" uid="uid://tyxtkcac73ri" path="res://Resources/Fish/eel.tres" id="16_ue5tg"]
 [ext_resource type="Resource" uid="uid://cjq6fbw6fj7mn" path="res://Resources/Fish/goldenkoi.tres" id="17_kdkqv"]
-[ext_resource type="Resource" uid="uid://d34gaj0o4u6rb" path="res://Resources/Fish/goldfish.tres" id="18_0pi3y"]
+[ext_resource type="Resource" path="res://Resources/Fish/goldfish.tres" id="18_0pi3y"]
 [ext_resource type="Resource" uid="uid://4cdnlhcgty63" path="res://Resources/Fish/jellyfish.tres" id="19_o6uj6"]
 [ext_resource type="Resource" uid="uid://rj2kd7xp3x70" path="res://Resources/Fish/koifish.tres" id="20_0di7p"]
 [ext_resource type="Resource" uid="uid://dyymstefwsn1n" path="res://Resources/Fish/mackerel.tres" id="21_oum5a"]
-[ext_resource type="Resource" uid="uid://dry74f06hyp5c" path="res://Resources/Fish/purplefish.tres" id="22_e1ifn"]
+[ext_resource type="Resource" path="res://Resources/Fish/purplefish.tres" id="22_e1ifn"]
 [ext_resource type="Resource" uid="uid://vcvv03disa07" path="res://Resources/Fish/salmon.tres" id="23_cnqsx"]
 [ext_resource type="Resource" uid="uid://dmbkoexjgn7vh" path="res://Resources/Fish/seahorse.tres" id="24_xil6c"]
 [ext_resource type="Resource" uid="uid://b47cxacy05ths" path="res://Resources/Fish/seaturtle.tres" id="25_t5rjj"]
 [ext_resource type="Resource" uid="uid://8f6byjxcjp17" path="res://Resources/Fish/shark.tres" id="26_0jl1d"]
 [ext_resource type="Resource" uid="uid://bkk36rki8gxam" path="res://Resources/Fish/shrimp.tres" id="27_f0yxi"]
 [ext_resource type="Resource" uid="uid://dqy1sr2tmq70g" path="res://Resources/Fish/swordfish.tres" id="28_rd1jp"]
-[ext_resource type="Resource" uid="uid://qnfk230wopk" path="res://Resources/Fish/trout.tres" id="29_1rdks"]
+[ext_resource type="Resource" path="res://Resources/Fish/trout.tres" id="29_1rdks"]
 [ext_resource type="Resource" uid="uid://bq2jqtf3vanwp" path="res://Resources/Fish/yellowfish.tres" id="30_dm3o3"]
-[ext_resource type="Script" uid="uid://ffgpxd1a6iw1" path="res://Scripts/FishingLevelManager.cs" id="31_cs8w8"]
 [ext_resource type="Script" uid="uid://bt7263wofrudp" path="res://Scripts/BiteController.cs" id="31_bite"]
+[ext_resource type="Script" uid="uid://ffgpxd1a6iw1" path="res://Scripts/FishingLevelManager.cs" id="31_cs8w8"]
 [ext_resource type="PackedScene" uid="uid://brqwf7lix4d0v" path="res://Scenes/BiteAlert.tscn" id="32_alert"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut64v"]
@@ -126,15 +126,16 @@ metadata/_edit_lock_ = true
 script = ExtResource("2_nxjxa")
 HideSystemCursor = false
 
-[node name="RodPivot" type="Node2D" parent="." unique_id=642977651 node_paths=PackedStringArray("_waterShape", "_cursorNode")]
+[node name="RodPivot" type="Node2D" parent="." unique_id=642977651 node_paths=PackedStringArray("_waterShape", "_cursorNode", "_hud")]
 position = Vector2(960, 1076)
 script = ExtResource("3_nxjxa")
 _waterShape = NodePath("../WaterArea/WaterShape")
 _cursorNode = NodePath("../CursorNode")
+_hud = NodePath("../HUDLayer/GameHud")
 _bobberScale = 7.0
 _lineWidth = 4.0
 
-[node name="BiteController" type="Node2D" parent="." node_paths=PackedStringArray("fishingRod", "fishSpawner", "waterShape")]
+[node name="BiteController" type="Node2D" parent="." unique_id=1299032319 node_paths=PackedStringArray("fishingRod", "fishSpawner", "waterShape")]
 script = ExtResource("31_bite")
 fishingRod = NodePath("../RodPivot")
 fishSpawner = NodePath("../FishSpawner")
