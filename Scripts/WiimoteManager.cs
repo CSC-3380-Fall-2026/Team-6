@@ -224,6 +224,11 @@ public partial class WiimoteManager : Node2D
 				if(_isAPressed && !(_wasAPressed))
 				{
 					Callable.From(() => OnWiimoteAClicked?.Invoke()).CallDeferred();
+					Callable.From(() => SimulateMouseClick(true)).CallDeferred();
+				}
+				else if (!_isAPressed && _wasAPressed)
+				{
+					Callable.From(() => SimulateMouseClick(false)).CallDeferred();
 				}
 				//We look for the B button byte mask to match the buffer recieved.
 				//if the two bytes do not match, the & comparator returns false and B is not pressed.
@@ -443,5 +448,15 @@ public partial class WiimoteManager : Node2D
 				// Pass the Wiimote's calculated screen coordinates to the central input manager
 				InputManager.Instance.PointerPosition = CurrentAimPosition;
 			}
+	}
+
+	private void SimulateMouseClick(bool isDown)
+	{
+		InputEventMouseButton clickEvent = new InputEventMouseButton();
+		clickEvent.ButtonIndex = MouseButton.Left;
+		clickEvent.Pressed = isDown;
+		clickEvent.Position = _cursorPosition;
+		clickEvent.GlobalPosition = _cursorPosition;
+		Input.ParseInputEvent(clickEvent);
 	}
 }
