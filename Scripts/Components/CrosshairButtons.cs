@@ -4,11 +4,12 @@ using System.Collections.Generic;
 // Lets the Wii Remote press menu buttons. Add this node to a screen, and pressing A (or left click, or E)
 // presses whichever button the crosshair is over. Hook up each button's Pressed signal like normal.
 // Godot buttons only react to the real mouse, which the Wii Remote doesn't move, so this takes over
-// pressing every button under this node's parent.
+// pressing every button under this node's parent. It also plays the menu hover and click sounds.
 public partial class CrosshairButtons : Node
 {
 	private readonly List<BaseButton> buttons = new List<BaseButton>();
 	private WiimoteManager wiimote;
+	private BaseButton hoveredButton;
 	private ulong lastPressFrame = ulong.MaxValue;
 
 	public override void _Ready()
@@ -24,6 +25,9 @@ public partial class CrosshairButtons : Node
 		if (wiimote != null) {
 			wiimote.OnWiimoteAClicked += OnAPressed;
 		}
+
+		// No hover sound for a button the crosshair is already on when the screen opens
+		hoveredButton = ButtonUnderCrosshair();
 	}
 
 	public override void _ExitTree()
@@ -35,6 +39,14 @@ public partial class CrosshairButtons : Node
 
 	public override void _Process(double delta)
 	{
+		BaseButton hovered = ButtonUnderCrosshair();
+		if (hovered != hoveredButton) {
+			hoveredButton = hovered;
+			if (hovered != null) {
+				AudioManager.Instance?.PlaySFX(AudioManager.MenuHover);
+			}
+		}
+
 		// Left click and E
 		if (Input.IsActionJustPressed("cursor_primary")) {
 			OnAPressed();
@@ -54,15 +66,25 @@ public partial class CrosshairButtons : Node
 		}
 		lastPressFrame = frame;
 
+		BaseButton button = ButtonUnderCrosshair();
+		if (button != null) {
+			AudioManager.Instance?.PlaySFX(AudioManager.MenuClick);
+			button.EmitSignal(BaseButton.SignalName.Pressed);
+		}
+	}
+
+	// The button the crosshair is over, or null if it isn't over one
+	private BaseButton ButtonUnderCrosshair()
+	{
 		Vector2 crosshair = GetCrosshairPosition();
 		// Buttons later in the scene are drawn on top, so check those first
 		for (int i = buttons.Count - 1; i >= 0; i--) {
 			BaseButton button = buttons[i];
 			if (IsInstanceValid(button) && button.IsVisibleInTree() && !button.Disabled && button.GetGlobalRect().HasPoint(crosshair)) {
-				button.EmitSignal(BaseButton.SignalName.Pressed);
-				return;
+				return button;
 			}
 		}
+		return null;
 	}
 
 	// Where the crosshair is drawn, or the mouse if the Cursor autoload is missing

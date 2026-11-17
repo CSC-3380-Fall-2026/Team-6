@@ -10,6 +10,8 @@ public partial class MainMenu : Control
 
 	public override void _Ready()
 	{
+		AudioManager.Instance?.PlayMusic(AudioManager.MenuMusic);
+
 		if (goneFishingButton == null || fishNinjaButton == null || highScoresButton == null) {
 			GD.PushError("MainMenu: assign the menu buttons in the Inspector");
 			return;

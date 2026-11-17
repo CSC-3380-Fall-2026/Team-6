@@ -13,6 +13,7 @@ public partial class PauseMenu : Node
 	[Export] private Button recalibrateButton;
 	[Export] private Button closeButton;
 	[Export] private Button homeButton;
+	[Export] private Button restartButton;
 	[Export] private PackedScene calibrationScene;
 
 	private CalibrationScreen calibration;
@@ -39,6 +40,10 @@ public partial class PauseMenu : Node
 		if (homeButton != null)
 		{
 			homeButton.Pressed += GoHome;
+
+		if (restartButton != null)
+		{
+			restartButton.Pressed += Restart;
 		}
 	}
 
@@ -94,6 +99,10 @@ public partial class PauseMenu : Node
 		{
 			SceneManager.Instance.ChangeScene(SceneManager.MainMenu);
 		}
+	private void Restart()
+	{
+		Close();
+		GetTree().ReloadCurrentScene();
 	}
 
 	private void OpenCalibration()

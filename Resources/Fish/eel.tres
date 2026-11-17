@@ -13,4 +13,6 @@ Points = 25
 Speed = 120.0
 DoNotCut = true
 Rarity = 1
+NoticeChance = 0.25
+BiteDelay = 1.5
 metadata/_custom_type_script = "uid://o4uag27rp8gg"

@@ -63,6 +63,8 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+[ext_resource type="Script" uid="uid://bt7263wofrudp" path="res://Scripts/BiteController.cs" id="31_bite"]
+[ext_resource type="PackedScene" uid="uid://brqwf7lix4d0v" path="res://Scenes/BiteAlert.tscn" id="32_alert"]
 
 [node name="GoneFishing" type="Control" unique_id=691912027]
 layout_mode = 3
@@ -126,6 +128,13 @@ _waterShape = NodePath("../WaterArea/WaterShape")
 _cursorNode = NodePath("../CursorNode")
 _bobberScale = 7.0
 _lineWidth = 4.0
+
+[node name="BiteController" type="Node2D" parent="." node_paths=PackedStringArray("fishingRod", "fishSpawner", "waterShape")]
+script = ExtResource("31_bite")
+fishingRod = NodePath("../RodPivot")
+fishSpawner = NodePath("../FishSpawner")
+waterShape = NodePath("../WaterArea/WaterShape")
+biteAlertScene = ExtResource("32_alert")
 
 [node name="HUDLayer" type="CanvasLayer" parent="." unique_id=1708769849]
 

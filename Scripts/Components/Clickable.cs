@@ -25,8 +25,10 @@ public partial class Clickable : Area2D
 	[Export] private float clickPulseScale = 1.15f;
 	[Export] private float clickPulseGrowTime = 0.06f;
 	[Export] private float clickPulseShrinkTime = 0.1f;
-	// This is for when the game gets sound
-	[Export] private AudioStreamPlayer2D clickSound;
+	// AudioManager sounds for hovering and clicking. Pick a different one (like slice or catch) in the Inspector, or clear it for no sound.
+	// Hover starts with no sound, since fish swimming under the crosshair would set it off nonstop
+	[Export(PropertyHint.EnumSuggestion, AudioManager.SfxNames)] private string hoverSfx = "";
+	[Export(PropertyHint.EnumSuggestion, AudioManager.SfxNames)] private string clickSfx = AudioManager.MenuClick;
 
 	private ShaderMaterial outlineMaterial;
 	private Color baseSelfModulate;
@@ -158,6 +160,7 @@ public partial class Clickable : Area2D
 		ShowHighlight(hovered);
 
 		if (hovered) {
+			AudioManager.Instance?.PlaySFX(hoverSfx);
 			OnHoverStarted();
 			EmitSignal(SignalName.Hovered);
 		} else {
@@ -182,7 +185,7 @@ public partial class Clickable : Area2D
 		OnClicked();
 		EmitSignal(SignalName.Clicked);
 	}
-	// Sets the visual back to its original scale, it'll play a pulse and then go back. Can play a sound if we got one
+	// Sets the visual back to its original scale, it'll play a pulse and then go back. Also plays the click sound
 	private void PlayClickFeedback()
 	{
 		clickTween?.Kill();
@@ -191,8 +194,6 @@ public partial class Clickable : Area2D
 		clickTween.TweenProperty(visual, "scale", baseVisualScale * clickPulseScale, clickPulseGrowTime);
 		clickTween.TweenProperty(visual, "scale", baseVisualScale, clickPulseShrinkTime);
 
-		if (clickSound != null) {
-			clickSound.Play();
-		}
+		AudioManager.Instance?.PlaySFX(clickSfx);
 	}
 }
