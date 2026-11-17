@@ -35,6 +35,8 @@
 [ext_resource type="Resource" uid="uid://qnfk230wopk" path="res://Resources/Fish/trout.tres" id="29_1rdks"]
 [ext_resource type="Resource" uid="uid://bq2jqtf3vanwp" path="res://Resources/Fish/yellowfish.tres" id="30_dm3o3"]
 [ext_resource type="Script" uid="uid://ffgpxd1a6iw1" path="res://Scripts/FishingLevelManager.cs" id="31_cs8w8"]
+[ext_resource type="Script" uid="uid://bt7263wofrudp" path="res://Scripts/BiteController.cs" id="31_bite"]
+[ext_resource type="PackedScene" uid="uid://brqwf7lix4d0v" path="res://Scenes/BiteAlert.tscn" id="32_alert"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut64v"]
 content_margin_left = 28.0
@@ -67,8 +69,6 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
-[ext_resource type="Script" uid="uid://bt7263wofrudp" path="res://Scripts/BiteController.cs" id="31_bite"]
-[ext_resource type="PackedScene" uid="uid://brqwf7lix4d0v" path="res://Scenes/BiteAlert.tscn" id="32_alert"]
 
 [node name="GoneFishing" type="Control" unique_id=691912027]
 layout_mode = 3
