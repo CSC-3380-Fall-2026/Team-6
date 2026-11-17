@@ -40,11 +40,12 @@ public partial class PauseMenu : Node
 		if (homeButton != null)
 		{
 			homeButton.Pressed += GoHome;
-
+		}
 		if (restartButton != null)
 		{
 			restartButton.Pressed += Restart;
 		}
+		
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -99,6 +100,7 @@ public partial class PauseMenu : Node
 		{
 			SceneManager.Instance.ChangeScene(SceneManager.MainMenu);
 		}
+	}
 	private void Restart()
 	{
 		Close();
