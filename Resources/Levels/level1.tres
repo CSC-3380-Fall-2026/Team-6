@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="FishingLevel" format=3]
+
+[ext_resource type="Script" uid="uid://vd6qyb0gg1og" path="res://Scripts/FishingLevel.cs" id="1_level"]
+[ext_resource type="Resource" uid="uid://bj8hm5651aasx" path="res://Resources/Fish/anchovy.tres" id="2_anchovy"]
+[ext_resource type="Resource" uid="uid://sum177qda3u0" path="res://Resources/Fish/bass.tres" id="3_bass"]
+[ext_resource type="Resource" uid="uid://1hs1h3ie4opf" path="res://Resources/Fish/bluefish.tres" id="4_bluefish"]
+[ext_resource type="Resource" uid="uid://b45f30l8upncg" path="res://Resources/Fish/catfish.tres" id="5_catfish"]
+[ext_resource type="Resource" uid="uid://ci5s1mf2vqb8q" path="res://Resources/Fish/clownfish.tres" id="6_clownfish"]
+[ext_resource type="Resource" uid="uid://d34gaj0o4u6rb" path="res://Resources/Fish/goldfish.tres" id="7_goldfish"]
+[ext_resource type="Resource" uid="uid://dry74f06hyp5c" path="res://Resources/Fish/purplefish.tres" id="8_purplefish"]
+[ext_resource type="Resource" uid="uid://bkk36rki8gxam" path="res://Resources/Fish/shrimp.tres" id="9_shrimp"]
+[ext_resource type="Resource" uid="uid://qnfk230wopk" path="res://Resources/Fish/trout.tres" id="10_trout"]
+[ext_resource type="Resource" uid="uid://bq2jqtf3vanwp" path="res://Resources/Fish/yellowfish.tres" id="11_yellowfish"]
+
+[resource]
+script = ExtResource("1_level")
+Fish = Array[Object]([ExtResource("2_anchovy"), ExtResource("3_bass"), ExtResource("4_bluefish"), ExtResource("5_catfish"), ExtResource("6_clownfish"), ExtResource("7_goldfish"), ExtResource("8_purplefish"), ExtResource("9_shrimp"), ExtResource("10_trout"), ExtResource("11_yellowfish")])
+MaxFish = 8
+SwimSpeedMultiplier = 1.0
+BiteDelayMin = 1.0
+BiteDelayMax = 2.5
+ReactionWindow = 1.0
+PullStrength = 1.0
+metadata/_custom_type_script = "uid://vd6qyb0gg1og"
