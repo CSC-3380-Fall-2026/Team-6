@@ -44,7 +44,7 @@ public partial class FishingLevelManager : Node
     private bool _changingLevel = false; //true while banner is up so target isn't reached twice
     private bool _runOver = false;
     private int _lastShownScore = -1; // only rewrite level label when score changes
-
+    private WiimoteManager wiimote;
     public override void _Ready()
     {
         ProcessMode = ProcessModeEnum.Always; // keep running while game is paused
@@ -70,8 +70,22 @@ public partial class FishingLevelManager : Node
             _statsLabel.Visible = false;
         }
         UpdateLevelLabel();
+        //INTENDED FOR DEBUG ONLY. Press '-' to add points from the wii remote.
+        //K still works as an option for debug.
+        WiimoteManager wiimote = GetTree().Root.GetNodeOrNull<WiimoteManager>("WiimoteManager");
+        if (wiimote != null && OS.IsDebugBuild())
+        {
+        wiimote.OnWiimoteMinusClicked += OnWiimoteDebugScore;
+        }
     }
-
+    public override void _ExitTree()
+    {
+        WiimoteManager wiimote = GetTree().Root.GetNodeOrNull<WiimoteManager>("WiimoteManager");
+        if (wiimote != null && OS.IsDebugBuild())
+        {
+            wiimote.OnWiimoteMinusClicked -= OnWiimoteDebugScore;
+        }
+    }
     public override void _Process(double delta)
     {
         // pause menu and level-up banner both pause the game
@@ -223,4 +237,14 @@ public partial class FishingLevelManager : Node
         int wholeSeconds = (int)seconds;
         return $"{wholeSeconds / SecondsPerMinute}:{wholeSeconds % SecondsPerMinute:00}";
     }
-}
+
+    private void OnWiimoteDebugScore()
+{
+
+    if (GetTree().Paused || _hud == null)
+    {
+        return;
+    }
+
+    _hud.AddScore(_debugPoints);
+}}
