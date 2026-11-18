@@ -21,8 +21,7 @@ public partial class CatchFeedback: Control
     [Export] private float _popTime = 0.15f; // seconds to grow and settle
 
     [ExportGroup("Catch Card")]
-    [Export] private string _newFishMessage = "NEW FISH CAUGHT!";
-    [Export] private string _caughtAgainMessage = "{0}  ·  caught again"; // {0} replaced by rarity
+    [Export] private string _newFishMessage = "*  NEW FISH CAUGHT!  *";
     [Export] private float _cardMargin = 24f; // gap between card and bottom-right corner
     [Export] private float _newCardTime = 3.5f; // seconds "new fish card" stays before fading
     [Export] private float _repeatCardTime = 2f; // seconds "caught again" card stays before fading
@@ -43,36 +42,60 @@ public partial class CatchFeedback: Control
     private const float Invisible = 0f;
     private const float ScreenLeft = 0f;
 
-    // look of "new fish" card (matches HUD style)
-    private static readonly Color NewCardBackground = new Color("0c1c2dd9");
-    private static readonly Color NewHeaderColor = new Color("ffd75a");
-    private static readonly Color NewNameColor = Colors.White;
-    private static readonly Color PillTextColor = new Color("14141e");
-    private const int NewCardBorder = 4;
-    private const int NewIconSize = 120;
-    private const int NewHeaderFontSize = 24;
+    // look of "new fish" card
+    private const float NewBackgroundDarknes = 0.35f; // background is rarity color at 35% brightness
+    private const float NewBackgroundOpacity = 0.96f;
+    private const float GlowOpacity = 0.6f;
+    private const int GlowSize = 18; // how far colored glow spreads around card
+    private const int NewCardBorder = 5;
+    private const int NewCornerRadius = 18;
+    private const int NewIconSize = 112;
+    private const int BannerFontSize = 24;
+    private const int BannerPaddingTopBottom = 8;
     private const int NewNameFontSize = 46;
-    private const int PillFontSize = 20;
+    private const int NewRarityFontSize = 30;
+    private const int NewBodyPaddingLeft = 24;
+    private const int NewBodyPaddingRight = 72; // extra room on right for sparkles
+    private const int NewBodyPaddingTopBottom = 14;
+    private static readonly Color BannerTextColor = new Color("19140a");
+    private static readonly Color NewNameColor = Colors.White;
+
+    // sparkles for "new fish" card
+    // each position is a fraction of the card's width and height
+    private static readonly Vector2[] SparklePositions =
+    {
+        new Vector2(0.93f, 0.42f),
+        new Vector2(0.87f, 0.74f),
+        new Vector2(0.96f, 0.80f),
+    };
+    private const float SparkleSize = 9f; // pixels from middle of sparkle to tips
+    private const float SparkleWaist = 3f; // pixels from middle to pinched-in corners
+    private const float SparkleSmallScale = 0.5f;
+    private const float SparkleBigScale = 1.1f;
+    private const float SparkleTwinkleTime = 0.45f; // seconds to grow or shrink once
+    private const float SparkleStagger = 0.2f; // seconds between each sparkle starting
+    private static readonly Color SparkleColor = new Color(1f, 1f, 1f, 0.9f);
 
     // look of "caught again" card (smaller and grey)
-    private static readonly Color RepeatCardBackground = new Color("1e2024be");
-    private static readonly Color RepeatCardBorderColor = new Color("ffffff28");
-    private static readonly Color RepeatNameColor = new Color("c8c8c8");
-    private static readonly Color RepeatInfoColor = new Color("969696");
+    private static readonly Color RepeatCardBackground = new Color("3c3e42dc");
+    private static readonly Color RepeatCardBorderColor = new Color("8c8c8c");
+    private static readonly Color RepeatShadowColor = new Color(0f, 0f, 0f, 0.35f);
+    private static readonly Vector2 RepeatShadowOffset = new Vector2(4f, 6f);
+    private static readonly Color RepeatNameColor = new Color("d7d7d7");
     private static readonly Color GreyedOutIcon = new Color(0.6f, 0.6f, 0.6f, 0.7f);
-    private const int RepeatCardBorder = 2;
-    private const int RepeatIconSize = 64;
+    private const float RepeatRarityOpacity = 0.67f; // rarity word keeps its color but dimmer
+    private const int RepeatCardBorder = 3;
+    private const int RepeatCornerRadius = 16;
+    private const int RepeatIconSize = 68;
     private const int RepeatNameFontSize = 32;
-    private const int RepeatInfoFontSize = 20;
+    private const int RepeatRarityFontSize = 22;
+    private const int RepeatPaddingSides = 20;
+    private const int RepeatPaddingTopBottom = 14;
 
-    // shared card layout
-    private const int CardCornerRadius = 16;
-    private const int CardPaddingSides = 20;
-    private const int CardPaddingTopBottom = 14;
     private const int CardSpacing = 20; // gap between picture and text
-    private const int PillCornerRadius = 12;
-    private const int PillPaddingSides = 14;
-    private const int PillPaddingTopBottom = 3;
+    private const int NoSpacing = 0;
+    private const int NoBorder = 0;
+    private const int NoRounding = 0;
 
     private Control _currentCard; // only one card at a time, new catch replaces it
 
@@ -154,8 +177,15 @@ public partial class CatchFeedback: Control
         AddChild(card);
         card.ResetSize(); // shrink to fit its contents
 
+        if (isNewFish)
+        {
+            AddSparkles(card); // needs card's final size, so it happens after ResetSize
+        }
+
         // start just off right edge, then slide into bottom-right corner
+        // glow spreads past card's edge
         Vector2 screen = GetViewportRect().Size;
+        float edgeGap = isNewFish ? _cardMargin + GlowSize : _cardMargin;
         Vector2 target = screen - card.Size - Vector2.One * _cardMargin;
         card.Position = new Vector2(screen.X, target.Y);
 
@@ -170,29 +200,79 @@ public partial class CatchFeedback: Control
     private Control BuildNewFishCard(FishData fish)
     {
         Color rarityColor = RarityColor(fish.Rarity);
-        PanelContainer card = MakeCard(NewCardBackground, rarityColor, NewCardBorder);
-        HBoxContainer row = MakeRow(card);
+        Color background = rarityColor.Darkened(1f - NewBackgroundDarknes);
+        background.A = NewBackgroundOpacity;
+
+        StyleBoxFlat cardStyle = MakeStyle(background, rarityColor, NewCardBorder, NewCornerRadius);
+        cardStyle.ShadowColor = new Color(rarityColor, GlowOpacity); // the glow
+        cardStyle.ShadowSize = GlowSize;
+        cardStyle.SetContentMarginAll(NewCardBorder); // contents sit just inside border
+
+        PanelContainer card = MakePanel(cardStyle);
+        VBoxContainer layout = new VBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
+        layout.AddThemeConstantOverride("separation", NoSpacing);
+        card.AddChild(layout);
+
+        layout.AddChild(MakeBanner(rarityColor));
+
+        MarginContainer body = new MarginContainer { MouseFilter = MouseFilterEnum.Ignore };
+        body.AddThemeConstantOverride("margin_left", NewBodyPaddingLeft);
+        body.AddThemeConstantOverride("margin_right", NewBodyPaddingRight);
+        body.AddThemeConstantOverride("margin_top", NewBodyPaddingTopBottom);
+        body.AddThemeConstantOverride("margin_bottom", NewBodyPaddingTopBottom);
+        layout.AddChild(body);
+
+        HBoxContainer row = MakeRow();
+        body.AddChild(row);
         row.AddChild(MakeIcon(fish, NewIconSize, Colors.White));
 
-        VBoxContainer text = new VBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
+        VBoxContainer text = new VBoxContainer { MouseFilter = MouseFilterEnum.Ignore, SizeFlagsVertical = SizeFlags.ShrinkCenter };
         row.AddChild(text);
-        text.AddChild(MakeLabel(_newFishMessage, NewHeaderFontSize, NewHeaderColor));
         text.AddChild(MakeLabel(fish.FishName, NewNameFontSize, NewNameColor));
-        text.AddChild(MakeRarityPill(fish.Rarity, rarityColor));
+        text.AddChild(MakeLabel(fish.Rarity.ToString(), NewRarityFontSize, rarityColor));
         return card;
+    }
+
+    // colored strip across top of "new fish" card
+    private Control MakeBanner(Color rarityColor)
+    {
+        StyleBoxFlat style = MakeStyle(rarityColor, rarityColor, NoBorder, NoRounding);
+        // only top corners rounded
+        int innerRadius = NewCornerRadius - NewCardBorder;
+        style.CornerRadiusTopLeft = innerRadius;
+        style.CornerRadiusTopRight = innerRadius;
+        style.ContentMarginTop = BannerPaddingTopBottom;
+        style.ContentMarginBottom = BannerPaddingTopBottom;
+
+        PanelContainer banner = MakePanel(style);
+        Label title = MakeLabel(_newFishMessage, BannerFontSize, BannerTextColor);
+        title.HorizontalAlignment = HorizontalAlignment.Center;
+        banner.AddChild(title);
+        return banner;
     }
 
     // SMALL GREY CARD
     private Control BuildRepeatCard(FishData fish)
     {
-        PanelContainer card = MakeCard(RepeatCardBackground, RepeatCardBorderColor, RepeatCardBorder);
-        HBoxContainer row = MakeRow(card);
+        StyleBoxFlat style = MakeStyle(RepeatCardBackground, RepeatCardBorderColor, RepeatCardBorder, RepeatCornerRadius);
+        style.ShadowColor = RepeatShadowColor;
+        style.ShadowOffset = RepeatShadowOffset;
+        style.ShadowSize = RepeatCardBorder;
+        style.ContentMarginLeft = RepeatPaddingSides;
+        style.ContentMarginRight = RepeatPaddingSides;
+        style.ContentMarginTop = RepeatPaddingTopBottom;
+        style.ContentMarginBottom = RepeatPaddingTopBottom;
+
+        PanelContainer card = MakePanel(style);
+        HBoxContainer row = MakeRow();
+        card.AddChild(row);
         row.AddChild(MakeIcon(fish, RepeatIconSize, GreyedOutIcon));
 
-        VBoxContainer text = new VBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
+        VBoxContainer text = new VBoxContainer { MouseFilter = MouseFilterEnum.Ignore, SizeFlagsVertical = SizeFlags.ShrinkCenter };
         row.AddChild(text);
-                text.AddChild(MakeLabel(fish.FishName, RepeatNameFontSize, RepeatNameColor));
-        text.AddChild(MakeLabel(string.Format(_caughtAgainMessage, fish.Rarity), RepeatInfoFontSize, RepeatInfoColor));
+        text.AddChild(MakeLabel(fish.FishName, RepeatNameFontSize, RepeatNameColor));
+        Color dimRarity = new Color(RarityColor(fish.Rarity), RepeatRarityOpacity);
+        text.AddChild(MakeLabel(fish.Rarity.ToString(), RepeatRarityFontSize, dimRarity));
         return card;
     }
 
@@ -206,8 +286,46 @@ public partial class CatchFeedback: Control
         return _rarityColors[index];
     }
 
-    // GENERAL CARD STYLES
-    private static PanelContainer MakeCard(Color background, Color border, int borderWidth)
+    // SPARKLES
+    private static void AddSparkles(Control card)
+    {
+        for (int i = 0; i < SparklePositions.Length; i++)
+        {
+            Polygon2D sparkle = new Polygon2D
+            {
+                Polygon = SparkleShape(),
+                Color = SparkleColor,
+                Position = card.Size * SparklePositions[i],
+                Scale = Vector2.One * SparkleSmallScale,
+            };
+            card.AddChild(sparkle);
+
+            // twinkle until card is removed
+            Tween twinkle = sparkle.CreateTween().SetLoops();
+            twinkle.TweenInterval(i * SparkleStagger);
+            twinkle.TweenProperty(sparkle, "scale", Vector2.One * SparkleBigScale, SparkleTwinkleTime).SetTrans(Tween.TransitionType.Sine);
+            twinkle.TweenProperty(sparkle, "scale", Vector2.One * SparkleSmallScale, SparkleTwinkleTime).SetTrans(Tween.TransitionType.Sine);
+        }
+    }
+
+    // four-pointed star, pinched in between
+    private static Vector2[] SparkleShape()
+    {
+        return new Vector2[]
+        {
+            new Vector2(0f, -SparkleSize),
+            new Vector2(SparkleWaist, -SparkleWaist),
+            new Vector2(SparkleSize, 0f),
+            new Vector2(SparkleWaist, SparkleWaist),
+            new Vector2(0f, SparkleSize),
+            new Vector2(-SparkleWaist, SparkleWaist),
+            new Vector2(-SparkleSize, 0f),
+            new Vector2(-SparkleWaist, -SparkleWaist),
+        };
+    }
+
+    // GENERAL CARD PIECES
+    private static StyleBoxFlat MakeStyle(Color background, Color border, int borderWidth, int cornerRadius)
     {
         StyleBoxFlat style = new StyleBoxFlat
         {
@@ -215,21 +333,21 @@ public partial class CatchFeedback: Control
             BorderColor = border,
         };
         style.SetBorderWidthAll(borderWidth);
-        style.SetCornerRadiusAll(CardCornerRadius);
-        style.SetContentMarginAll(CardPaddingTopBottom);
-        style.ContentMarginLeft = CardPaddingSides;
-        style.ContentMarginRight = CardPaddingSides;
-
-        PanelContainer card = new PanelContainer { MouseFilter = MouseFilterEnum.Ignore };
-        card.AddThemeStyleboxOverride("panel", style);
-        return card;
+        style.SetCornerRadiusAll(cornerRadius);
+        return style;
     }
 
-    private static HBoxContainer MakeRow(PanelContainer card)
+    private static PanelContainer MakePanel(StyleBoxFlat style)
+    {
+        PanelContainer panel = new PanelContainer { MouseFilter = MouseFilterEnum.Ignore };
+        panel.AddThemeStyleboxOverride("panel", style);
+        return panel;
+    }
+
+    private static HBoxContainer MakeRow()
     {
         HBoxContainer row = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
         row.AddThemeConstantOverride("separation", CardSpacing);
-        card.AddChild(row);
         return row;
     }
 
@@ -265,21 +383,5 @@ public partial class CatchFeedback: Control
             MouseFilter = MouseFilterEnum.Ignore,
             LabelSettings = new LabelSettings { FontSize = fontSize, FontColor = color },
         };
-    }
-
-    // rounded badge in rarity's color
-    private static Label MakeRarityPill(FishRarity rarity, Color color)
-    {
-        StyleBoxFlat style = new StyleBoxFlat { BgColor = color };
-        style.SetCornerRadiusAll(PillCornerRadius);
-        style.ContentMarginLeft = PillPaddingSides;
-        style.ContentMarginRight = PillPaddingSides;
-        style.ContentMarginTop = PillPaddingTopBottom;
-        style.ContentMarginBottom = PillPaddingTopBottom;
-
-        Label pill = MakeLabel(rarity.ToString().ToUpper(), PillFontSize, PillTextColor);
-        pill.AddThemeStyleboxOverride("normal", style);
-        pill.SizeFlagsHorizontal = SizeFlags.ShrinkBegin; // only as wide as the word
-        return pill;
     }
 }
