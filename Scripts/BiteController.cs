@@ -132,6 +132,8 @@ public partial class BiteController : Node2D
 	// The bobber is in the water, so start watching for a fish
 	private void OnCastLanded(Vector2 position)
 	{
+		ResetBobber();
+
 		bobberPosition = position;
 		noticeTimer = noticeInterval;
 		stage = Stage.Watching;
