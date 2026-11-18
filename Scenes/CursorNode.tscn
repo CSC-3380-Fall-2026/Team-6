@@ -3,13 +3,13 @@
 [ext_resource type="Script" uid="uid://dl832hes558bg" path="res://Scripts/CursorNode.cs" id="1_cursor"]
 [ext_resource type="Texture2D" uid="uid://be7qo81sou1cf" path="res://Assets/crosshair.svg" id="2_crosshair"]
 
-[node name="Cursor" type="CanvasLayer"]
+[node name="Cursor" type="CanvasLayer" unique_id=612717670]
 process_mode = 3
 layer = 128
 
-[node name="CursorNode" type="Node2D" parent="."]
+[node name="CursorNode" type="Node2D" parent="." unique_id=434313105]
 z_index = 4096
 script = ExtResource("1_cursor")
 
-[node name="Crosshair" type="Sprite2D" parent="CursorNode"]
+[node name="Crosshair" type="Sprite2D" parent="CursorNode" unique_id=344582133]
 texture = ExtResource("2_crosshair")
