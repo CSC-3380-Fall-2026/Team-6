@@ -106,11 +106,7 @@ public partial class FishingRod : Node2D
 		
 		if (wiimote != null)
 		{
-			// 2. Subscribe to the C# Events using the += operator.
-			// When Wiimote A is clicked, we just call the exact same method the mouse uses!
 			wiimote.OnWiimoteAClicked += OnWiimoteAPressed;
-			// Note: If you need to track when the A button is RELEASED for the hold-to-reel mechanic,
-			// WiimoteManager would need an 'OnWiimoteAReleased' event. For now, we trigger the press.
 		}
 	}
 
@@ -171,7 +167,7 @@ public partial class FishingRod : Node2D
 		{
 			return;
 		}
-		
+
 		// can only cast when line is fully reeled in
 		if (State == RodState.Idle)
 		{
@@ -211,7 +207,6 @@ public partial class FishingRod : Node2D
 		WiimoteManager wiimote = GetTree().Root.GetNodeOrNull<WiimoteManager>("WiimoteManager");
 		if (wiimote != null)
 		{
-			// Pass the Wiimote's aiming cursor directly into your existing logic
 			Vector2 aim = wiimote.CurrentAimPosition;
 			OnPrimaryPressed(aim);
 		}
