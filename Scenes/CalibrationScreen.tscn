@@ -1,0 +1,189 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://bpt7slxm0fm8m" path="res://Scripts/CalibrationScreen.cs" id="1_calib"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ring"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 60
+corner_radius_top_right = 60
+corner_radius_bottom_right = 60
+corner_radius_bottom_left = 60
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dot"]
+bg_color = Color(0.7647059, 0.24705882, 0.27058825, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_check"]
+bg_color = Color(1, 0.85, 0.2, 0.25)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 0.85, 0.2, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
+bg_color = Color(0.09019608, 0.39607844, 0.44313726, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[node name="CalibrationScreen" type="CanvasLayer" node_paths=PackedStringArray("targetMarker", "checkMarker", "instructionsLabel", "progressLabel", "resultLabel", "buttonRow", "retryButton", "acceptButton")]
+process_mode = 3
+layer = 100
+script = ExtResource("1_calib")
+targetMarker = NodePath("Target")
+checkMarker = NodePath("CheckPointer")
+instructionsLabel = NodePath("Instructions")
+progressLabel = NodePath("Progress")
+resultLabel = NodePath("Result")
+buttonRow = NodePath("Buttons")
+retryButton = NodePath("Buttons/RetryButton")
+acceptButton = NodePath("Buttons/AcceptButton")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.08, 0.12, 0.94)
+
+[node name="Title" type="Label" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 50.0
+offset_bottom = 140.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 64
+text = "Wiimote Calibration"
+horizontal_alignment = 1
+
+[node name="Instructions" type="Label" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 300.0
+offset_top = 160.0
+offset_right = -300.0
+offset_bottom = 290.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Progress" type="Label" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 300.0
+offset_bottom = 350.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+
+[node name="Result" type="Label" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 300.0
+offset_top = 760.0
+offset_right = -300.0
+offset_bottom = 860.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 36
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Target" type="Panel" parent="."]
+offset_right = 120.0
+offset_bottom = 120.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ring")
+
+[node name="Dot" type="Panel" parent="Target"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -14.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dot")
+
+[node name="CheckPointer" type="Panel" parent="."]
+visible = false
+offset_right = 60.0
+offset_bottom = 60.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_check")
+
+[node name="Buttons" type="HBoxContainer" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -460.0
+offset_top = -200.0
+offset_right = 460.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 80
+alignment = 1
+
+[node name="RetryButton" type="Button" parent="Buttons"]
+custom_minimum_size = Vector2(420, 120)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+text = "Retry Calibration"
+
+[node name="AcceptButton" type="Button" parent="Buttons"]
+custom_minimum_size = Vector2(420, 120)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+text = "Accept Calibration"
+
+[node name="CancelHint" type="Label" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -60.0
+offset_right = -30.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 26
+text = "Esc: cancel"
+horizontal_alignment = 2

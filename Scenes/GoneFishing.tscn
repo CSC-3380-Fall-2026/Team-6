@@ -1,0 +1,215 @@
+[gd_scene format=3 uid="uid://b51jrdkiiuawl"]
+
+[ext_resource type="Script" uid="uid://ddwbb4vhjuh8w" path="res://Scripts/GoneFishing.cs" id="1_g3asb"]
+[ext_resource type="Texture2D" uid="uid://bv34fkiydo1sc" path="res://Assets/grass.png" id="2_ndjx8"]
+[ext_resource type="Script" uid="uid://dl832hes558bg" path="res://Scripts/CursorNode.cs" id="2_nxjxa"]
+[ext_resource type="Script" uid="uid://cjn1hiw7ildcx" path="res://Scripts/FishingRod.cs" id="3_nxjxa"]
+[ext_resource type="Texture2D" uid="uid://jdxc523lage2" path="res://Assets/water.png" id="3_wgts6"]
+[ext_resource type="Script" uid="uid://do5ketj8qnl2o" path="res://Scripts/Components/BackToMainMenu.cs" id="4_back"]
+[ext_resource type="PackedScene" uid="uid://4mydybhdhrux" path="res://Scenes/GameHud.tscn" id="5_wgts6"]
+[ext_resource type="PackedScene" uid="uid://b4ph7i6yexn5u" path="res://Scenes/MenuOverlay.tscn" id="6_pause"]
+[ext_resource type="Resource" path="res://Resources/Levels/level1.tres" id="9_level1"]
+[ext_resource type="Resource" path="res://Resources/Levels/level2.tres" id="9_level2"]
+[ext_resource type="Resource" path="res://Resources/Levels/level3.tres" id="9_level3"]
+[ext_resource type="Resource" path="res://Resources/Levels/level4.tres" id="9_level4"]
+[ext_resource type="Script" uid="uid://bx5umpa6dlpt" path="res://Scripts/FishSpawner.cs" id="9_n5wfh"]
+[ext_resource type="PackedScene" uid="uid://ccy4pe4eswv5f" path="res://Scenes/FishInPond.tscn" id="10_cs8w8"]
+[ext_resource type="Resource" path="res://Resources/Fish/anchovy.tres" id="11_qp6bd"]
+[ext_resource type="Resource" uid="uid://sum177qda3u0" path="res://Resources/Fish/bass.tres" id="12_i7acv"]
+[ext_resource type="Resource" uid="uid://1hs1h3ie4opf" path="res://Resources/Fish/bluefish.tres" id="13_71yxo"]
+[ext_resource type="Resource" path="res://Resources/Fish/catfish.tres" id="14_0ru0m"]
+[ext_resource type="Resource" uid="uid://ci5s1mf2vqb8q" path="res://Resources/Fish/clownfish.tres" id="15_xqwkd"]
+[ext_resource type="Resource" uid="uid://tyxtkcac73ri" path="res://Resources/Fish/eel.tres" id="16_ue5tg"]
+[ext_resource type="Resource" uid="uid://cjq6fbw6fj7mn" path="res://Resources/Fish/goldenkoi.tres" id="17_kdkqv"]
+[ext_resource type="Resource" path="res://Resources/Fish/goldfish.tres" id="18_0pi3y"]
+[ext_resource type="Resource" uid="uid://4cdnlhcgty63" path="res://Resources/Fish/jellyfish.tres" id="19_o6uj6"]
+[ext_resource type="Resource" uid="uid://rj2kd7xp3x70" path="res://Resources/Fish/koifish.tres" id="20_0di7p"]
+[ext_resource type="Resource" uid="uid://dyymstefwsn1n" path="res://Resources/Fish/mackerel.tres" id="21_oum5a"]
+[ext_resource type="Resource" path="res://Resources/Fish/purplefish.tres" id="22_e1ifn"]
+[ext_resource type="Resource" uid="uid://vcvv03disa07" path="res://Resources/Fish/salmon.tres" id="23_cnqsx"]
+[ext_resource type="Resource" uid="uid://dmbkoexjgn7vh" path="res://Resources/Fish/seahorse.tres" id="24_xil6c"]
+[ext_resource type="Resource" uid="uid://b47cxacy05ths" path="res://Resources/Fish/seaturtle.tres" id="25_t5rjj"]
+[ext_resource type="Resource" uid="uid://8f6byjxcjp17" path="res://Resources/Fish/shark.tres" id="26_0jl1d"]
+[ext_resource type="Resource" uid="uid://bkk36rki8gxam" path="res://Resources/Fish/shrimp.tres" id="27_f0yxi"]
+[ext_resource type="Resource" uid="uid://dqy1sr2tmq70g" path="res://Resources/Fish/swordfish.tres" id="28_rd1jp"]
+[ext_resource type="Resource" path="res://Resources/Fish/trout.tres" id="29_1rdks"]
+[ext_resource type="Resource" uid="uid://bq2jqtf3vanwp" path="res://Resources/Fish/yellowfish.tres" id="30_dm3o3"]
+[ext_resource type="Script" uid="uid://bt7263wofrudp" path="res://Scripts/BiteController.cs" id="31_bite"]
+[ext_resource type="Script" uid="uid://ffgpxd1a6iw1" path="res://Scripts/FishingLevelManager.cs" id="31_cs8w8"]
+[ext_resource type="PackedScene" uid="uid://brqwf7lix4d0v" path="res://Scenes/BiteAlert.tscn" id="32_alert"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut64v"]
+content_margin_left = 28.0
+content_margin_top = 10.0
+content_margin_right = 28.0
+content_margin_bottom = 10.0
+bg_color = Color(0.047058824, 0.10980392, 0.23921569, 0.6666667)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="LabelSettings" id="LabelSettings_q8rwo"]
+font_size = 36
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hlhnc"]
+bg_color = Color(0, 0, 0, 0.47058824)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nr1gc"]
+bg_color = Color(0.47058824, 0.8627451, 0.54901963, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="GoneFishing" type="Control" unique_id=691912027]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g3asb")
+metadata/_edit_lock_ = true
+
+[node name="Background Grass" type="TextureRect" parent="." unique_id=625236661]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_ndjx8")
+stretch_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="WaterArea" type="Area2D" parent="." unique_id=1241967109]
+metadata/_edit_lock_ = true
+
+[node name="WaterShape" type="Polygon2D" parent="WaterArea" unique_id=1277273584]
+texture_filter = 1
+texture_repeat = 2
+texture = ExtResource("3_wgts6")
+polygon = PackedVector2Array(682, 196, 1236, 192, 1341, 225, 1518, 314, 1591, 379, 1661, 534, 1664, 673, 1594, 789, 1352, 930, 1247, 959, 654, 956, 505, 902, 339, 796, 283, 713, 256, 510, 343, 367, 534, 250)
+metadata/_edit_lock_ = true
+
+[node name="CollisionArea" type="CollisionPolygon2D" parent="WaterArea" unique_id=607201733]
+polygon = PackedVector2Array(682, 196, 1236, 192, 1341, 225, 1518, 314, 1591, 379, 1661, 534, 1664, 673, 1594, 789, 1352, 930, 1247, 959, 654, 956, 505, 902, 339, 796, 283, 713, 256, 510, 343, 367, 534, 250)
+metadata/_edit_lock_ = true
+
+[node name="FishSpawner" type="Node2D" parent="." unique_id=1924136416 node_paths=PackedStringArray("_waterPolygon")]
+script = ExtResource("9_n5wfh")
+_fishScene = ExtResource("10_cs8w8")
+_maxFishCount = 7
+_waterPolygon = NodePath("../WaterArea/WaterShape")
+_availableFish = Array[Object]([ExtResource("11_qp6bd"), ExtResource("12_i7acv"), ExtResource("13_71yxo"), ExtResource("14_0ru0m"), ExtResource("15_xqwkd"), ExtResource("16_ue5tg"), ExtResource("17_kdkqv"), ExtResource("18_0pi3y"), ExtResource("19_o6uj6"), ExtResource("20_0di7p"), ExtResource("21_oum5a"), ExtResource("22_e1ifn"), ExtResource("23_cnqsx"), ExtResource("24_xil6c"), ExtResource("25_t5rjj"), ExtResource("26_0jl1d"), ExtResource("27_f0yxi"), ExtResource("28_rd1jp"), ExtResource("29_1rdks"), ExtResource("30_dm3o3")])
+_levels = Array[Object]([ExtResource("9_level1"), ExtResource("9_level2"), ExtResource("9_level3"), ExtResource("9_level4")])
+
+[node name="WaterOverlay" type="Polygon2D" parent="." unique_id=1429903034]
+texture_filter = 1
+texture_repeat = 2
+color = Color(0.09803922, 0.4509804, 0.7647059, 0.38039216)
+texture = ExtResource("3_wgts6")
+polygon = PackedVector2Array(682, 196, 1236, 192, 1341, 225, 1518, 314, 1591, 379, 1661, 534, 1664, 673, 1594, 789, 1352, 930, 1247, 959, 654, 956, 505, 902, 339, 796, 283, 713, 256, 510, 343, 367, 534, 250)
+metadata/_edit_lock_ = true
+
+[node name="CursorNode" type="Node2D" parent="." unique_id=868867043]
+script = ExtResource("2_nxjxa")
+HideSystemCursor = false
+
+[node name="RodPivot" type="Node2D" parent="." unique_id=642977651 node_paths=PackedStringArray("_waterShape", "_cursorNode", "_hud")]
+position = Vector2(960, 1076)
+script = ExtResource("3_nxjxa")
+_waterShape = NodePath("../WaterArea/WaterShape")
+_cursorNode = NodePath("../CursorNode")
+_hud = NodePath("../HUDLayer/GameHud")
+_bobberScale = 7.0
+_lineWidth = 4.0
+
+[node name="BiteController" type="Node2D" parent="." unique_id=1299032319 node_paths=PackedStringArray("fishingRod", "fishSpawner", "waterShape")]
+script = ExtResource("31_bite")
+fishingRod = NodePath("../RodPivot")
+fishSpawner = NodePath("../FishSpawner")
+waterShape = NodePath("../WaterArea/WaterShape")
+biteAlertScene = ExtResource("32_alert")
+
+[node name="HUDLayer" type="CanvasLayer" parent="." unique_id=1708769849]
+
+[node name="LevelBanner" type="Label" parent="HUDLayer" unique_id=1831350864]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 15
+theme_override_font_sizes/font_size = 100
+text = "Level 2!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatsLabel" type="Label" parent="HUDLayer/LevelBanner" unique_id=1676054832]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 110.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 75
+text = "Score: 700     Time: 0:42"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GameHud" parent="HUDLayer" unique_id=1629236125 instance=ExtResource("5_wgts6")]
+
+[node name="MenuOverlay" parent="HUDLayer" unique_id=201952899 instance=ExtResource("6_pause")]
+
+[node name="LevelInfo" type="VBoxContainer" parent="HUDLayer" unique_id=999312501]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -292.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 118.0
+grow_horizontal = 0
+theme_override_constants/separation = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="LevelLabel" type="Label" parent="HUDLayer/LevelInfo" unique_id=679216861]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_ut64v")
+text = "Lv 1 · 0 / 100"
+label_settings = SubResource("LabelSettings_q8rwo")
+horizontal_alignment = 2
+
+[node name="LevelProgress" type="ProgressBar" parent="HUDLayer/LevelInfo" unique_id=1797591566]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_hlhnc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_nr1gc")
+show_percentage = false
+
+[node name="BackToMainMenu" type="Node" parent="." unique_id=570052545]
+script = ExtResource("4_back")
+
+[node name="FishingLevelmanager" type="Node" parent="." unique_id=970986357 node_paths=PackedStringArray("_hud", "_fishSpawner", "_levelLabel", "_banner", "_statsLabel", "_levelProgress")]
+script = ExtResource("31_cs8w8")
+_hud = NodePath("../HUDLayer/GameHud")
+_fishSpawner = NodePath("../FishSpawner")
+_levelLabel = NodePath("../HUDLayer/LevelInfo/LevelLabel")
+_banner = NodePath("../HUDLayer/LevelBanner")
+_statsLabel = NodePath("../HUDLayer/LevelBanner/StatsLabel")
+_levelProgress = NodePath("../HUDLayer/LevelInfo/LevelProgress")

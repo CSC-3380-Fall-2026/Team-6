@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://cas1xf62bk7bh" path="res://Scripts/FishNinja.cs" id="1_ninja"]
+[ext_resource type="Script" uid="uid://djhqdojdh4ev3" path="res://Scripts/FishLauncher.cs" id="2_launcher"]
+[ext_resource type="PackedScene" path="res://Scenes/NinjaFish.tscn" id="3_fish"]
+[ext_resource type="Texture2D" uid="uid://jdxc523lage2" path="res://Assets/water.png" id="4_water"]
+
+[sub_resource type="Gradient" id="Gradient_sky"]
+colors = PackedColorArray(0.25, 0.55, 0.85, 1, 0.78, 0.91, 0.98, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_sky"]
+gradient = SubResource("Gradient_sky")
+fill_to = Vector2(0, 1)
+
+[node name="FishNinja" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_ninja")
+
+[node name="Sky" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_sky")
+expand_mode = 1
+
+[node name="Fish" type="Node2D" parent="."]
+
+[node name="Water" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -128.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("4_water")
+stretch_mode = 1
+
+[node name="FishLauncher" type="Node" parent="." node_paths=PackedStringArray("fishParent")]
+script = ExtResource("2_launcher")
+fishScene = ExtResource("3_fish")
+fishParent = NodePath("../Fish")
