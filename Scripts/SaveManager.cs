@@ -18,6 +18,7 @@ public partial class SaveManager : Node
 	// Sections of the save file
 	private const string HighScoresSection = "high_scores";
 	private const string SettingsSection = "settings";
+	private const string CaughtFishSection = "caught_fish";
 
 	// Games that get a high score list
 	private static readonly string[] HighScoreGames = { SceneManager.GoneFishingId, SceneManager.FishNinjaId };
@@ -121,6 +122,26 @@ public partial class SaveManager : Node
 		}
 		GD.PushError($"SaveManager: '{gameId}' has no high score list, use SceneManager.GoneFishingId or SceneManager.FishNinjaId");
 		return false;
+	}
+
+	// Gone Fishing: remembers every kind of fish the player as caught across play sessions
+	// call when fish is caught and returns true the first time that kind of fish is caught
+	public bool MarkFishCaught(string fishName)
+	{
+		string key = CaughtFishKey(fishName);
+		if (save.HasSectionKey(CaughtFishSection, key))
+		{
+			return false;
+		}
+		save.SetValue(CaughtFishSection, key, true);
+		Save();
+		return true;
+	}
+
+	// "Golden Koi" is saved as "golden_koi" so names with spaces or capitals are stored safely
+	private static string CaughtFishKey(string fishName)
+	{
+		return fishName.ToLower().Replace(" ", "_");
 	}
 
 	// Wiimote calibration: how far the pointer reads from the middle of the screen

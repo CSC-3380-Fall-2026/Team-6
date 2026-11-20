@@ -11,6 +11,9 @@ public partial class FishingRod : Node2D
 	[Signal] public delegate void CastFailedEventHandler(Vector2 aimPosition);
 	[Signal] public delegate void ReelFinishedEventHandler();
 	[Signal] public delegate void FishBitEventHandler(FishData fish); // carries the biting fish's data for reeling in
+	// fired when caught fish drops out of bottom of screen and its points are added
+	// dropPosition is where it left the screen, so popups can appear there
+	[Signal] public delegate void FishCaughtEventHandler(FishData fish, int points, Vector2 dropPosition);
 
 	[Export] private Polygon2D _waterShape;
 	[Export] private CursorNode _cursorNode;
@@ -327,6 +330,7 @@ public partial class FishingRod : Node2D
 				{
 					_hud.AddScore(points);
 				}
+				EmitSignal(SignalName.FishCaught, caughtFish.Data, points, new Vector2(fishStart.X, GetViewportRect().End.Y));
 				
 				GD.Print($"Awarded {points} points!");
 				

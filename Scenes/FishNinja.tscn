@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dgnj2bibmwcwd"]
 
 [ext_resource type="Script" uid="uid://cas1xf62bk7bh" path="res://Scripts/FishNinja.cs" id="1_ninja"]
 [ext_resource type="Script" uid="uid://djhqdojdh4ev3" path="res://Scripts/FishLauncher.cs" id="2_launcher"]
@@ -12,7 +12,7 @@ colors = PackedColorArray(0.25, 0.55, 0.85, 1, 0.78, 0.91, 0.98, 1)
 gradient = SubResource("Gradient_sky")
 fill_to = Vector2(0, 1)
 
-[node name="FishNinja" type="Control"]
+[node name="FishNinja" type="Control" unique_id=1911264456]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,7 +22,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_ninja")
 
-[node name="Sky" type="TextureRect" parent="."]
+[node name="Sky" type="TextureRect" parent="." unique_id=851384837]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,9 +33,9 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_sky")
 expand_mode = 1
 
-[node name="Fish" type="Node2D" parent="."]
+[node name="Fish" type="Node2D" parent="." unique_id=487372605]
 
-[node name="Water" type="TextureRect" parent="."]
+[node name="Water" type="TextureRect" parent="." unique_id=364325497]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 12
@@ -49,7 +49,7 @@ mouse_filter = 2
 texture = ExtResource("4_water")
 stretch_mode = 1
 
-[node name="FishLauncher" type="Node" parent="." node_paths=PackedStringArray("fishParent")]
+[node name="FishLauncher" type="Node" parent="." unique_id=1474883875 node_paths=PackedStringArray("fishParent")]
 script = ExtResource("2_launcher")
 fishScene = ExtResource("3_fish")
 fishParent = NodePath("../Fish")
