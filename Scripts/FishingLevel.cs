@@ -34,4 +34,8 @@ public partial class FishingLevel : Resource
 	// How hard fish pull while being reeled in (1 = normal)
 	[Export]
 	public float PullStrength { get; set; } = 1f;
+
+	// Chance (0 to 1) that each nibble is a hard nibble, which pulls the bobber partly under like a bite but without the "!"
+	[Export(PropertyHint.Range, "0,1,0.01")]
+	public float HardNibbleChance { get; set; } = 0f;
 }
