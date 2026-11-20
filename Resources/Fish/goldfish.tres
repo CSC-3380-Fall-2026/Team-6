@@ -11,4 +11,5 @@ FishName = "Goldfish"
 GoneFishingSprite = ExtResource("3_up7ej")
 FishNinjaSprite = ExtResource("2_wesut")
 FishNinjaCutSprite = ExtResource("1_tex0e")
+Points = 10
 metadata/_custom_type_script = "uid://o4uag27rp8gg"
