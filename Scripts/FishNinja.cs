@@ -1,7 +1,7 @@
 using Godot;
 
-// The Fish Ninja minigame: the background and the FishLauncher throwing waves of fish.
-// Cutting, score and lives come in later tasks.
+// The Fish Ninja minigame: the background, the FishLauncher throwing waves of fish,
+// and NinjaDifficulty ramping them up as the HUD score climbs. Cutting and lives come in later tasks.
 // Esc goes back to the title screen until the pause menu's Back to Home button is hooked up.
 public partial class FishNinja : Control
 {

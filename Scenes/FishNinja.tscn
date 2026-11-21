@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://djhqdojdh4ev3" path="res://Scripts/FishLauncher.cs" id="2_launcher"]
 [ext_resource type="PackedScene" path="res://Scenes/NinjaFish.tscn" id="3_fish"]
 [ext_resource type="Texture2D" uid="uid://jdxc523lage2" path="res://Assets/water.png" id="4_water"]
+[ext_resource type="PackedScene" uid="uid://4mydybhdhrux" path="res://Scenes/GameHud.tscn" id="5_hud"]
+[ext_resource type="Script" uid="uid://cuusqm5jsc3l0" path="res://Scripts/NinjaDifficulty.cs" id="6_difficulty"]
 
 [sub_resource type="Gradient" id="Gradient_sky"]
 colors = PackedColorArray(0.25, 0.55, 0.85, 1, 0.78, 0.91, 0.98, 1)
@@ -53,3 +55,27 @@ stretch_mode = 1
 script = ExtResource("2_launcher")
 fishScene = ExtResource("3_fish")
 fishParent = NodePath("../Fish")
+
+[node name="HUDLayer" type="CanvasLayer" parent="."]
+
+[node name="GameHud" parent="HUDLayer" instance=ExtResource("5_hud")]
+mouse_filter = 2
+
+[node name="RampBanner" type="Label" parent="HUDLayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 15
+theme_override_font_sizes/font_size = 100
+text = "Ramp up!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NinjaDifficulty" type="Node" parent="." node_paths=PackedStringArray("launcher", "hud", "banner")]
+script = ExtResource("6_difficulty")
+launcher = NodePath("../FishLauncher")
+hud = NodePath("../HUDLayer/GameHud")
+banner = NodePath("../HUDLayer/RampBanner")

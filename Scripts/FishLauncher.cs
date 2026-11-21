@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 // Throws fish up from the bottom, left and right edges of the screen in waves, with a short break between waves.
 // Each arc is worked out from gravity so the fish peaks inside the screen and falls back out the bottom.
-// WaveSize and SpeedMultiplier can be changed while the game runs, so score or difficulty can drive them later.
+// WaveSize, SpeedMultiplier and DoNotCutShare can be changed while the game runs. NinjaDifficulty raises them as the score climbs.
 public partial class FishLauncher : Node
 {
 	// A fish the player was meant to cut fell off the bottom. Later this can take a life off the player.
@@ -31,8 +31,10 @@ public partial class FishLauncher : Node
 
 	// Fish thrown in each wave
 	[Export] public int WaveSize = 3;
-	// 1 is normal speed. 2 sends every fish along the same arc twice as fast.
+	// 1 is normal speed. 2 throws fish twice as often and sends each one along the same arc twice as fast.
 	[Export] public float SpeedMultiplier = 1f;
+	// Share of thrown fish that are do-not-cut, from 0 to 1. Rarer fish are still thrown less often within each group.
+	[Export] public float DoNotCutShare = 0.2f;
 
 	// Downward pull at normal speed, in pixels per second squared
 	[Export] private float gravity = 1400f;
@@ -51,7 +53,9 @@ public partial class FishLauncher : Node
 	[Export] private float[] rarityWeights = { 50f, 25f, 15f, 7f, 3f };
 
 	private readonly List<NinjaFish> inFlight = new List<NinjaFish>();
-	private readonly List<FishData> fishPool = new List<FishData>();
+	// Fish with a Fish Ninja sprite, split by whether the player should cut them
+	private readonly List<FishData> cutPool = new List<FishData>();
+	private readonly List<FishData> doNotCutPool = new List<FishData>();
 	private readonly RandomNumberGenerator random = new RandomNumberGenerator();
 	private int fishLeftToThrow;
 	private float timer;
@@ -75,13 +79,15 @@ public partial class FishLauncher : Node
 		}
 
 		foreach (FishData fish in allFish) {
-			if (fish.FishNinjaSprite != null) {
-				fishPool.Add(fish);
-			} else {
+			if (fish.FishNinjaSprite == null) {
 				GD.PushWarning($"FishLauncher: {fish.FishName} has no Fish Ninja sprite, so it won't be thrown");
+			} else if (fish.DoNotCut) {
+				doNotCutPool.Add(fish);
+			} else {
+				cutPool.Add(fish);
 			}
 		}
-		if (fishPool.Count == 0) {
+		if (cutPool.Count + doNotCutPool.Count == 0) {
 			GD.PushError("FishLauncher: no fish to throw, check Resources/Fish");
 			SetProcess(false);
 			return;
@@ -99,7 +105,7 @@ public partial class FishLauncher : Node
 			if (timer <= 0f) {
 				ThrowFish();
 				fishLeftToThrow--;
-				timer = throwInterval;
+				timer = throwInterval / SpeedMultiplier;
 			}
 			return;
 		}
@@ -163,22 +169,29 @@ public partial class FishLauncher : Node
 		fish.Launch(PickFish(), start, velocity, pull, random.RandfRange(-maxSpin, maxSpin) * SpeedMultiplier);
 	}
 
-	// Picks a fish at random, with rarer fish thrown less often
+	// Picks a fish at random. DoNotCutShare decides whether it's a do-not-cut fish,
+	// then rarer fish in that group are thrown less often.
 	private FishData PickFish()
 	{
+		List<FishData> group = random.Randf() < DoNotCutShare ? doNotCutPool : cutPool;
+		// If every fish is the same kind, throw that kind
+		if (group.Count == 0) {
+			group = group == cutPool ? doNotCutPool : cutPool;
+		}
+
 		float total = 0f;
-		foreach (FishData fish in fishPool) {
+		foreach (FishData fish in group) {
 			total += RarityWeight(fish);
 		}
 
 		float roll = random.RandfRange(0f, total);
-		foreach (FishData fish in fishPool) {
+		foreach (FishData fish in group) {
 			roll -= RarityWeight(fish);
 			if (roll <= 0f) {
 				return fish;
 			}
 		}
-		return fishPool[fishPool.Count - 1];
+		return group[group.Count - 1];
 	}
 	// Returns a weight for the fish based on its rarity, so rarer fish are thrown less often. If the rarity is out of range, returns 1.
 	private float RarityWeight(FishData fish)
