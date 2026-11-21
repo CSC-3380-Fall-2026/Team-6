@@ -32,17 +32,30 @@ public partial class HighScoresScreen : Control
 		wiimote = GetTree().Root.GetNodeOrNull<WiimoteManager>("WiimoteManager");
 		if (wiimote != null) {
 			wiimote.OnWiimoteBClicked += OnBPressed;
+
+			if (OS.IsDebugBuild())
+			{
+				wiimote.OnWiimote1Clicked += () => AddRandomScore(SceneManager.GoneFishingId);
+				wiimote.OnWiimote2Clicked += () => AddRandomScore(SceneManager.FishNinjaId);
+			}
 		}
 
 		debugLabel.Visible = OS.IsDebugBuild();
 		ShowScores();
 	}
 
+	//memory cleanup
 	public override void _ExitTree()
 	{
 		if (wiimote != null) {
 			wiimote.OnWiimoteBClicked -= OnBPressed;
 		}
+
+		if (OS.IsDebugBuild())
+			{
+				wiimote.OnWiimote1Clicked -= () => AddRandomScore(SceneManager.GoneFishingId);
+				wiimote.OnWiimote2Clicked -= () => AddRandomScore(SceneManager.FishNinjaId);
+			}
 	}
 
 	public override void _UnhandledInput(InputEvent @event)

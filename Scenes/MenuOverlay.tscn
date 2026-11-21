@@ -54,6 +54,7 @@ restartButton = NodePath("MenuOverlay/Overlay/MenuPanel/ButtonContainer/RestartB
 calibrationScene = ExtResource("2_calib")
 
 [node name="MenuOverlay" type="CanvasLayer" parent="." unique_id=1910394550]
+layer = 100
 
 [node name="Overlay" type="Control" parent="MenuOverlay" unique_id=554473320]
 layout_mode = 3
@@ -164,5 +165,3 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_mvtk4")
 theme_override_styles/focus = SubResource("StyleBoxFlat_nr1gc")
 text = "X"
 script = ExtResource("2_mvtk4")
-
-[connection signal="pressed" from="MenuOverlay/Overlay/MenuPanel/CloseButton" to="." method="_on_close_button_pressed"]

@@ -84,11 +84,20 @@ public partial class CursorNode : Node2D
 
 		if(InputManager.Instance != null)
 		{
-			Vector2 targetPosition = InputManager.Instance.PointerPosition;
-			// JitterCushion is how much of the gap closes per frame at 60 fps; scaling by delta keeps that speed at any frame rate
-			float weight = 1f - Mathf.Pow(1f - JitterCushion, (float)delta * 60f);
-			_screenPosition = _screenPosition.Lerp(targetPosition, weight);
-			_screenPosition = _screenPosition.Clamp(Vector2.Zero, GetViewportRect().Size);
+			WiimoteManager wiimote = GetTree().Root.GetNodeOrNull<WiimoteManager>("WiimoteManager");
+			
+			// Only apply smoothing and mouse-warping if the hardware Wiimote is currently connected
+			if (wiimote != null && wiimote.IsWiimoteActive)
+			{
+				Vector2 targetPosition = InputManager.Instance.PointerPosition;
+				// JitterCushion is how much of the gap closes per frame at 60 fps; scaling by delta keeps that speed at any frame rate
+				float weight = 1f - Mathf.Pow(1f - JitterCushion, (float)delta * 60f);
+				_screenPosition = _screenPosition.Lerp(targetPosition, weight);
+				_screenPosition = _screenPosition.Clamp(Vector2.Zero, GetViewportRect().Size);
+					
+				// This should force the OS/Engine mouse to snap to be the same as the Wiimote crosshair.
+				GetViewport().WarpMouse(_screenPosition);
+			}
 		}
 
 
