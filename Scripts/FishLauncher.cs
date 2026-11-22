@@ -58,6 +58,7 @@ public partial class FishLauncher : Node
 
 	public int WaveNumber { get; private set; }
 	public int FishInFlight => inFlight.Count;
+	public IReadOnlyList<NinjaFish> InFlight => inFlight;
 	// Checks the Inspector slots and loads every fish that has a Fish Ninja sprite, then waits one break before the first wave
  	public override void _Ready()
 	{

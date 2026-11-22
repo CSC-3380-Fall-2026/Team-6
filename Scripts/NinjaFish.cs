@@ -75,6 +75,41 @@ public partial class NinjaFish : Node2D
 		}
 	}
 	// Adds a shader to the sprite that draws an outline around it, so fish that shouldn't be cut are easy to tell apart.
+	// Checks whether a swipe between two screen positions intersects this fish's sprite.
+	// Converts the swipe into the sprite's local coordinate space so position and rotation are accounted for.
+	public bool IntersectsSwipe(Vector2 fromScreen, Vector2 toScreen)
+    {
+        if (sprite == null || sprite.Texture == null)
+        {
+            return false;
+        }
+
+		Transform2D screenToSprite = sprite.GetGlobalTransformWithCanvas().AffineInverse();
+
+		Vector2 from = screenToSprite * fromScreen;
+		Vector2 to = screenToSprite * toScreen;
+
+		Rect2 bounds = sprite.GetRect();
+
+		float distance = from.DistanceTo(to);
+		int steps = Mathf.Max(1, Mathf.CeilToInt(distance / 8f));
+
+		for (int i = 0; i <= steps; i++)
+        {
+            Vector2 point = from.Lerp(to, (float)i / steps);
+
+			if (bounds.HasPoint(point))
+            {
+                return true;
+            }
+        }
+
+		return false;
+
+
+
+
+    }
 	private void AddOutline()
 	{
 		ShaderMaterial outline = new ShaderMaterial { Shader = GD.Load<Shader>(OutlineShaderPath) };
