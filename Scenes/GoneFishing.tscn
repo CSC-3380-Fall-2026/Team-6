@@ -40,6 +40,7 @@
 [ext_resource type="Script" uid="uid://ffgpxd1a6iw1" path="res://Scripts/FishingLevelManager.cs" id="31_cs8w8"]
 [ext_resource type="Texture2D" uid="uid://373bir2hsav2" path="res://Assets/Pond/dirt.png" id="31_o6uj6"]
 [ext_resource type="PackedScene" uid="uid://brqwf7lix4d0v" path="res://Scenes/BiteAlert.tscn" id="32_alert"]
+[ext_resource type="PackedScene" uid="uid://dhn3hkspja5dc" path="res://Scenes/PondTree.tscn" id="33_0di7p"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut64v"]
 content_margin_left = 28.0
@@ -129,6 +130,32 @@ metadata/_edit_lock_ = true
 script = ExtResource("30_0pi3y")
 _waterShape = NodePath("../WaterArea/WaterShape")
 _dirtTexture = ExtResource("31_o6uj6")
+
+[node name="Decorations" type="Node2D" parent="." unique_id=710276075]
+y_sort_enabled = true
+
+[node name="PondTree" parent="Decorations" unique_id=752092111 instance=ExtResource("33_0di7p")]
+position = Vector2(1530, 275)
+scale = Vector2(7.2, 7.2)
+
+[node name="PondTree6" parent="Decorations" unique_id=1967162879 instance=ExtResource("33_0di7p")]
+position = Vector2(1668.9998, 332.0001)
+scale = Vector2(7.7, 7.7)
+
+[node name="PondTree5" parent="Decorations" unique_id=105621819 instance=ExtResource("33_0di7p")]
+position = Vector2(1806.9998, 748)
+scale = Vector2(9, 9)
+
+[node name="PondTree4" parent="Decorations" unique_id=2079008804 instance=ExtResource("33_0di7p")]
+position = Vector2(1612.9999, 1097)
+scale = Vector2(12, 12)
+
+[node name="PondTree3" parent="Decorations" unique_id=598041637 instance=ExtResource("33_0di7p")]
+position = Vector2(230, 1019)
+scale = Vector2(10, 10)
+
+[node name="PondTree2" parent="Decorations" unique_id=739661114 instance=ExtResource("33_0di7p")]
+position = Vector2(134, 541)
 
 [node name="CursorNode" type="Node2D" parent="." unique_id=868867043]
 script = ExtResource("2_nxjxa")
