@@ -110,6 +110,36 @@ public partial class NinjaFish : Node2D
 
 
     }
+	// Creates the split effect using the cut sprite when available, or the original sprite as a fallback.
+	public void Split(Vector2 swipeDirection)
+    {
+        if (Data == null)
+        {
+            return;
+        }
+
+		Texture2D splitTexture = Data.FishNinjaCutSprite;
+
+		if (splitTexture == null)
+		{
+            splitTexture = Data.FishNinjaSprite;
+        }
+
+		if (splitTexture == null)
+        {
+            GD.PushWarning("NinjaFish: no sprite available for " + Data?.FishName);
+			return;
+        }
+
+		FishSplitEffect splitEffect = new FishSplitEffect();
+
+		GetParent().AddChild(splitEffect);
+		splitEffect.GlobalPosition = GlobalPosition;
+
+		splitEffect.Start(splitTexture, swipeDirection, sprite.Scale);
+
+		QueueFree();
+    }
 	private void AddOutline()
 	{
 		ShaderMaterial outline = new ShaderMaterial { Shader = GD.Load<Shader>(OutlineShaderPath) };
