@@ -2,9 +2,11 @@ using Godot;
 using System.Collections.Generic;
 
 // Bite logic for Gone Fishing. Once the bobber lands, fish near it can notice it (each fish's NoticeChance).
-// Only one fish comes over at a time: it turns toward the bobber, swims up, nibbles once or twice (twitching the bobber),
-// then bites after its BiteDelay. On the bite the bobber dips under, a "!" pops up, and the rod enters its Bite state and emits FishBit.
-// Reeling in before the bite scares the fish away. What happens after the bite belongs to the reel-in task.
+// Only one fish comes over at a time: it turns toward the bobber, swims up, nibbles a random number of times at random
+// moments (0 nibbles means it bites as soon as it arrives), then bites. On harder levels some nibbles are hard nibbles that
+// pull the bobber partly under, so they look close to a bite. Only the real bite dips the bobber fully under and shows the "!",
+// then the rod enters its Bite state and emits FishBit. Reeling in before the bite scares the fish away,
+// and pulling while it's nibbling shows "Too Early!". What happens after the bite belongs to the reel-in task.
 public partial class BiteController : Node2D
 {
 	private enum Stage
@@ -26,6 +28,8 @@ public partial class BiteController : Node2D
 	[Export] private FishSpawner fishSpawner;
 	[Export] private Polygon2D waterShape;
 	[Export] private PackedScene biteAlertScene;
+	// Loaded from Scenes/TooEarlyAlert.tscn when left empty
+	[Export] private PackedScene tooEarlyAlertScene;
 
 	[ExportGroup("Noticing")]
 	// Fish within this many pixels of the bobber can notice it
@@ -47,15 +51,22 @@ public partial class BiteController : Node2D
 	[Export] private float mouthReach = 28f;
 	// How far back from the bobber the fish waits between nibbles
 	[Export] private float nibbleBackoff = 14f;
-	[Export] private int minNibbles = 1;
+	// How many times a fish nibbles before biting, picked at random. 0 means it bites as soon as it arrives,
+	// so there's never a safe wait.
+	[Export] private int minNibbles = 0;
 	[Export] private int maxNibbles = 5;
 
 	[ExportGroup("Bobber")]
 	// Pixels the bobber jerks down when nibbled
 	[Export] private float twitchDepth = 6f;
-	// Pixels the bobber sinks when the fish bites, and how see-through it gets under the water
-	[Export] private float dipDepth = 12f;
-	[Export] private float dippedAlpha = 0.35f;
+	// A hard nibble pulls the bobber this far down, this see-through, and holds it there this many seconds
+	[Export] private float hardNibbleDepth = 9f;
+	[Export] private float hardNibbleAlpha = 0.6f;
+	[Export] private float hardNibbleHold = 0.3f;
+	// Pixels the bobber sinks when the fish bites, and how see-through it gets fully under the water.
+	// Kept well past a hard nibble so a real bite is always clearly different.
+	[Export] private float dipDepth = 16f;
+	[Export] private float dippedAlpha = 0.15f;
 
 	[ExportGroup("Swimming Away")]
 	// How far a scared fish swims from the bobber
@@ -69,6 +80,12 @@ public partial class BiteController : Node2D
 	private const float BiteLungeTime = 0.1f;
 	private const float TwitchTime = 0.06f;
 	private const float DipTime = 0.15f;
+	private const float HardNibbleRiseTime = 0.2f;
+	// The gaps between nibbles are random: each is this many times longer or shorter than the others, and never under MinNibbleGap seconds
+	private const float MinGapWeight = 0.3f;
+	private const float MaxGapWeight = 1.7f;
+	private const float MinNibbleGap = 0.3f;
+	private const string DefaultTooEarlyAlertPath = "res://Scenes/TooEarlyAlert.tscn";
 	// A scared fish tries straight away from the bobber first, then swings this far to either side each try until it finds water
 	private const float FleeAngleStep = Mathf.Pi / 6f;
 	private const int FleeAngleSteps = 6;
@@ -94,6 +111,7 @@ public partial class BiteController : Node2D
 		}
 
 		random.Randomize();
+		tooEarlyAlertScene ??= GD.Load<PackedScene>(DefaultTooEarlyAlertPath);
 		fishingRod.CastLanded += OnCastLanded;
 		fishingRod.StateChanged += OnRodStateChanged;
 		listening = true;
@@ -165,10 +183,16 @@ public partial class BiteController : Node2D
 			return;
 		}
 
+		// Pulling while the fish is only nibbling spooks it, and the line comes back in so the player has to cast again
+		if (stage == Stage.Nibbling && state == FishingRod.RodState.Reeling)
+		{
+			ShowTooEarly();
+		}
+
 		LetFishGo();
 		ResetBobber();
 
-		if (alert != null) 
+		if (alert != null)
 		{
 			alert.Dismiss();
 			alert = null;
@@ -215,7 +239,8 @@ public partial class BiteController : Node2D
 		}
 	}
 
-	// The fish waits at the bobber for its bite delay, nibbling once or twice along the way, then bites at the end of it
+	// The fish nibbles a random number of times at random moments through its bite delay, then bites.
+	// With 0 nibbles it bites as soon as it arrives. Each nibble can be a hard nibble, by the level's HardNibbleChance.
 	private void StartNibbling()
 	{
 		stage = Stage.Nibbling;
@@ -224,29 +249,84 @@ public partial class BiteController : Node2D
 		Vector2 waitSpot = bobberPosition - direction * (mouthReach + nibbleBackoff);
 		Vector2 mouthSpot = bobberPosition - direction * mouthReach;
 
+		int nibbles = random.RandiRange(minNibbles, maxNibbles);
+		if (nibbles == 0) {
+			Bite(mouthSpot);
+			return;
+		}
+
 		float variation = 1f + random.RandfRange(-biteDelayVariation, biteDelayVariation);
 		float delay = Mathf.Max(0f, fish.Data.BiteDelay * biteDelayScale * variation);
-		int nibbles = random.RandiRange(minNibbles, maxNibbles);
-		// The nibbles are spread evenly through the delay
-		float gap = delay / (nibbles + 1);
+		float hardNibbleChance = fishSpawner.CurrentLevelSettings?.HardNibbleChance ?? 0f;
+		float[] gaps = RandomGaps(nibbles + 1, delay);
+		// A hard nibble holds the bobber down for a while, so whatever comes next waits until it's back up
+		float hardNibbleTime = DipTime + hardNibbleHold + HardNibbleRiseTime;
 
 		schedule = CreateTween();
+		bool lastWasHard = false;
 		for (int i = 0; i < nibbles; i++) {
-			schedule.TweenInterval(gap);
-			schedule.TweenCallback(Callable.From(() => Nibble(waitSpot, mouthSpot)));
+			bool hard = random.Randf() < hardNibbleChance;
+			schedule.TweenInterval(Mathf.Max(gaps[i], lastWasHard ? hardNibbleTime : MinNibbleGap));
+			schedule.TweenCallback(Callable.From(() => Nibble(waitSpot, mouthSpot, hard)));
+			lastWasHard = hard;
 		}
-		schedule.TweenInterval(gap);
+		schedule.TweenInterval(Mathf.Max(gaps[nibbles], lastWasHard ? hardNibbleTime : MinNibbleGap));
 		schedule.TweenCallback(Callable.From(() => Bite(mouthSpot)));
 	}
 
-	// The fish darts in to the bobber and back out, and the bobber twitches when it's touched
-	private void Nibble(Vector2 waitSpot, Vector2 mouthSpot)
+	// Splits the bite delay into random gaps that add up to it, so players can't time the bite by counting
+	private float[] RandomGaps(int count, float total)
+	{
+		float[] gaps = new float[count];
+		float sum = 0f;
+		for (int i = 0; i < count; i++) {
+			gaps[i] = random.RandfRange(MinGapWeight, MaxGapWeight);
+			sum += gaps[i];
+		}
+		for (int i = 0; i < count; i++) {
+			gaps[i] = gaps[i] / sum * total;
+		}
+		return gaps;
+	}
+
+	// The fish darts in to the bobber and back out. A normal nibble twitches the bobber. A hard nibble holds on and
+	// pulls the bobber partly under, close to a bite, but there's no "!" and the bobber comes back up.
+	private void Nibble(Vector2 waitSpot, Vector2 mouthSpot, bool hard)
 	{
 		fishMotion?.Kill();
 		fishMotion = CreateTween();
 		fishMotion.TweenProperty(fish, "global_position", mouthSpot, NibbleInTime);
-		fishMotion.TweenCallback(Callable.From(TwitchBobber));
+		if (hard) {
+			fishMotion.TweenCallback(Callable.From(PullBobberUnder));
+			fishMotion.TweenInterval(DipTime + hardNibbleHold);
+		} else {
+			fishMotion.TweenCallback(Callable.From(TwitchBobber));
+		}
 		fishMotion.TweenProperty(fish, "global_position", waitSpot, NibbleOutTime);
+	}
+
+	// A hard nibble: the bobber sinks partway and fades a little, holds there, then floats back up
+	private void PullBobberUnder()
+	{
+		Sprite2D bobber = fishingRod.Bobber;
+		bobberMotion?.Kill();
+		bobberMotion = CreateTween().SetParallel();
+		bobberMotion.TweenProperty(bobber, "offset", BobberOffset(hardNibbleDepth), DipTime);
+		bobberMotion.TweenProperty(bobber, "self_modulate:a", hardNibbleAlpha, DipTime);
+		bobberMotion.Chain().TweenInterval(hardNibbleHold);
+		bobberMotion.Chain().TweenProperty(bobber, "offset", Vector2.Zero, HardNibbleRiseTime);
+		bobberMotion.TweenProperty(bobber, "self_modulate:a", 1f, HardNibbleRiseTime);
+	}
+
+	// "Too Early!" over the bobber when the player pulls while the fish is only nibbling
+	private void ShowTooEarly()
+	{
+		if (tooEarlyAlertScene == null) {
+			return;
+		}
+		TooEarlyAlert tooEarly = tooEarlyAlertScene.Instantiate<TooEarlyAlert>();
+		AddChild(tooEarly);
+		tooEarly.GlobalPosition = bobberPosition;
 	}
 
 	private void TwitchBobber()
