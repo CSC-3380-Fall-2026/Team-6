@@ -1,0 +1,50 @@
+using Godot;
+
+public partial class SceneManager : Node
+{
+	// Lets any script call SceneManager.Instance.ChangeScene(...)
+	public static SceneManager Instance { get; private set; }
+
+	// Keep all scene paths in one place
+	public const string MainMenu = "res://Scenes/MainMenu.tscn";
+	public const string TestLevel = "res://Scenes/TestLevel.tscn";
+	public const string FishingLevel = "res://Scenes/GoneFishing.tscn";
+	public const string HighScoresScreen = "res://Scenes/HighScoresScreen.tscn";
+	public const string FishNinja = "res://Scenes/FishNinja.tscn";
+
+	// Names of the two minigames. StartGame stores one in SelectedGame, and SaveManager keeps a high score list for each
+	public const string GoneFishingId = "Gone Fishing";
+	public const string FishNinjaId = "Fish Ninja";
+
+	// Name of the last minigame picked, so the next scene knows which game to run
+	public string SelectedGame { get; private set; } = "";
+
+	// Scene that was open before the current one, so Back buttons know where to go
+	public string PreviousScene { get; private set; } = MainMenu;
+
+	public override void _Ready()
+	{
+		if (Instance != null) {
+			QueueFree();
+			return;
+		}
+		Instance = this;
+	}
+
+	public void StartGame(string gameName, string path)
+	{
+		SelectedGame = gameName;
+		ChangeScene(path);
+	}
+
+	public void ChangeScene(string path)
+	{
+		string current = GetTree().CurrentScene?.SceneFilePath;
+		Error err = GetTree().ChangeSceneToFile(path);
+		if (err != Error.Ok) {
+			GD.PushError($"SceneManager: couldn't load '{path}' ({err})");
+		} else if (!string.IsNullOrEmpty(current)) {
+			PreviousScene = current;
+		}
+	}
+}
