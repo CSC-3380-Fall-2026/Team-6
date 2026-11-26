@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://bpcniam574qof"]
+
+[ext_resource type="Texture2D" uid="uid://k3oma0ejobak" path="res://Assets/Pond/frog.png" id="1_r82xu"]
+[ext_resource type="Script" uid="uid://1l5aml2i1gbt" path="res://Scripts/Frog.cs" id="2_4dnsg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gpkxm"]
+atlas = ExtResource("1_r82xu")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cri5c"]
+atlas = ExtResource("1_r82xu")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xd6vg"]
+atlas = ExtResource("1_r82xu")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l42fr"]
+atlas = ExtResource("1_r82xu")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x50k8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gpkxm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cri5c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xd6vg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l42fr")
+}],
+"loop": 0,
+"name": &"hop",
+"speed": 8.0
+}]
+
+[node name="PondFrog" type="AnimatedSprite2D" unique_id=510272750]
+texture_filter = 1
+scale = Vector2(8, 8)
+sprite_frames = SubResource("SpriteFrames_x50k8")
+animation = &"hop"
+centered = false
+offset = Vector2(-8, -16)
+script = ExtResource("2_4dnsg")

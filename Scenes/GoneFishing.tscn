@@ -42,6 +42,8 @@
 [ext_resource type="PackedScene" uid="uid://dgv6s2il8h20p" path="res://Scenes/PondFlowerBush.tscn" id="32_oum5a"]
 [ext_resource type="PackedScene" uid="uid://dhn3hkspja5dc" path="res://Scenes/PondTree.tscn" id="33_0di7p"]
 [ext_resource type="PackedScene" uid="uid://c7ueqxy66ict4" path="res://Scenes/PondBush.tscn" id="34_oum5a"]
+[ext_resource type="PackedScene" uid="uid://dkmfkqtkxbn3y" path="res://Scenes/PondButterfly.tscn" id="36_cnqsx"]
+[ext_resource type="PackedScene" uid="uid://bpcniam574qof" path="res://Scenes/PondFrog.tscn" id="43_e1ifn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut64v"]
 content_margin_left = 28.0
@@ -185,6 +187,27 @@ scale = Vector2(4, 4)
 position = Vector2(1716, 511.00003)
 scale = Vector2(5, 5)
 
+[node name="PondFrog" parent="Decorations" unique_id=510272750 instance=ExtResource("43_e1ifn")]
+position = Vector2(75, 756)
+scale = Vector2(4.5, 4.5)
+
+[node name="PondFrog2" parent="Decorations" unique_id=873295752 instance=ExtResource("43_e1ifn")]
+position = Vector2(774, 115)
+scale = Vector2(4.5, 4.5)
+
+[node name="PondFrog3" parent="Decorations" unique_id=1688867626 instance=ExtResource("43_e1ifn")]
+position = Vector2(1813, 982)
+scale = Vector2(4.5, 4.5)
+flip_h = true
+
+[node name="PondButterfly" parent="Decorations" unique_id=1260083103 instance=ExtResource("36_cnqsx")]
+position = Vector2(1721.0001, 791.00006)
+scale = Vector2(3, 3)
+
+[node name="PondButterfly2" parent="Decorations" unique_id=1000667097 instance=ExtResource("36_cnqsx")]
+position = Vector2(289.00012, 339)
+scale = Vector2(3, 3)
+
 [node name="CursorNode" type="Node2D" parent="." unique_id=868867043]
 script = ExtResource("2_nxjxa")
 HideSystemCursor = false
@@ -206,6 +229,7 @@ waterShape = NodePath("../WaterArea/WaterShape")
 biteAlertScene = ExtResource("32_alert")
 
 [node name="HUDLayer" type="CanvasLayer" parent="." unique_id=1708769849]
+visible = false
 
 [node name="LevelBanner" type="Label" parent="HUDLayer" unique_id=1831350864]
 anchors_preset = 15
