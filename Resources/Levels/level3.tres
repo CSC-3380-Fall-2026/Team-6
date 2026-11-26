@@ -28,4 +28,5 @@ BiteDelayMin = 2.0
 BiteDelayMax = 4.5
 ReactionWindow = 0.6
 PullStrength = 1.6
+HardNibbleChance = 0.2
 metadata/_custom_type_script = "uid://vd6qyb0gg1og"
