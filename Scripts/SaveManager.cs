@@ -160,7 +160,8 @@ public partial class SaveManager : Node
 		}
 	}
 
-	private void Save()
+	// Writes the save file. Values already save as they change, and the main menu's Quit Game calls this too.
+	public void Save()
 	{
 		Error err = save.Save(SavePath);
 		if (err != Error.Ok) {

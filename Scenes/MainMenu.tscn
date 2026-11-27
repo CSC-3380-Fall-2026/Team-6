@@ -442,7 +442,33 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
-[node name="MainMenu" type="Control" unique_id=2077510560 node_paths=PackedStringArray("goneFishingButton", "fishNinjaButton", "highScoresButton")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_quitpanel"]
+bg_color = Color(0.69803923, 0.85490197, 0.89411765, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_quitbutton"]
+bg_color = Color(0.09019608, 0.39607844, 0.44313726, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_quithover"]
+bg_color = Color(0.05490196, 0.28627452, 0.32156864, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[node name="MainMenu" type="Control" unique_id=2077510560 node_paths=PackedStringArray("goneFishingButton", "fishNinjaButton", "highScoresButton", "quitButton", "quitBox", "quitYesButton", "quitNoButton", "menuCrosshairButtons")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -454,6 +480,11 @@ script = ExtResource("5_menu")
 goneFishingButton = NodePath("GoneFishingButton")
 fishNinjaButton = NodePath("FishNinjaButton")
 highScoresButton = NodePath("HighScoresButton")
+quitButton = NodePath("QuitButton")
+quitBox = NodePath("QuitBox")
+quitYesButton = NodePath("QuitBox/Panel/Buttons/YesButton")
+quitNoButton = NodePath("QuitBox/Panel/Buttons/NoButton")
+menuCrosshairButtons = NodePath("CrosshairButtons")
 
 [node name="BackgroundColor" type="ColorRect" parent="." unique_id=1894003716]
 z_index = -100
@@ -600,6 +631,115 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_cmrfp")
 theme_override_styles/focus = SubResource("StyleBoxFlat_ut64v")
 text = "High Scores"
 script = ExtResource("6_xim88")
+
+[node name="QuitButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -330.0
+offset_top = -150.0
+offset_right = -50.0
+offset_bottom = -50.0
+grow_horizontal = 0
+grow_vertical = 0
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_ut64v")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ut64v")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cmrfp")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ut64v")
+text = "Quit Game"
+script = ExtResource("6_xim88")
+
+[node name="QuitBox" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DimBackground" type="ColorRect" parent="QuitBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.11764706)
+
+[node name="Panel" type="Panel" parent="QuitBox"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -200.0
+offset_right = 350.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_quitpanel")
+
+[node name="Title" type="Label" parent="QuitBox/Panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 60.0
+offset_bottom = 156.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 70
+text = "Close game?"
+horizontal_alignment = 1
+
+[node name="Buttons" type="HBoxContainer" parent="QuitBox/Panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -265.0
+offset_top = -170.0
+offset_right = 265.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 50
+
+[node name="YesButton" type="Button" parent="QuitBox/Panel/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_quitbutton")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_quitbutton")
+theme_override_styles/hover = SubResource("StyleBoxFlat_quithover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_quitbutton")
+text = "Yes"
+script = ExtResource("6_xim88")
+
+[node name="NoButton" type="Button" parent="QuitBox/Panel/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_quitbutton")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_quitbutton")
+theme_override_styles/hover = SubResource("StyleBoxFlat_quithover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_quitbutton")
+text = "No"
+script = ExtResource("6_xim88")
+
+[node name="CrosshairButtons" type="Node" parent="QuitBox"]
+script = ExtResource("6_crosshair")
 
 [node name="CrosshairButtons" type="Node" parent="." unique_id=1126375633]
 script = ExtResource("6_crosshair")
