@@ -1,9 +1,10 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://ddlqqv2hamh8l"]
 
 [ext_resource type="Script" uid="uid://cas1xf62bk7bh" path="res://Scripts/FishNinja.cs" id="1_ninja"]
 [ext_resource type="Script" uid="uid://djhqdojdh4ev3" path="res://Scripts/FishLauncher.cs" id="2_launcher"]
 [ext_resource type="PackedScene" path="res://Scenes/NinjaFish.tscn" id="3_fish"]
 [ext_resource type="Texture2D" uid="uid://jdxc523lage2" path="res://Assets/water.png" id="4_water"]
+[ext_resource type="Script" uid="uid://braucpqwav8dg" path="res://Scripts/ComboManager.cs" id="5_d26co"]
 
 [sub_resource type="Gradient" id="Gradient_sky"]
 colors = PackedColorArray(0.25, 0.55, 0.85, 1, 0.78, 0.91, 0.98, 1)
@@ -12,7 +13,32 @@ colors = PackedColorArray(0.25, 0.55, 0.85, 1, 0.78, 0.91, 0.98, 1)
 gradient = SubResource("Gradient_sky")
 fill_to = Vector2(0, 1)
 
-[node name="FishNinja" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hlhnc"]
+content_margin_left = 28.0
+content_margin_top = 10.0
+content_margin_right = 28.0
+content_margin_bottom = 10.0
+bg_color = Color(0.047058824, 0.10980392, 0.1764706, 0.6666667)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 0.27450982)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="LabelSettings" id="LabelSettings_ut64v"]
+font_size = 36
+
+[sub_resource type="LabelSettings" id="LabelSettings_hlhnc"]
+font_size = 72
+font_color = Color(1, 0.3529412, 0.3529412, 1)
+outline_size = 12
+outline_color = Color(0.011764706, 0.011764706, 0.011764706, 1)
+
+[node name="FishNinja" type="Control" unique_id=1441305576]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,7 +48,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_ninja")
 
-[node name="Sky" type="TextureRect" parent="."]
+[node name="Sky" type="TextureRect" parent="." unique_id=1659588410]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,9 +59,9 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_sky")
 expand_mode = 1
 
-[node name="Fish" type="Node2D" parent="."]
+[node name="Fish" type="Node2D" parent="." unique_id=2054274435]
 
-[node name="Water" type="TextureRect" parent="."]
+[node name="Water" type="TextureRect" parent="." unique_id=1200247129]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 12
@@ -49,7 +75,40 @@ mouse_filter = 2
 texture = ExtResource("4_water")
 stretch_mode = 1
 
-[node name="FishLauncher" type="Node" parent="." node_paths=PackedStringArray("fishParent")]
+[node name="FishLauncher" type="Node" parent="." unique_id=1620818148 node_paths=PackedStringArray("fishParent")]
 script = ExtResource("2_launcher")
 fishScene = ExtResource("3_fish")
 fishParent = NodePath("../Fish")
+
+[node name="ComboManager" type="Node" parent="." unique_id=1398858202 node_paths=PackedStringArray("_fishLauncher", "_streakLabel", "_comboLostLabel")]
+script = ExtResource("5_d26co")
+_fishLauncher = NodePath("../FishLauncher")
+_streakLabel = NodePath("../StreakLabel")
+_comboLostLabel = NodePath("../ComboLostLabel")
+_comboLostTime = 1.0
+
+[node name="StreakLabel" type="Label" parent="." unique_id=1552554816]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 24.0
+grow_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_hlhnc")
+text = "Streak 0 · x1"
+label_settings = SubResource("LabelSettings_ut64v")
+
+[node name="ComboLostLabel" type="Label" parent="." unique_id=2020268522]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Combo Lost"
+label_settings = SubResource("LabelSettings_hlhnc")
+horizontal_alignment = 1
+vertical_alignment = 1
