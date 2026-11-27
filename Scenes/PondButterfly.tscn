@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://dkmfkqtkxbn3y"]
+
+[ext_resource type="Texture2D" uid="uid://b0g1135qvowic" path="res://Assets/Pond/butterfly.png" id="1_p1lmr"]
+[ext_resource type="Script" uid="uid://dea6jlivnhp2h" path="res://Scripts/Butterfly.cs" id="2_lib2r"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k1pjk"]
+atlas = ExtResource("1_p1lmr")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gp88f"]
+atlas = ExtResource("1_p1lmr")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4mtsg"]
+atlas = ExtResource("1_p1lmr")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_12rbe"]
+atlas = ExtResource("1_p1lmr")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_22tbb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k1pjk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gp88f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4mtsg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_12rbe")
+}],
+"loop": 1,
+"name": &"flap",
+"speed": 12.0
+}]
+
+[node name="PondButterfly" type="AnimatedSprite2D" unique_id=1260083103]
+texture_filter = 1
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_22tbb")
+animation = &"flap"
+autoplay = "flap"
+centered = false
+offset = Vector2(-8, -16)
+script = ExtResource("2_lib2r")

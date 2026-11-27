@@ -13,6 +13,7 @@ FishNinjaSprite = ExtResource("2_0bk3u")
 FishNinjaCutSprite = ExtResource("1_ph1tc")
 Points = 25
 Speed = 120.0
+Scale = 1.75
 Rarity = 1
 NoticeChance = 0.25
 BiteDelay = 1.5

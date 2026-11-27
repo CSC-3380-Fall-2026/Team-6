@@ -160,6 +160,8 @@ public partial class Fish : Area2D
             //loop the animation
             _sprite.Frame = 0;
         }
+
+        Scale = Vector2.One  * data.Scale; // scale fish sprite
         
     }
     // Steps through the horizontal sprite sheet frames at the configured FPS rate

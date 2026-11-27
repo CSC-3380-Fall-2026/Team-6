@@ -34,6 +34,9 @@ public partial class FishData : Resource
     public bool DoNotCut { get; set; } = false;
 
     [Export]
+    public float Scale { get; set; } = 1.0f; // how big fish is
+
+    [Export]
     public FishRarity Rarity { get; set; } = FishRarity.Common;
 
     // Chance (0 to 1) that this fish notices a bobber near it, rolled every few moments while it's close.

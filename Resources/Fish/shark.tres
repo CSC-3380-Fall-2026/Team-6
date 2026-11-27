@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_jtgxk"]
 [ext_resource type="Texture2D" uid="uid://bgyv3riilwie" path="res://Assets/Fish/SwimmingFish/shark.png" id="1_t0fty"]
-[ext_resource type="Texture2D" path="res://Assets/Fish/UncutFish/shark.png" id="1_wlpkw"]
+[ext_resource type="Texture2D" uid="uid://cgqxlyx7kwroe" path="res://Assets/Fish/UncutFish/shark.png" id="1_wlpkw"]
 
 [resource]
 script = ExtResource("1_jtgxk")
@@ -12,6 +12,7 @@ FishNinjaSprite = ExtResource("1_wlpkw")
 Points = 100
 Speed = 160.0
 DoNotCut = true
+Scale = 3.25
 Rarity = 3
 NoticeChance = 0.1
 BiteDelay = 2.5
