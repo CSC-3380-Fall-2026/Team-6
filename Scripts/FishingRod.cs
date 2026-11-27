@@ -82,7 +82,9 @@ public partial class FishingRod : Node2D
 	private bool _fishHooked = false;
 	private bool _canReel = false;
 	private Fish _hookedFish;
-
+	//Prevents the fishing rod from using the 'A' input used to open the level.
+	private const float StartupInputLockoutSeconds = 0.25f;
+	private float _inputLockoutTimer = StartupInputLockoutSeconds;
 	public override void _Ready()
 	{
 		LoadDefaultTexturesIfMissing();
@@ -99,6 +101,13 @@ public partial class FishingRod : Node2D
 		{
 			GD.PushWarning("FishingRod: no CursorNode assigned in the Inspector, casting won't work.");
 		}
+
+		WiimoteManager wiimote = GetTree().Root.GetNodeOrNull<WiimoteManager>("WiimoteManager");
+		
+		if (wiimote != null)
+		{
+			wiimote.OnWiimoteAClicked += OnWiimoteAPressed;
+		}
 	}
 
 	public override void _ExitTree()
@@ -108,10 +117,20 @@ public partial class FishingRod : Node2D
 			_cursorNode.PrimaryPressed -= OnPrimaryPressed;
 			_cursorNode.PrimaryReleased -= OnPrimaryReleased;
 		}
+
+		WiimoteManager wiimote = GetTree().Root.GetNodeOrNull<WiimoteManager>("WiimoteManager");
+		if (wiimote != null)
+		{
+			wiimote.OnWiimoteAClicked -= OnWiimoteAPressed;
+		}
 	}
 
 	public override void _Process(double delta)
 	{
+		if (_inputLockoutTimer > 0f)
+		{
+			_inputLockoutTimer -= (float)delta;
+		}
 		switch (State)
 		{
 			case RodState.Idle:
@@ -143,18 +162,22 @@ public partial class FishingRod : Node2D
 	// INPUT
 	private void OnPrimaryPressed(Vector2 _screenPosition)
 	{
+		//prevents casting before the game has even begun.
+		if (_inputLockoutTimer > 0f || GetTree().Paused)
+		{
+			return;
+		}
+
 		// can only cast when line is fully reeled in
 		if (State == RodState.Idle)
 		{
-			Vector2 aim = _cursorNode.GlobalPosition;
-
-			if (IsOverWater(aim))
+			if (IsOverWater(_screenPosition))
 			{
-				StartCast(aim);
+				StartCast(_screenPosition);
 			}
 			else
 			{
-				FailCast(aim);
+				FailCast(_screenPosition);
 			}
 			
 			return;
@@ -176,6 +199,18 @@ public partial class FishingRod : Node2D
 		// Reel progress only increases while A is held.
 	}
 
+
+	// --- NEW WIIMOTE BRIDGE METHOD ---
+	private void OnWiimoteAPressed()
+	{
+		// Grab the WiimoteManager to get the current aiming cursor position
+		WiimoteManager wiimote = GetTree().Root.GetNodeOrNull<WiimoteManager>("WiimoteManager");
+		if (wiimote != null)
+		{
+			Vector2 aim = wiimote.CurrentAimPosition;
+			OnPrimaryPressed(aim);
+		}
+	}
 	// CASTING
 	private void StartCast(Vector2 target)
 	{

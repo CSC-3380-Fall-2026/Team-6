@@ -27,6 +27,8 @@ public partial class PauseMenu : Node
 		if (wiimote != null) {
 			wiimote.ProcessMode = ProcessModeEnum.Always;
 			CalibrationScreen.ApplySavedCalibration(wiimote);
+			wiimote.OnWiimotePlusClicked += OnWiimotePlusPressed;
+			wiimote.OnWiimoteBClicked += OnWiimoteBPressed;
 		}
 
 		if (menuLayer == null || recalibrateButton == null || closeButton == null || calibrationScene == null) {
@@ -46,6 +48,35 @@ public partial class PauseMenu : Node
 			restartButton.Pressed += Restart;
 		}
 		
+	}
+
+	private void OnWiimotePlusPressed()
+	{
+		if (menuLayer == null || calibration != null)
+		{
+			return;
+		}
+		if (IsOpen)
+		{
+			Close();
+		}
+		else if (InGameScene() && !GetTree().Paused)
+		{
+			Open();
+		}
+	}
+	//Redundant option to give the option for users to use 'B' to close the pause menu.
+	private void OnWiimoteBPressed()
+	{
+		if (menuLayer == null || calibration != null)
+		{
+			return;
+		}
+
+		if (IsOpen)
+		{
+			Close();
+		}
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
