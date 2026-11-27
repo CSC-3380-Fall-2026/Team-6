@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 // Bite logic for Gone Fishing. Once the bobber lands, fish near it can notice it (each fish's NoticeChance).
 // Only one fish comes over at a time: it turns toward the bobber, swims up, nibbles a random number of times at random
-// moments (0 nibbles means it bites as soon as it arrives), then bites. On harder levels some nibbles are hard nibbles that
+// moments (0 nibbles means it bites as soon as it arrives), then bites after a wait from the level's bite delay range,
+// which gets longer each level. On harder levels some nibbles are hard nibbles that
 // pull the bobber partly under, so they look close to a bite. Only the real bite dips the bobber fully under and shows the "!",
 // then the rod enters its Bite state and emits FishBit. Reeling in before the bite scares the fish away,
 // and pulling while it's nibbling shows "Too Early!". What happens after the bite belongs to the reel-in task.
@@ -36,10 +37,10 @@ public partial class BiteController : Node2D
 	[Export] private float noticeRadius = 250f;
 	// Seconds between rolls for the nearby fish to notice the bobber
 	[Export] private float noticeInterval = 0.5f;
-	// Difficulty settings: every fish's NoticeChance and BiteDelay are multiplied by these
+	// Difficulty settings: every fish's NoticeChance and every bite delay are multiplied by these
 	[Export] private float noticeChanceScale = 1f;
 	[Export] private float biteDelayScale = 1f;
-	// Each bite delay is randomly up to this fraction shorter or longer, so bites aren't predictable
+	// Without level settings, each bite delay is the fish's own BiteDelay, randomly up to this fraction shorter or longer
 	[Export] private float biteDelayVariation = 0.2f;
 
 	[ExportGroup("Approach")]
@@ -85,6 +86,8 @@ public partial class BiteController : Node2D
 	private const float MinGapWeight = 0.3f;
 	private const float MaxGapWeight = 1.7f;
 	private const float MinNibbleGap = 0.3f;
+	// A common fish's BiteDelay. Fish with a longer BiteDelay (the rarer ones) are more cautious.
+	private const float CommonBiteDelay = 1f;
 	private const string DefaultTooEarlyAlertPath = "res://Scenes/TooEarlyAlert.tscn";
 	// A scared fish tries straight away from the bobber first, then swings this far to either side each try until it finds water
 	private const float FleeAngleStep = Mathf.Pi / 6f;
@@ -255,8 +258,7 @@ public partial class BiteController : Node2D
 			return;
 		}
 
-		float variation = 1f + random.RandfRange(-biteDelayVariation, biteDelayVariation);
-		float delay = Mathf.Max(0f, fish.Data.BiteDelay * biteDelayScale * variation);
+		float delay = PickBiteDelay();
 		float hardNibbleChance = fishSpawner.CurrentLevelSettings?.HardNibbleChance ?? 0f;
 		float[] gaps = RandomGaps(nibbles + 1, delay);
 		// A hard nibble holds the bobber down for a while, so whatever comes next waits until it's back up
@@ -272,6 +274,22 @@ public partial class BiteController : Node2D
 		}
 		schedule.TweenInterval(Mathf.Max(gaps[nibbles], lastWasHard ? hardNibbleTime : MinNibbleGap));
 		schedule.TweenCallback(Callable.From(() => Bite(mouthSpot)));
+	}
+
+	// How long the fish waits at the bobber before biting. The level picks a random time in its bite delay range
+	// (longer on harder levels), and cautious fish wait longer on top: every second of BiteDelay past a common
+	// fish's is added. Without level settings it's just the fish's own BiteDelay, give or take biteDelayVariation.
+	private float PickBiteDelay()
+	{
+		FishingLevel level = fishSpawner.CurrentLevelSettings;
+		float delay;
+		if (level != null) {
+			float caution = Mathf.Max(0f, fish.Data.BiteDelay - CommonBiteDelay);
+			delay = random.RandfRange(level.BiteDelayMin, level.BiteDelayMax) + caution;
+		} else {
+			delay = fish.Data.BiteDelay * (1f + random.RandfRange(-biteDelayVariation, biteDelayVariation));
+		}
+		return Mathf.Max(0f, delay * biteDelayScale);
 	}
 
 	// Splits the bite delay into random gaps that add up to it, so players can't time the bite by counting
