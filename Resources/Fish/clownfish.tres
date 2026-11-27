@@ -14,4 +14,5 @@ FishNinjaCutSprite = ExtResource("1_0eust")
 Points = 10
 Speed = 80.0
 DoNotCut = true
+Scale = 1.5
 metadata/_custom_type_script = "uid://o4uag27rp8gg"

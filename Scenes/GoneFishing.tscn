@@ -229,7 +229,6 @@ waterShape = NodePath("../WaterArea/WaterShape")
 biteAlertScene = ExtResource("32_alert")
 
 [node name="HUDLayer" type="CanvasLayer" parent="." unique_id=1708769849]
-visible = false
 
 [node name="LevelBanner" type="Label" parent="HUDLayer" unique_id=1831350864]
 anchors_preset = 15

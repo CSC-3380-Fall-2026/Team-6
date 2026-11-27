@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="FishData" format=3 uid="uid://dqy1sr2tmq70g"]
 
 [ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_v52y2"]
-[ext_resource type="Texture2D" path="res://Assets/Fish/UncutFish/swordfish.png" id="1_yq2q3"]
-[ext_resource type="Texture2D" path="res://Assets/Fish/SwimmingFish/swordfish.png" id="2_iwa05"]
+[ext_resource type="Texture2D" uid="uid://cldi6ovdyy0ac" path="res://Assets/Fish/UncutFish/swordfish.png" id="1_yq2q3"]
+[ext_resource type="Texture2D" uid="uid://kbnkdsv13lxe" path="res://Assets/Fish/SwimmingFish/swordfish.png" id="2_iwa05"]
 
 [resource]
 script = ExtResource("1_v52y2")
@@ -12,6 +12,7 @@ FishNinjaSprite = ExtResource("1_yq2q3")
 Points = 75
 Speed = 185.0
 DoNotCut = true
+Scale = 3.25
 Rarity = 3
 NoticeChance = 0.1
 BiteDelay = 2.5

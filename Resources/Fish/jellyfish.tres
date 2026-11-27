@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="FishData" format=3 uid="uid://4cdnlhcgty63"]
 
-[ext_resource type="Texture2D" path="res://Assets/Fish/UncutFish/jellyfish.png" id="1_cfenb"]
+[ext_resource type="Texture2D" uid="uid://bwik8vcbra830" path="res://Assets/Fish/UncutFish/jellyfish.png" id="1_cfenb"]
 [ext_resource type="Texture2D" uid="uid://p35ffbqw87vh" path="res://Assets/Fish/SwimmingFish/jellyfish.png" id="1_me8u5"]
 [ext_resource type="Script" uid="uid://o4uag27rp8gg" path="res://Scripts/FishData.cs" id="1_wboye"]
 
@@ -12,6 +12,7 @@ FishNinjaSprite = ExtResource("1_cfenb")
 Points = 25
 Speed = 55.0
 DoNotCut = true
+Scale = 2.25
 Rarity = 1
 NoticeChance = 0.25
 BiteDelay = 1.5
